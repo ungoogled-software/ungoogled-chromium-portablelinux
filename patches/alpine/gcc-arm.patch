@@ -1,0 +1,11 @@
+--- ./third_party/zlib/BUILD.gn
++++ ./third_party/zlib/BUILD.gn
+@@ -18,7 +18,7 @@
+ 
+ use_arm_neon_optimizations = false
+ if (current_cpu == "arm" || current_cpu == "arm64") {
+-  if (arm_use_neon) {
++  if (arm_use_neon && is_clang) {
+     use_arm_neon_optimizations = true
+   }
+ }

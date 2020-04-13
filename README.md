@@ -1,8 +1,8 @@
-# ungoogled-chromium-portablelinux
+# ungoogled-chromium-portablelinux-musl
 
-Portable Linux (i.e. a generic Linux version) packaging for [ungoogled-chromium](//github.com/Eloston/ungoogled-chromium).
+Portable Linux musl (i.e. a generic Linux version) packaging for [ungoogled-chromium](//github.com/Eloston/ungoogled-chromium).
 
-Portable Linux builds can run on **any Linux distribution** (that regular Chromium supports).
+Portable Linux musl builds can run on **any [musl-based](//musl.libc.org) Linux distribution** (that regular Chromium supports).
 
 ## Downloads
 

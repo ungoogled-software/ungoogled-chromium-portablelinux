@@ -1,0 +1,20 @@
+--- ./third_party/yasm/source/config/linux/config.h
++++ ./third_party/yasm/source/config/linux/config.h
+@@ -5,7 +5,7 @@
+ #define CPP_PROG "cc -E"
+ 
+ /* */
+-#define ENABLE_NLS 1
++#define ENABLE_NLS 0
+ 
+ /* Define to 1 if you have the `abort' function. */
+ #define HAVE_ABORT 1
+@@ -38,7 +38,7 @@
+ #define HAVE_GETTEXT 0
+ 
+ /* Define to 1 if you have the GNU C Library */
+-#define HAVE_GNU_C_LIBRARY 1
++#define HAVE_GNU_C_LIBRARY 0
+ 
+ /* Define if you have the iconv() function and it works. */
+ /* #undef HAVE_ICONV */

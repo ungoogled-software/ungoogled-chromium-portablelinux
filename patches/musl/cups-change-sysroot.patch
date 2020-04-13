@@ -1,0 +1,16 @@
+--- ./printing/BUILD.gn
++++ ./printing/BUILD.gn
+@@ -362,10 +362,11 @@
+       lib_dirs = [ "$mac_sdk_path/usr/lib" ]
+     } else {
+       # rebase_path does not accept an empty string
++      # Note: this has been changed
+       if (use_sysroot) {
+-        cups_sysroot = rebase_path(sysroot)
++        cups_sysroot = "/"
+       } else {
+-        cups_sysroot = ""
++        cups_sysroot = "/"
+       }
+       libs = exec_script("cups_config_helper.py",
+                          [

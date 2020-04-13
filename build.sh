@@ -13,6 +13,8 @@ rm -f "$_root_dir/build/domsubcache.tar.gz" || true
 mkdir -p "$_src_dir/out/Default"
 mkdir -p "$_download_cache"
 
+./patch_utils.sh
+
 "$_main_repo/utils/downloads.py" retrieve -i "$_main_repo/downloads.ini" -c "$_download_cache"
 "$_main_repo/utils/downloads.py" unpack -i "$_main_repo/downloads.ini" -c "$_download_cache" "$_src_dir"
 "$_main_repo/utils/prune_binaries.py" "$_src_dir" "$_main_repo/pruning.list"
