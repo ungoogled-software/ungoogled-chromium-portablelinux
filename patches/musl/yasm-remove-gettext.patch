@@ -1,0 +1,175 @@
+--- ./third_party/yasm/source/patched-yasm/frontends/yasm/yasm-options.c
++++ ./third_party/yasm/source/patched-yasm/frontends/yasm/yasm-options.c
+@@ -163,7 +163,7 @@
+     char optbuf[100], optopt[100];
+     size_t i;
+ 
+-    printf("%s", gettext(msg));
++    printf("%s", msg);
+ 
+     for (i = 0; i < nopts; i++) {
+         size_t shortopt_len = 0;
+@@ -205,12 +205,12 @@
+         /* split [-s <desc>], [--long <desc>] if it destroys columns */
+         if (shortopt_len && longopt_len && longopt_len > 22) {
+             optbuf[shortopt_len] = '\0';
+-            printf("    %-22s  %s\n", optopt, gettext(options[i].description));
++            printf("    %-22s  %s\n", optopt, options[i].description);
+             printf("     %s\n", optbuf);
+         }
+         else
+-            printf("    %-22s  %s\n", optbuf, gettext(options[i].description));
++            printf("    %-22s  %s\n", optbuf, options[i].description);
+     }
+ 
+-    printf("%s", gettext(tail));
++    printf("%s", tail);
+ }
+--- ./third_party/yasm/source/patched-yasm/frontends/yasm/yasm.c
++++ ./third_party/yasm/source/patched-yasm/frontends/yasm/yasm.c
+@@ -591,10 +591,12 @@
+ #if defined(HAVE_SETLOCALE) && defined(HAVE_LC_MESSAGES)
+     setlocale(LC_MESSAGES, "");
+ #endif
++/*
+ #if defined(LOCALEDIR)
+     bindtextdomain(PACKAGE, LOCALEDIR);
+ #endif
+     textdomain(PACKAGE);
++*/
+ 
+     /* Initialize errwarn handling */
+     yasm_internal_error_ = handle_yasm_int_error;
+@@ -1351,7 +1353,7 @@
+ handle_yasm_int_error(const char *file, unsigned int line, const char *message)
+ {
+     fprintf(stderr, _("INTERNAL ERROR at %s, line %u: %s\n"), file, line,
+-            gettext(message));
++            message);
+ #ifdef HAVE_ABORT
+     abort();
+ #else
+@@ -1363,7 +1365,7 @@
+ handle_yasm_fatal(const char *fmt, va_list va)
+ {
+     fprintf(errfile, "yasm: %s: ", _("FATAL"));
+-    vfprintf(errfile, gettext(fmt), va);
++    vfprintf(errfile, fmt, va);
+     fputc('\n', errfile);
+     exit(EXIT_FAILURE);
+ }
+@@ -1371,7 +1373,7 @@
+ static const char *
+ handle_yasm_gettext(const char *msgid)
+ {
+-    return gettext(msgid);
++    return msgid;
+ }
+ 
+ static const char *fmt[2] = {
+--- ./third_party/yasm/source/patched-yasm/frontends/vsyasm/vsyasm.c
++++ ./third_party/yasm/source/patched-yasm/frontends/vsyasm/vsyasm.c
+@@ -523,10 +523,11 @@
+ #if defined(HAVE_SETLOCALE) && defined(HAVE_LC_MESSAGES)
+     setlocale(LC_MESSAGES, "");
+ #endif
++/*
+ #if defined(LOCALEDIR)
+     bindtextdomain(PACKAGE, LOCALEDIR);
+ #endif
+-    textdomain(PACKAGE);
++    textdomain(PACKAGE);*/
+ 
+     /* Initialize errwarn handling */
+     yasm_internal_error_ = handle_yasm_int_error;
+@@ -1359,7 +1360,7 @@
+ handle_yasm_int_error(const char *file, unsigned int line, const char *message)
+ {
+     fprintf(stderr, _("INTERNAL ERROR at %s, line %u: %s\n"), file, line,
+-            gettext(message));
++            message);
+ #ifdef HAVE_ABORT
+     abort();
+ #else
+@@ -1371,7 +1372,7 @@
+ handle_yasm_fatal(const char *fmt, va_list va)
+ {
+     fprintf(errfile, "vsyasm: %s: ", _("FATAL"));
+-    vfprintf(errfile, gettext(fmt), va);
++    vfprintf(errfile, fmt, va);
+     fputc('\n', errfile);
+     exit(EXIT_FAILURE);
+ }
+@@ -1379,7 +1380,7 @@
+ static const char *
+ handle_yasm_gettext(const char *msgid)
+ {
+-    return gettext(msgid);
++    return msgid;
+ }
+ 
+ static const char *fmt[2] = {
+--- ./third_party/yasm/source/patched-yasm/frontends/tasm/tasm-options.c
++++ ./third_party/yasm/source/patched-yasm/frontends/tasm/tasm-options.c
+@@ -105,7 +105,7 @@
+     char optbuf[100];
+     size_t i;
+ 
+-    printf("%s", gettext(msg));
++    printf("%s", msg);
+ 
+     for (i = 0; i < nopts; i++) {
+         optbuf[0] = 0;
+@@ -120,8 +120,8 @@
+                 sprintf(optbuf, "/%s", options[i].opt);
+         }
+ 
+-        printf("    %-22s  %s\n", optbuf, gettext(options[i].description));
++        printf("    %-22s  %s\n", optbuf, options[i].description);
+     }
+ 
+-    printf("%s", gettext(tail));
++    printf("%s", tail);
+ }
+--- ./third_party/yasm/source/patched-yasm/frontends/tasm/tasm.c
++++ ./third_party/yasm/source/patched-yasm/frontends/tasm/tasm.c
+@@ -437,10 +437,11 @@
+ #if defined(HAVE_SETLOCALE) && defined(HAVE_LC_MESSAGES)
+     setlocale(LC_MESSAGES, "");
+ #endif
++/*
+ #if defined(LOCALEDIR)
+     bindtextdomain(PACKAGE, LOCALEDIR);
+ #endif
+-    textdomain(PACKAGE);
++    textdomain(PACKAGE);*/
+ 
+     /* Initialize errwarn handling */
+     yasm_internal_error_ = handle_yasm_int_error;
+@@ -957,7 +958,7 @@
+ handle_yasm_int_error(const char *file, unsigned int line, const char *message)
+ {
+     fprintf(stderr, _("INTERNAL ERROR at %s, line %u: %s\n"), file, line,
+-            gettext(message));
++            message);
+ #ifdef HAVE_ABORT
+     abort();
+ #else
+@@ -969,7 +970,7 @@
+ handle_yasm_fatal(const char *fmt, va_list va)
+ {
+     fprintf(errfile, "**%s**: ", _("Fatal"));
+-    vfprintf(errfile, gettext(fmt), va);
++    vfprintf(errfile, fmt, va);
+     fputc('\n', errfile);
+     exit(EXIT_FAILURE);
+ }
+@@ -977,7 +978,7 @@
+ static const char *
+ handle_yasm_gettext(const char *msgid)
+ {
+-    return gettext(msgid);
++    return msgid;
+ }
+ 
+ static void

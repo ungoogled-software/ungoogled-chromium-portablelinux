@@ -1,0 +1,33 @@
+--- ./third_party/yasm/source/config/linux/config.h
++++ ./third_party/yasm/source/config/linux/config.h
+@@ -5,7 +5,7 @@
+ #define CPP_PROG "cc -E"
+ 
+ /* */
+-#define ENABLE_NLS 1
++#define ENABLE_NLS 0
+ 
+ /* Define to 1 if you have the `abort' function. */
+ #define HAVE_ABORT 1
+@@ -23,7 +23,7 @@
+ 
+ /* Define if the GNU dcgettext() function is already present or preinstalled.
+    */
+-#define HAVE_DCGETTEXT 1
++#define HAVE_DCGETTEXT 0
+ 
+ /* Define to 1 if you have the <direct.h> header file. */
+ /* #undef HAVE_DIRECT_H */
+@@ -35,10 +35,10 @@
+ #define HAVE_GETCWD 1
+ 
+ /* */
+-#define HAVE_GETTEXT 1
++#define HAVE_GETTEXT 0
+ 
+ /* Define to 1 if you have the GNU C Library */
+-#define HAVE_GNU_C_LIBRARY 1
++#define HAVE_GNU_C_LIBRARY 0
+ 
+ /* Define if you have the iconv() function and it works. */
+ /* #undef HAVE_ICONV */
