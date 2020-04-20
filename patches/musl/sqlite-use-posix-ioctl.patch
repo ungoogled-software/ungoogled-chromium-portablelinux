@@ -16,9 +16,27 @@
  #else
    { "ioctl",         (sqlite3_syscall_ptr)0,              0 },
  #endif
---- ./third_party/sqlite/sqlite-src-3300100/src/os_unix.c
-+++ ./third_party/sqlite/sqlite-src-3300100/src/os_unix.c
+--- ./third_party/sqlite/sqlite-src-3310100/src/os_unix.c
++++ ./third_party/sqlite/sqlite-src-3310100/src/os_unix.c
 @@ -534,14 +534,10 @@
+ #endif
+ #define osLstat      ((int(*)(const char*,struct stat*))aSyscall[27].pCurrent)
+ 
++/* https://bugs.freedesktop.org/show_bug.cgi?id=85319 -- POSIX ioctl(int, int) differs from glibc's ioctl(int, unsigned long) */
+ #if defined(__linux__) && defined(SQLITE_ENABLE_BATCH_ATOMIC_WRITE)
+-# ifdef __ANDROID__
+   { "ioctl", (sqlite3_syscall_ptr)(int(*)(int, int, ...))ioctl, 0 },
+ #define osIoctl ((int(*)(int,int,...))aSyscall[28].pCurrent)
+-# else
+-  { "ioctl",         (sqlite3_syscall_ptr)ioctl,          0 },
+-#define osIoctl ((int(*)(int,unsigned long,...))aSyscall[28].pCurrent)
+-# endif
+ #else
+   { "ioctl",         (sqlite3_syscall_ptr)0,              0 },
+ #endif
+--- ./third_party/sqlite/amalgamation/sqlite3.c
++++ ./third_party/sqlite/amalgamation/sqlite3.c
+@@ -33809,14 +33809,10 @@ static struct unix_syscall {
  #endif
  #define osLstat      ((int(*)(const char*,struct stat*))aSyscall[27].pCurrent)
  

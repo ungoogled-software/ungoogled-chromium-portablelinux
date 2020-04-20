@@ -7,8 +7,8 @@
 -#else
 +#elif defined(__GLIBC__)
    struct mallinfo info = mallinfo();
- #if !defined(ADDRESS_SANITIZER) && !defined(THREAD_SANITIZER)
-   // Sanitizers override mallinfo.
+   // In case of Android's jemalloc |arena| is 0 and the outer pages size is
+   // reported by |hblkhd|. In case of dlmalloc the total is given by
 --- ./base/process/process_metrics_posix.cc
 +++ ./base/process/process_metrics_posix.cc
 @@ -110,17 +110,16 @@

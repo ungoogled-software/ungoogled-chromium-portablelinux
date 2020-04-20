@@ -43,11 +43,7 @@ alpine/no-execinfo.patch
 alpine/no-mallinfo.patch
 alpine/resolver.patch
 alpine/swiftshader.patch
-alpine/upstream-fix-building-with-unbundled-libxml.patch
-alpine/upstream-move-RemoteTreeNode-declaration.patch
 alpine/upstream-rebuild-Linux-frame-button-cache-when-activation.patch
-alpine/upstream-rename-Relayout-in-DesktopWindowTreeHostPlatform.patch
-alpine/upstream-sync-enable-USSPasswords-by-default.patch
 busybox/remove-nonstandard-gzip-options.patch
 musl/disable-tcmalloc.patch
 musl/fix-yasm-config.patch
