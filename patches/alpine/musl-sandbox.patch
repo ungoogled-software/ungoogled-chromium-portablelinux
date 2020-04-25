@@ -117,18 +117,6 @@
 +#endif
 +
  #endif  // SANDBOX_LINUX_SYSTEM_HEADERS_MIPS_LINUX_SYSCALLS_H_
---- ./sandbox/linux/system_headers/x86_64_linux_syscalls.h
-+++ ./sandbox/linux/system_headers/x86_64_linux_syscalls.h
-@@ -1290,5 +1290,9 @@
- #define __NR_memfd_create 319
- #endif
- 
-+#if !defined(__NR_membarrier)
-+#define __NR_membarrier 324
-+#endif
-+
- #endif  // SANDBOX_LINUX_SYSTEM_HEADERS_X86_64_LINUX_SYSCALLS_H_
- 
 --- ./services/service_manager/sandbox/linux/bpf_renderer_policy_linux.cc
 +++ ./services/service_manager/sandbox/linux/bpf_renderer_policy_linux.cc
 @@ -88,10 +88,10 @@

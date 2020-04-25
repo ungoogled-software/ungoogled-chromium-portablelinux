@@ -43,20 +43,3 @@ index 954e776057f..4f579955675 100644
    MaybeUpdateCachedFrameButtonImages();
    OpaqueBrowserFrameView::Layout();
  }
-diff --git a/ui/views/widget/desktop_aura/desktop_window_tree_host_platform.cc b/ui/views/widget/desktop_aura/desktop_window_tree_host_platform.cc
-index 9c695d8e5b1..9662f19aa90 100644
---- ./ui/views/widget/desktop_aura/desktop_window_tree_host_platform.cc
-+++ ./ui/views/widget/desktop_aura/desktop_window_tree_host_platform.cc
-@@ -677,9 +677,12 @@ void DesktopWindowTreeHostPlatform::OnCloseRequest() {
- }
- 
- void DesktopWindowTreeHostPlatform::OnActivationChanged(bool active) {
-+  if (is_active_ == active)
-+    return;
-   is_active_ = active;
-   aura::WindowTreeHostPlatform::OnActivationChanged(active);
-   desktop_native_widget_aura_->HandleActivationChanged(active);
-+  ScheduleRelayout();
- }
- 
- base::Optional<gfx::Size>

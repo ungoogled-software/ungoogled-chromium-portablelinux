@@ -32,15 +32,15 @@
  // adjustment is [-1000, 1000], with [0, 1000] being user accessible.
 --- ./sandbox/linux/seccomp-bpf/trap.cc
 +++ ./sandbox/linux/seccomp-bpf/trap.cc
-@@ -168,7 +168,7 @@
-   // most versions of glibc don't include this information in siginfo_t. So,
-   // we need to explicitly copy it into a arch_sigsys structure.
-   struct arch_sigsys sigsys;
+@@ -174,7 +174,7 @@
+   // If the version of glibc doesn't include this information in
+   // siginfo_t (older than 2.17), we need to explicitly copy it
+   // into an arch_sigsys structure.
 -  memcpy(&sigsys, &info->_sifields, sizeof(sigsys));
-+  memcpy(&sigsys, &info->__si_fields, sizeof(sigsys));
++  memcpy(&sigsys, &info->__sifields, sizeof(sigsys));
+ #endif
  
  #if defined(__mips__)
-   // When indirect syscall (syscall(__NR_foo, ...)) is made on Mips, the
 --- ./third_party/ffmpeg/libavutil/cpu.c
 +++ ./third_party/ffmpeg/libavutil/cpu.c
 @@ -41,7 +41,6 @@
@@ -128,44 +128,6 @@
      defined(OS_FUCHSIA)
    pthread_attr_t attr;
    int error;
---- ./third_party/lss/linux_syscall_support.h
-+++ ./third_party/lss/linux_syscall_support.h
-@@ -132,15 +132,18 @@
- 
- /* The Android NDK's <sys/stat.h> #defines these macros as aliases
-  * to their non-64 counterparts. To avoid naming conflict, remove them. */
--#ifdef __ANDROID__
-+#if defined(fstat64)
-   /* These are restored by the corresponding #pragma pop_macro near
-    * the end of this file. */
- # pragma push_macro("stat64")
- # pragma push_macro("fstat64")
-+# pragma push_macro("fstatat64")
- # pragma push_macro("lstat64")
- # undef stat64
- # undef fstat64
-+# undef fstatat64
- # undef lstat64
-+# define __RESTORE_MACRO 1
- #endif
- 
- #if defined(__ANDROID__) && defined(__x86_64__)
-@@ -4517,12 +4518,14 @@
- # endif
- #endif
- 
--#ifdef __ANDROID__
-+#ifdef __RESTORE_MACRO
-   /* These restore the original values of these macros saved by the
-    * corresponding #pragma push_macro near the top of this file. */
- # pragma pop_macro("stat64")
- # pragma pop_macro("fstat64")
-+# pragma pop_macro("fstatat64")
- # pragma pop_macro("lstat64")
-+#undef __RESTORE_MACRO
- #endif
- 
- #if defined(__cplusplus) && !defined(SYS_CPLUSPLUS)
 --- ./third_party/crashpad/crashpad/util/linux/thread_info.h
 +++ ./third_party/crashpad/crashpad/util/linux/thread_info.h
 @@ -273,7 +273,7 @@
