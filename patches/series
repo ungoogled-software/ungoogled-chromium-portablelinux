@@ -25,7 +25,6 @@ ungoogled-chromium/linux/manpage.patch
 ungoogled-chromium/remove-fcomplete-member-pointers-cflag.patch
 ungoogled-chromium/fix-node-path.patch
 alpine/default-pthread-stacksize.patch
-alpine/gcc-arm.patch
 alpine/gcc-fno-delete-null-pointer-checks.patch
 alpine/media-base.patch
 alpine/musl-crashpad.patch
@@ -39,7 +38,6 @@ alpine/nasm.patch
 alpine/no-execinfo.patch
 alpine/no-mallinfo.patch
 alpine/resolver.patch
-alpine/upstream-rebuild-Linux-frame-button-cache-when-activation.patch
 busybox/remove-nonstandard-gzip-options.patch
 musl/disable-tcmalloc.patch
 musl/fontconfig-use-rand.patch
