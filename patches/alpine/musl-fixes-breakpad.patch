@@ -1,13 +1,3 @@
---- ./third_party/breakpad/breakpad/src/common/linux/elf_core_dump.h
-+++ ./third_party/breakpad/breakpad/src/common/linux/elf_core_dump.h
-@@ -36,6 +36,7 @@
- #include <elf.h>
- #include <link.h>
- #include <stddef.h>
-+#include <limits.h>
- 
- #include "common/memory_range.h"
- 
 --- ./third_party/breakpad/breakpad/src/client/linux/handler/exception_handler.cc
 +++ ./third_party/breakpad/breakpad/src/client/linux/handler/exception_handler.cc
 @@ -490,7 +490,9 @@

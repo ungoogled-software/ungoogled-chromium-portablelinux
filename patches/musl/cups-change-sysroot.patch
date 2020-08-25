@@ -1,6 +1,6 @@
 --- ./printing/BUILD.gn
 +++ ./printing/BUILD.gn
-@@ -362,10 +362,11 @@
+@@ -398,10 +398,11 @@
        lib_dirs = [ "$mac_sdk_path/usr/lib" ]
      } else {
        # rebase_path does not accept an empty string

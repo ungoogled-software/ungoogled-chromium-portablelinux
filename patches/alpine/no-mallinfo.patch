@@ -11,7 +11,7 @@
    // reported by |hblkhd|. In case of dlmalloc the total is given by
 --- ./base/process/process_metrics_posix.cc
 +++ ./base/process/process_metrics_posix.cc
-@@ -110,17 +110,16 @@
+@@ -119,17 +119,16 @@
    malloc_statistics_t stats = {0};
    malloc_zone_statistics(nullptr, &stats);
    return stats.size_in_use;
