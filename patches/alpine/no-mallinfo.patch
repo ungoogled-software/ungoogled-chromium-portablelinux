@@ -11,7 +11,7 @@
    // reported by |hblkhd|. In case of dlmalloc the total is given by
 --- ./base/process/process_metrics_posix.cc
 +++ ./base/process/process_metrics_posix.cc
-@@ -110,17 +110,16 @@
+@@ -119,17 +119,16 @@
    malloc_statistics_t stats = {0};
    malloc_zone_statistics(nullptr, &stats);
    return stats.size_in_use;
@@ -31,3 +31,47 @@
  }
  
  }  // namespace base
+--- ./third_party/swiftshader/third_party/llvm-10.0/configs/linux/include/llvm/Config/config.h
++++ ./third_party/swiftshader/third_party/llvm-10.0/configs/linux/include/llvm/Config/config.h
+@@ -125,7 +125,7 @@
+ /* #undef HAVE_MALLCTL */
+ 
+ /* Define to 1 if you have the `mallinfo' function. */
+-#define HAVE_MALLINFO 1
++// #define HAVE_MALLINFO 1
+ 
+ /* Define to 1 if you have the <malloc/malloc.h> header file. */
+ /* #undef HAVE_MALLOC_MALLOC_H */
+--- ./third_party/swiftshader/third_party/llvm-subzero/build/Linux/include/llvm/Config/config.h
++++ ./third_party/swiftshader/third_party/llvm-subzero/build/Linux/include/llvm/Config/config.h
+@@ -14,7 +14,7 @@
+ #define ENABLE_CRASH_OVERRIDES 0
+ 
+ /* Define to 1 if you have the `backtrace' function. */
+-#define HAVE_BACKTRACE 1
++/* #define HAVE_BACKTRACE 1 */
+ 
+ /* Define to 1 if you have the <CrashReporterClient.h> header file. */
+ /* #undef HAVE_CRASHREPORTERCLIENT_H */
+@@ -55,7 +55,7 @@
+ #define HAVE_ERRNO_H 1
+ 
+ /* Define to 1 if you have the <execinfo.h> header file. */
+-#define HAVE_EXECINFO_H 1
++/* #define HAVE_EXECINFO_H 1 */
+ 
+ /* Define to 1 if you have the <fcntl.h> header file. */
+ #define HAVE_FCNTL_H 1
+@@ -130,10 +130,10 @@
+ /* #undef HAVE_MALLCTL */
+ 
+ /* Define to 1 if you have the `mallinfo' function. */
+-#define HAVE_MALLINFO 1
++/* #define HAVE_MALLINFO 1 */
+ 
+ /* Define to 1 if you have the <malloc.h> header file. */
+-#define HAVE_MALLOC_H 1
++/* #define HAVE_MALLOC_H 1 */
+ 
+ /* Define to 1 if you have the <malloc/malloc.h> header file. */
+ /* #undef HAVE_MALLOC_MALLOC_H */

@@ -15,7 +15,6 @@ debian_buster/disable/swiftshader.patch
 debian_buster/warnings/printf.patch
 debian_buster/warnings/multichar.patch
 debian_buster/warnings/enum-compare.patch
-debian_buster/warnings/unused-typedefs.patch
 debian_buster/warnings/null-destination.patch
 debian_buster/warnings/int-in-bool-context.patch
 ubuntu/no-new-ninja-flag.patch
@@ -25,11 +24,7 @@ opensuse/system-libdrm.patch
 ungoogled-chromium/linux/manpage.patch
 ungoogled-chromium/remove-fcomplete-member-pointers-cflag.patch
 ungoogled-chromium/fix-node-path.patch
-alpine/aarch64-fixes.patch
 alpine/default-pthread-stacksize.patch
-alpine/elf-arm.patch
-alpine/gcc-arm.patch
-alpine/gcc-fno-delete-null-pointer-checks.patch
 alpine/media-base.patch
 alpine/musl-crashpad.patch
 alpine/musl-fixes-breakpad.patch
@@ -42,12 +37,9 @@ alpine/nasm.patch
 alpine/no-execinfo.patch
 alpine/no-mallinfo.patch
 alpine/resolver.patch
-alpine/swiftshader.patch
-alpine/upstream-rebuild-Linux-frame-button-cache-when-activation.patch
 busybox/remove-nonstandard-gzip-options.patch
 musl/disable-tcmalloc.patch
-musl/fix-yasm-config.patch
 musl/fontconfig-use-rand.patch
 musl/sqlite-use-posix-ioctl.patch
-musl/yasm-remove-gettext.patch
 musl/cups-change-sysroot.patch
+musl/stack_size.patch
