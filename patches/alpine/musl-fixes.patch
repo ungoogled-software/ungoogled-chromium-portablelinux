@@ -76,7 +76,7 @@
 diff --git a/chrome/browser/metrics/chrome_browser_main_extra_parts_metrics.cc b/chrome/browser/metrics/chrome_browser_main_extra_parts_metrics.cc
 --- ./chrome/browser/metrics/chrome_browser_main_extra_parts_metrics.cc
 +++ ./chrome/browser/metrics/chrome_browser_main_extra_parts_metrics.cc
-@@ -50,7 +50,9 @@
+@@ -49,7 +49,9 @@
  #endif  // defined(OS_ANDROID) && defined(__arm__)
  
  #if defined(OS_LINUX) && !defined(OS_CHROMEOS)
@@ -97,7 +97,7 @@ diff --git a/chrome/browser/metrics/chrome_browser_main_extra_parts_metrics.cc b
    UMALinuxGlibcVersion glibc_version_result = UMA_LINUX_GLIBC_NOT_PARSEABLE;
 --- ./base/logging.cc
 +++ ./base/logging.cc
-@@ -597,8 +597,7 @@
+@@ -601,8 +601,7 @@
  
  LogMessage::~LogMessage() {
    size_t stack_start = stream_.tellp();
@@ -109,7 +109,7 @@ diff --git a/chrome/browser/metrics/chrome_browser_main_extra_parts_metrics.cc b
      base::debug::StackTrace stack_trace;
 --- ./third_party/blink/renderer/platform/wtf/stack_util.cc
 +++ ./third_party/blink/renderer/platform/wtf/stack_util.cc
-@@ -96,7 +96,7 @@
+@@ -97,7 +97,7 @@
  }
  
  void* GetStackStart() {
