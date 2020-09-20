@@ -12,4 +12,4 @@
 +  use_allocator_shim = false
  }
  
- assert(use_allocator == "none" || use_allocator == "tcmalloc" ||
+ assert(use_allocator == "none" || use_allocator == "tcmalloc")
