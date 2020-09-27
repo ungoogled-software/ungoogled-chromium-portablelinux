@@ -1,10 +1,9 @@
 --- ./printing/BUILD.gn
 +++ ./printing/BUILD.gn
-@@ -398,10 +398,11 @@
+@@ -397,10 +397,10 @@
        lib_dirs = [ "$mac_sdk_path/usr/lib" ]
      } else {
        # rebase_path does not accept an empty string
-+      # Note: this has been changed
        if (use_sysroot) {
 -        cups_sysroot = rebase_path(sysroot)
 +        cups_sysroot = "/"

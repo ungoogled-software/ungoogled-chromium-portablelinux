@@ -18,12 +18,13 @@ debian_buster/warnings/enum-compare.patch
 debian_buster/warnings/null-destination.patch
 debian_buster/warnings/int-in-bool-context.patch
 ubuntu/no-new-ninja-flag.patch
-ubuntu/relax-ninja-version-requirement.patch
 ubuntu/suppress-newer-clang-warning-flags.patch
 opensuse/system-libdrm.patch
 ungoogled-chromium/linux/manpage.patch
 ungoogled-chromium/remove-fcomplete-member-pointers-cflag.patch
 ungoogled-chromium/fix-node-path.patch
+alpine/chromium-85-NearbyShareEncryptedMetadataKey-include.patch
+alpine/chromium-85-sim_hash-include.patch
 alpine/default-pthread-stacksize.patch
 alpine/media-base.patch
 alpine/musl-crashpad.patch
