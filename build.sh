@@ -20,6 +20,7 @@ mkdir -p "$_download_cache"
 "$_main_repo/utils/domain_substitution.py" apply -r "$_main_repo/domain_regex.list" -f "$_main_repo/domain_substitution.list" -c "$_root_dir/build/domsubcache.tar.gz" "$_src_dir"
 cp "$_main_repo/flags.gn" "$_src_dir/out/Default/args.gn"
 cat "$_root_dir/flags.portable.gn" >> "$_src_dir/out/Default/args.gn"
+[ -r "$_src_dir/../flags.local.gn" ] && cat "$_src_dir/../flags.local.gn" >> "$_src_dir/out/Default/args.gn"
 
 # Set commands or paths to LLVM-provided tools outside the script via 'export ...'
 # or before these lines
