@@ -1,7 +1,7 @@
 is_clang=false
 is_debug=false
 custom_toolchain="//build/toolchain/linux/unbundle:default"
-host_toolchain=//build/toolchain/linux/unbundle:default"
+host_toolchain="//build/toolchain/linux/unbundle:default"
 blink_symbol_level=0
 symbol_level=0
 is_cfi=false
