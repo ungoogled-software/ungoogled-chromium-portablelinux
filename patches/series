@@ -27,4 +27,3 @@ musl/musl-sandbox.patch
 musl/musl-stacktrace.patch
 musl/musl-sync.patch
 musl/musl-v8-monotonic-pthread-cont_timedwait.patch
-ungoogled-chromium/fix-node-path.patch
