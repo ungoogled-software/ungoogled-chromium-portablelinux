@@ -20,11 +20,11 @@ musl/musl-fixes.patch
 musl/musl-hacks.patch
 musl/musl-libc++.patch
 musl/musl-no-execinfo.patch
+musl/musl-no-getcontext.patch
 musl/musl-no-mallinfo.patch
 musl/musl-resolver.patch
 musl/musl-sandbox.patch
 musl/musl-stacktrace.patch
 musl/musl-sync.patch
 musl/musl-v8-monotonic-pthread-cont_timedwait.patch
-void/chromium-libc_malloc.patch
-void/chromium-no-getcontext.patch
+ungoogled-chromium/fix-node-path.patch
