@@ -7,7 +7,6 @@ icu_use_data_file=true
 is_cfi=false
 is_clang=false
 is_debug=false
-is_desktop_linux=true
 link_pulseaudio=false
 ozone_platform_wayland=false
 proprietary_codecs=true

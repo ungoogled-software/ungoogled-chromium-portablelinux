@@ -1,0 +1,59 @@
+From 75a1f5234e4b544b4d16eddb995d39685da21361 Mon Sep 17 00:00:00 2001
+From: Ivan Murashov <ivan.murashov@lge.com>
+Date: Fri, 20 Nov 2020 09:38:56 +0000
+Subject: [PATCH] Remove storage class specifier for the explicit template specialization
+
+According to the http://www.eel.is/c++draft/temp.expl.spec:
+An explicit specialization shall not use a storage-class-specifier
+other than thread_local.
+Clang doesn't claims about it, but GCC does.
+An error example for GCC 8.4.0:
+gen/third_party/dawn/src/dawn_wire/client/ApiObjects_autogen.h:25:5:
+error: explicit template specialization cannot have a storage class
+
+Bug: dawn:384
+Change-Id: Iaf86722a943d19c9796a7f112885666ac88f20ca
+Reviewed-on: https://dawn-review.googlesource.com/c/dawn/+/33480
+Commit-Queue: Corentin Wallez <cwallez@chromium.org>
+Reviewed-by: Corentin Wallez <cwallez@chromium.org>
+---
+
+diff --git a/third_party/dawn/generator/templates/dawn_wire/client/ApiObjects.h b/third_party/dawn/generator/templates/dawn_wire/client/ApiObjects.h
+index 0d8421b..bbf9817 100644
+--- a/third_party/dawn/generator/templates/dawn_wire/client/ApiObjects.h
++++ b/third_party/dawn/generator/templates/dawn_wire/client/ApiObjects.h
+@@ -21,7 +21,9 @@
+ namespace dawn_wire { namespace client {
+ 
+     template <typename T>
+-    static constexpr ObjectType ObjectTypeToTypeEnum = static_cast<ObjectType>(-1);
++    struct ObjectTypeToTypeEnum {
++        static constexpr ObjectType value = static_cast<ObjectType>(-1);
++    };
+ 
+     {% for type in by_category["object"] %}
+         {% set Type = type.name.CamelCase() %}
+@@ -41,7 +43,9 @@
+         }
+ 
+         template <>
+-        static constexpr ObjectType ObjectTypeToTypeEnum<{{type.name.CamelCase()}}> = ObjectType::{{type.name.CamelCase()}};
++        struct ObjectTypeToTypeEnum<{{Type}}> {
++            static constexpr ObjectType value = ObjectType::{{Type}};
++        };
+ 
+     {% endfor %}
+ }}  // namespace dawn_wire::client
+diff --git a/third_party/dawn/src/dawn_wire/client/Device.h b/third_party/dawn/src/dawn_wire/client/Device.h
+index eef03a5..a0036a4 100644
+--- a/third_party/dawn/src/dawn_wire/client/Device.h
++++ b/third_party/dawn/src/dawn_wire/client/Device.h
+@@ -65,7 +65,7 @@
+ 
+         template <typename T>
+         void TrackObject(T* object) {
+-            mObjects[ObjectTypeToTypeEnum<T>].Append(object);
++            mObjects[ObjectTypeToTypeEnum<T>::value].Append(object);
+         }
+ 
+         void CancelCallbacksForDisconnect() override;
