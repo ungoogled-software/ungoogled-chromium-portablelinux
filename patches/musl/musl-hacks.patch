@@ -1,6 +1,8 @@
---- net/socket/udp_socket_posix.cc.orig	2019-07-03 13:13:46.034342649 -0400
-+++ net/socket/udp_socket_posix.cc	2019-07-03 13:23:53.117081909 -0400
-@@ -1194,7 +1194,7 @@
+diff --git a/net/socket/udp_socket_posix.cc b/net/socket/udp_socket_posix.cc
+index 525307c..1b75eb6 100644
+--- a/net/socket/udp_socket_posix.cc
++++ b/net/socket/udp_socket_posix.cc
+@@ -1152,7 +1152,7 @@ SendResult UDPSocketPosixSender::InternalSendmmsgBuffers(
      msg_iov->push_back({const_cast<char*>(buffer->data()), buffer->length()});
    msgvec->reserve(buffers.size());
    for (size_t j = 0; j < buffers.size(); j++)

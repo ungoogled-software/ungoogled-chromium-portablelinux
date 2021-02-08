@@ -1,8 +1,8 @@
-diff --git chrome/browser/metrics/chrome_browser_main_extra_parts_metrics.cc chrome/browser/metrics/chrome_browser_main_extra_parts_metrics.cc
-index b57a994..dbb117f 100644
---- chrome/browser/metrics/chrome_browser_main_extra_parts_metrics.cc
-+++ chrome/browser/metrics/chrome_browser_main_extra_parts_metrics.cc
-@@ -49,7 +49,9 @@
+diff --git a/chrome/browser/metrics/chrome_browser_main_extra_parts_metrics.cc b/chrome/browser/metrics/chrome_browser_main_extra_parts_metrics.cc
+index e476958..3ef0ad8 100644
+--- a/chrome/browser/metrics/chrome_browser_main_extra_parts_metrics.cc
++++ b/chrome/browser/metrics/chrome_browser_main_extra_parts_metrics.cc
+@@ -51,7 +51,9 @@
  #endif  // defined(OS_ANDROID) && defined(__arm__)
  
  #if defined(OS_LINUX) && !defined(OS_CHROMEOS)
@@ -12,7 +12,7 @@ index b57a994..dbb117f 100644
  
  #include "base/linux_util.h"
  #include "base/strings/string_split.h"
-@@ -264,7 +266,7 @@ void RecordLinuxDistro() {
+@@ -308,7 +310,7 @@ void RecordLinuxDistro() {
  #endif  // defined(OS_LINUX) && !defined(OS_CHROMEOS)
  
  void RecordLinuxGlibcVersion() {
@@ -21,10 +21,10 @@ index b57a994..dbb117f 100644
    base::Version version(gnu_get_libc_version());
  
    UMALinuxGlibcVersion glibc_version_result = UMA_LINUX_GLIBC_NOT_PARSEABLE;
-diff --git mojo/public/cpp/platform/named_platform_channel_posix.cc mojo/public/cpp/platform/named_platform_channel_posix.cc
+diff --git a/mojo/public/cpp/platform/named_platform_channel_posix.cc b/mojo/public/cpp/platform/named_platform_channel_posix.cc
 index 9082ac4..cbedae6 100644
---- mojo/public/cpp/platform/named_platform_channel_posix.cc
-+++ mojo/public/cpp/platform/named_platform_channel_posix.cc
+--- a/mojo/public/cpp/platform/named_platform_channel_posix.cc
++++ b/mojo/public/cpp/platform/named_platform_channel_posix.cc
 @@ -5,6 +5,7 @@
  #include "mojo/public/cpp/platform/named_platform_channel.h"
  
@@ -33,10 +33,10 @@ index 9082ac4..cbedae6 100644
  #include <sys/socket.h>
  #include <sys/un.h>
  #include <unistd.h>
-diff --git net/dns/dns_config_service_posix.cc net/dns/dns_config_service_posix.cc
-index 5a4aead..3eb9fc9 100644
---- net/dns/dns_config_service_posix.cc
-+++ net/dns/dns_config_service_posix.cc
+diff --git a/net/dns/dns_config_service_posix.cc b/net/dns/dns_config_service_posix.cc
+index 4d4df80..733e23f 100644
+--- a/net/dns/dns_config_service_posix.cc
++++ b/net/dns/dns_config_service_posix.cc
 @@ -151,7 +151,7 @@ ConfigParsePosixResult ReadDnsConfig(DnsConfig* dns_config) {
  #if !defined(OS_ANDROID)
    ConfigParsePosixResult result;
@@ -46,10 +46,10 @@ index 5a4aead..3eb9fc9 100644
    // Note: res_ninit in glibc always returns 0 and sets RES_INIT.
    // res_init behaves the same way.
    memset(&_res, 0, sizeof(_res));
-diff --git sandbox/linux/seccomp-bpf/trap.cc sandbox/linux/seccomp-bpf/trap.cc
+diff --git a/sandbox/linux/seccomp-bpf/trap.cc b/sandbox/linux/seccomp-bpf/trap.cc
 index f5b86a7..2762d60 100644
---- sandbox/linux/seccomp-bpf/trap.cc
-+++ sandbox/linux/seccomp-bpf/trap.cc
+--- a/sandbox/linux/seccomp-bpf/trap.cc
++++ b/sandbox/linux/seccomp-bpf/trap.cc
 @@ -174,7 +174,7 @@ void Trap::SigSys(int nr, LinuxSigInfo* info, ucontext_t* ctx) {
    // If the version of glibc doesn't include this information in
    // siginfo_t (older than 2.17), we need to explicitly copy it
@@ -59,10 +59,10 @@ index f5b86a7..2762d60 100644
  #endif
  
  #if defined(__mips__)
-diff --git sandbox/linux/suid/process_util.h sandbox/linux/suid/process_util.h
+diff --git a/sandbox/linux/suid/process_util.h b/sandbox/linux/suid/process_util.h
 index 10071d3..0856910 100644
---- sandbox/linux/suid/process_util.h
-+++ sandbox/linux/suid/process_util.h
+--- a/sandbox/linux/suid/process_util.h
++++ b/sandbox/linux/suid/process_util.h
 @@ -12,6 +12,15 @@
  #include <stdint.h>
  #include <sys/types.h>
@@ -79,10 +79,10 @@ index 10071d3..0856910 100644
  // This adjusts /proc/process/oom_score_adj so the Linux OOM killer
  // will prefer certain process types over others. The range for the
  // adjustment is [-1000, 1000], with [0, 1000] being user accessible.
-diff --git third_party/blink/renderer/platform/wtf/stack_util.cc third_party/blink/renderer/platform/wtf/stack_util.cc
+diff --git a/third_party/blink/renderer/platform/wtf/stack_util.cc b/third_party/blink/renderer/platform/wtf/stack_util.cc
 index 71b901f..f33aba0 100644
---- third_party/blink/renderer/platform/wtf/stack_util.cc
-+++ third_party/blink/renderer/platform/wtf/stack_util.cc
+--- a/third_party/blink/renderer/platform/wtf/stack_util.cc
++++ b/third_party/blink/renderer/platform/wtf/stack_util.cc
 @@ -29,7 +29,7 @@ size_t GetUnderestimatedStackSize() {
  // FIXME: On Mac OSX and Linux, this method cannot estimate stack size
  // correctly for the main thread.
@@ -101,10 +101,10 @@ index 71b901f..f33aba0 100644
      defined(OS_FUCHSIA)
    pthread_attr_t attr;
    int error;
-diff --git third_party/ffmpeg/libavutil/cpu.c third_party/ffmpeg/libavutil/cpu.c
+diff --git a/third_party/ffmpeg/libavutil/cpu.c b/third_party/ffmpeg/libavutil/cpu.c
 index 52f6b9a..8da9488 100644
---- third_party/ffmpeg/libavutil/cpu.c
-+++ third_party/ffmpeg/libavutil/cpu.c
+--- a/third_party/ffmpeg/libavutil/cpu.c
++++ b/third_party/ffmpeg/libavutil/cpu.c
 @@ -41,7 +41,6 @@
  #include <sys/param.h>
  #endif
@@ -113,10 +113,10 @@ index 52f6b9a..8da9488 100644
  #endif
  #if HAVE_UNISTD_H
  #include <unistd.h>
-diff --git third_party/lss/linux_syscall_support.h third_party/lss/linux_syscall_support.h
+diff --git a/third_party/lss/linux_syscall_support.h b/third_party/lss/linux_syscall_support.h
 index e4ac226..3e58a66 100644
---- third_party/lss/linux_syscall_support.h
-+++ third_party/lss/linux_syscall_support.h
+--- a/third_party/lss/linux_syscall_support.h
++++ b/third_party/lss/linux_syscall_support.h
 @@ -139,12 +139,14 @@ extern "C" {
   */
  #pragma push_macro("stat64")
@@ -153,10 +153,10 @@ index e4ac226..3e58a66 100644
  #pragma pop_macro("lstat64")
  #pragma pop_macro("pread64")
  #pragma pop_macro("pwrite64")
-diff --git third_party/nasm/nasmlib/realpath.c third_party/nasm/nasmlib/realpath.c
+diff --git a/third_party/nasm/nasmlib/realpath.c b/third_party/nasm/nasmlib/realpath.c
 index c31003e..73de448 100644
---- third_party/nasm/nasmlib/realpath.c
-+++ third_party/nasm/nasmlib/realpath.c
+--- a/third_party/nasm/nasmlib/realpath.c
++++ b/third_party/nasm/nasmlib/realpath.c
 @@ -47,7 +47,7 @@
  
  #include "nasmlib.h"
@@ -166,10 +166,10 @@ index c31003e..73de448 100644
  
  /*
   * GNU-specific, but avoids the realpath(..., NULL)
-diff --git third_party/ots/include/opentype-sanitiser.h third_party/ots/include/opentype-sanitiser.h
+diff --git a/third_party/ots/include/opentype-sanitiser.h b/third_party/ots/include/opentype-sanitiser.h
 index 08f23be..021a7cb 100644
---- third_party/ots/include/opentype-sanitiser.h
-+++ third_party/ots/include/opentype-sanitiser.h
+--- a/third_party/ots/include/opentype-sanitiser.h
++++ b/third_party/ots/include/opentype-sanitiser.h
 @@ -20,6 +20,7 @@ typedef unsigned __int64 uint64_t;
  #define ots_htonl(x) _byteswap_ulong (x)
  #define ots_htons(x) _byteswap_ushort (x)
@@ -178,10 +178,10 @@ index 08f23be..021a7cb 100644
  #include <arpa/inet.h>
  #include <stdint.h>
  #define ots_ntohl(x) ntohl (x)
-diff --git third_party/swiftshader/third_party/llvm-subzero/lib/Support/Unix/Signals.inc third_party/swiftshader/third_party/llvm-subzero/lib/Support/Unix/Signals.inc
+diff --git a/third_party/swiftshader/third_party/llvm-subzero/lib/Support/Unix/Signals.inc b/third_party/swiftshader/third_party/llvm-subzero/lib/Support/Unix/Signals.inc
 index 3750d7f..d399b39 100644
---- third_party/swiftshader/third_party/llvm-subzero/lib/Support/Unix/Signals.inc
-+++ third_party/swiftshader/third_party/llvm-subzero/lib/Support/Unix/Signals.inc
+--- a/third_party/swiftshader/third_party/llvm-subzero/lib/Support/Unix/Signals.inc
++++ b/third_party/swiftshader/third_party/llvm-subzero/lib/Support/Unix/Signals.inc
 @@ -25,7 +25,7 @@
  #include "llvm/Support/raw_ostream.h"
  #include <algorithm>

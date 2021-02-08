@@ -1,6 +1,8 @@
---- a/third_party/breakpad/breakpad/src/client/linux/handler/exception_handler.cc.orig	2015-12-06 09:59:55.554536646 +0100
-+++ b/third_party/breakpad/breakpad/src/client/linux/handler/exception_handler.cc	2015-12-06 10:01:16.818238035 +0100
-@@ -477,7 +477,9 @@ bool ExceptionHandler::SimulateSignalDel
+diff --git a/third_party/breakpad/breakpad/src/client/linux/handler/exception_handler.cc b/third_party/breakpad/breakpad/src/client/linux/handler/exception_handler.cc
+index ca353c4..a6cb5f9 100644
+--- a/third_party/breakpad/breakpad/src/client/linux/handler/exception_handler.cc
++++ b/third_party/breakpad/breakpad/src/client/linux/handler/exception_handler.cc
+@@ -490,7 +490,9 @@ bool ExceptionHandler::SimulateSignalDelivery(int sig) {
    siginfo.si_code = SI_USER;
    siginfo.si_pid = getpid();
    ucontext_t context;
@@ -10,7 +12,7 @@
    return HandleSignal(sig, &siginfo, &context);
  }
  
-@@ -647,9 +649,14 @@ bool ExceptionHandler::WriteMinidump() {
+@@ -675,9 +677,14 @@ bool ExceptionHandler::WriteMinidump() {
    sys_prctl(PR_SET_DUMPABLE, 1, 0, 0, 0);
  
    CrashContext context;

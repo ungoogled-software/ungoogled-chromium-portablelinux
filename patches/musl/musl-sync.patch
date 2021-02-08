@@ -1,5 +1,7 @@
---- third_party/libsync/src/include/sync/sync.h.orig	2020-02-21 07:43:33.748325175 -0500
-+++ third_party/libsync/src/include/sync/sync.h	2020-02-21 07:44:07.288328784 -0500
+diff --git a/third_party/libsync/src/include/sync/sync.h b/third_party/libsync/src/include/sync/sync.h
+index 50ed0ac..bc9d567 100644
+--- a/third_party/libsync/src/include/sync/sync.h
++++ b/third_party/libsync/src/include/sync/sync.h
 @@ -19,12 +19,16 @@
  #ifndef __SYS_CORE_SYNC_H
  #define __SYS_CORE_SYNC_H
@@ -18,7 +20,7 @@
  
  struct sync_legacy_merge_data {
   int32_t fd2;
-@@ -158,6 +162,8 @@
+@@ -158,6 +162,8 @@ struct sync_pt_info *sync_pt_info(struct sync_fence_info_data *info,
                                    struct sync_pt_info *itr);
  void sync_fence_info_free(struct sync_fence_info_data *info);
  

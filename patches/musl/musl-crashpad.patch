@@ -1,16 +1,7 @@
---- third_party/crashpad/crashpad/util/linux/ptracer.cc
-+++ third_party/crashpad/crashpad/util/linux/ptracer.cc
-@@ -26,6 +26,7 @@
- 
- #if defined(ARCH_CPU_X86_FAMILY)
- #include <asm/ldt.h>
-+#include <asm/ptrace-abi.h>
- #endif
- 
- namespace crashpad {
-
---- third_party/crashpad/crashpad/compat/linux/sys/ptrace.h
-+++ third_party/crashpad/crashpad/compat/linux/sys/ptrace.h
+diff --git a/third_party/crashpad/crashpad/compat/linux/sys/ptrace.h b/third_party/crashpad/crashpad/compat/linux/sys/ptrace.h
+index f8be372..5ab6e5b 100644
+--- a/third_party/crashpad/crashpad/compat/linux/sys/ptrace.h
++++ b/third_party/crashpad/crashpad/compat/linux/sys/ptrace.h
 @@ -17,7 +17,9 @@
  
  #include_next <sys/ptrace.h>
@@ -21,3 +12,15 @@
  
  // https://sourceware.org/bugzilla/show_bug.cgi?id=22433
  #if !defined(PTRACE_GET_THREAD_AREA) && !defined(PT_GET_THREAD_AREA) && \
+diff --git a/third_party/crashpad/crashpad/util/linux/ptracer.cc b/third_party/crashpad/crashpad/util/linux/ptracer.cc
+index 557e0d3..f41dc80 100644
+--- a/third_party/crashpad/crashpad/util/linux/ptracer.cc
++++ b/third_party/crashpad/crashpad/util/linux/ptracer.cc
+@@ -26,6 +26,7 @@
+ 
+ #if defined(ARCH_CPU_X86_FAMILY)
+ #include <asm/ldt.h>
++#include <asm/ptrace-abi.h>
+ #endif
+ 
+ namespace crashpad {

@@ -1,7 +1,7 @@
-diff --git base/process/process_metrics_posix.cc base/process/process_metrics_posix.cc
+diff --git a/base/process/process_metrics_posix.cc b/base/process/process_metrics_posix.cc
 index 9d12c42..900ab13 100644
---- base/process/process_metrics_posix.cc
-+++ base/process/process_metrics_posix.cc
+--- a/base/process/process_metrics_posix.cc
++++ b/base/process/process_metrics_posix.cc
 @@ -119,14 +119,14 @@ size_t ProcessMetrics::GetMallocUsage() {
    malloc_statistics_t stats = {0};
    malloc_zone_statistics(nullptr, &stats);
@@ -19,11 +19,11 @@ index 9d12c42..900ab13 100644
    // TODO(fuchsia): Not currently exposed. https://crbug.com/735087.
    return 0;
  #endif
-diff --git base/trace_event/malloc_dump_provider.cc base/trace_event/malloc_dump_provider.cc
-index c327f48..79299a6 100644
---- base/trace_event/malloc_dump_provider.cc
-+++ base/trace_event/malloc_dump_provider.cc
-@@ -132,7 +132,7 @@ bool MallocDumpProvider::OnMemoryDump(const MemoryDumpArgs& args,
+diff --git a/base/trace_event/malloc_dump_provider.cc b/base/trace_event/malloc_dump_provider.cc
+index 9b4a0be..4598214 100644
+--- a/base/trace_event/malloc_dump_provider.cc
++++ b/base/trace_event/malloc_dump_provider.cc
+@@ -163,7 +163,7 @@ bool MallocDumpProvider::OnMemoryDump(const MemoryDumpArgs& args,
    }
  #elif defined(OS_FUCHSIA)
  // TODO(fuchsia): Port, see https://crbug.com/706592.
@@ -32,10 +32,10 @@ index c327f48..79299a6 100644
    struct mallinfo info = mallinfo();
    // In case of Android's jemalloc |arena| is 0 and the outer pages size is
    // reported by |hblkhd|. In case of dlmalloc the total is given by
-diff --git third_party/swiftshader/third_party/llvm-10.0/configs/linux/include/llvm/Config/config.h third_party/swiftshader/third_party/llvm-10.0/configs/linux/include/llvm/Config/config.h
+diff --git a/third_party/swiftshader/third_party/llvm-10.0/configs/linux/include/llvm/Config/config.h b/third_party/swiftshader/third_party/llvm-10.0/configs/linux/include/llvm/Config/config.h
 index ac4b3e3..3736a5b 100644
---- third_party/swiftshader/third_party/llvm-10.0/configs/linux/include/llvm/Config/config.h
-+++ third_party/swiftshader/third_party/llvm-10.0/configs/linux/include/llvm/Config/config.h
+--- a/third_party/swiftshader/third_party/llvm-10.0/configs/linux/include/llvm/Config/config.h
++++ b/third_party/swiftshader/third_party/llvm-10.0/configs/linux/include/llvm/Config/config.h
 @@ -125,7 +125,9 @@
  /* #undef HAVE_MALLCTL */
  
@@ -46,10 +46,10 @@ index ac4b3e3..3736a5b 100644
  
  /* Define to 1 if you have the <malloc/malloc.h> header file. */
  /* #undef HAVE_MALLOC_MALLOC_H */
-diff --git third_party/swiftshader/third_party/llvm-subzero/lib/Support/Unix/Process.inc third_party/swiftshader/third_party/llvm-subzero/lib/Support/Unix/Process.inc
+diff --git a/third_party/swiftshader/third_party/llvm-subzero/lib/Support/Unix/Process.inc b/third_party/swiftshader/third_party/llvm-subzero/lib/Support/Unix/Process.inc
 index b239046..1ffdbc5 100644
---- third_party/swiftshader/third_party/llvm-subzero/lib/Support/Unix/Process.inc
-+++ third_party/swiftshader/third_party/llvm-subzero/lib/Support/Unix/Process.inc
+--- a/third_party/swiftshader/third_party/llvm-subzero/lib/Support/Unix/Process.inc
++++ b/third_party/swiftshader/third_party/llvm-subzero/lib/Support/Unix/Process.inc
 @@ -86,7 +86,7 @@ unsigned Process::getPageSize() {
  }
  

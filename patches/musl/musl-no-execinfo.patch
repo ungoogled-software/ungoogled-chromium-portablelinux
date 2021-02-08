@@ -1,7 +1,7 @@
-diff --git base/debug/stack_trace_posix.cc base/debug/stack_trace_posix.cc
-index 6a1531e..75177c1 100644
---- base/debug/stack_trace_posix.cc
-+++ base/debug/stack_trace_posix.cc
+diff --git a/base/debug/stack_trace_posix.cc b/base/debug/stack_trace_posix.cc
+index bf4b854..554fb6f 100644
+--- a/base/debug/stack_trace_posix.cc
++++ b/base/debug/stack_trace_posix.cc
 @@ -27,7 +27,7 @@
  #if !defined(USE_SYMBOLIZE)
  #include <cxxabi.h>
@@ -47,7 +47,7 @@ index 6a1531e..75177c1 100644
  
  void PrintToStderr(const char* output) {
    // NOTE: This code MUST be async-signal safe (it's used by in-process
-@@ -834,7 +834,7 @@ size_t CollectStackTrace(void** trace, size_t count) {
+@@ -827,7 +827,7 @@ size_t CollectStackTrace(void** trace, size_t count) {
    // NOTE: This code MUST be async-signal safe (it's used by in-process
    // stack dumping signal handler). NO malloc or stdio is allowed here.
  
@@ -56,7 +56,7 @@ index 6a1531e..75177c1 100644
    // Though the backtrace API man page does not list any possible negative
    // return values, we take no chance.
    return base::saturated_cast<size_t>(backtrace(trace, count));
-@@ -847,13 +847,13 @@ void StackTrace::PrintWithPrefix(const char* prefix_string) const {
+@@ -840,13 +840,13 @@ void StackTrace::PrintWithPrefix(const char* prefix_string) const {
  // NOTE: This code MUST be async-signal safe (it's used by in-process
  // stack dumping signal handler). NO malloc or stdio is allowed here.
  
@@ -72,10 +72,10 @@ index 6a1531e..75177c1 100644
  void StackTrace::OutputToStreamWithPrefix(std::ostream* os,
                                            const char* prefix_string) const {
    StreamBacktraceOutputHandler handler(os);
-diff --git third_party/swiftshader/third_party/llvm-subzero/build/Linux/include/llvm/Config/config.h third_party/swiftshader/third_party/llvm-subzero/build/Linux/include/llvm/Config/config.h
+diff --git a/third_party/swiftshader/third_party/llvm-subzero/build/Linux/include/llvm/Config/config.h b/third_party/swiftshader/third_party/llvm-subzero/build/Linux/include/llvm/Config/config.h
 index 2f860e1..36f3c33 100644
---- third_party/swiftshader/third_party/llvm-subzero/build/Linux/include/llvm/Config/config.h
-+++ third_party/swiftshader/third_party/llvm-subzero/build/Linux/include/llvm/Config/config.h
+--- a/third_party/swiftshader/third_party/llvm-subzero/build/Linux/include/llvm/Config/config.h
++++ b/third_party/swiftshader/third_party/llvm-subzero/build/Linux/include/llvm/Config/config.h
 @@ -14,7 +14,7 @@
  #define ENABLE_CRASH_OVERRIDES 0
  

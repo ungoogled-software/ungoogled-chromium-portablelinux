@@ -1,8 +1,8 @@
-diff --git sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc
-index a100248..8d62f11 100644
---- sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc
-+++ sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc
-@@ -127,21 +127,11 @@ namespace sandbox {
+diff --git a/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc b/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc
+index 2a97d39..0c86cc5 100644
+--- a/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc
++++ b/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc
+@@ -130,21 +130,11 @@ namespace sandbox {
  // present (as in newer versions of posix_spawn).
  ResultExpr RestrictCloneToThreadsAndEPERMFork() {
    const Arg<unsigned long> flags(0);
@@ -29,7 +29,7 @@ index a100248..8d62f11 100644
  
    // The following two flags are the two important flags in any vfork-emulating
    // clone call. EPERM any clone call that contains both of them.
-@@ -151,7 +141,7 @@ ResultExpr RestrictCloneToThreadsAndEPERMFork() {
+@@ -154,7 +144,7 @@ ResultExpr RestrictCloneToThreadsAndEPERMFork() {
        AnyOf((flags & (CLONE_VM | CLONE_THREAD)) == 0,
              (flags & kImportantCloneVforkFlags) == kImportantCloneVforkFlags);
  
@@ -38,10 +38,10 @@ index a100248..8d62f11 100644
        .ElseIf(is_fork_or_clone_vfork, Error(EPERM))
        .Else(CrashSIGSYSClone());
  }
-diff --git sandbox/linux/seccomp-bpf-helpers/syscall_sets.cc sandbox/linux/seccomp-bpf-helpers/syscall_sets.cc
+diff --git a/sandbox/linux/seccomp-bpf-helpers/syscall_sets.cc b/sandbox/linux/seccomp-bpf-helpers/syscall_sets.cc
 index d9d1882..0567557 100644
---- sandbox/linux/seccomp-bpf-helpers/syscall_sets.cc
-+++ sandbox/linux/seccomp-bpf-helpers/syscall_sets.cc
+--- a/sandbox/linux/seccomp-bpf-helpers/syscall_sets.cc
++++ b/sandbox/linux/seccomp-bpf-helpers/syscall_sets.cc
 @@ -392,6 +392,7 @@ bool SyscallSets::IsAllowedProcessStartOrDeath(int sysno) {
  #if defined(__i386__)
      case __NR_waitpid:
@@ -75,10 +75,10 @@ index d9d1882..0567557 100644
      case __NR_msync:
      case __NR_munlockall:
      case __NR_readahead:
-diff --git sandbox/linux/system_headers/arm64_linux_syscalls.h sandbox/linux/system_headers/arm64_linux_syscalls.h
+diff --git a/sandbox/linux/system_headers/arm64_linux_syscalls.h b/sandbox/linux/system_headers/arm64_linux_syscalls.h
 index a242c18..bb80da6 100644
---- sandbox/linux/system_headers/arm64_linux_syscalls.h
-+++ sandbox/linux/system_headers/arm64_linux_syscalls.h
+--- a/sandbox/linux/system_headers/arm64_linux_syscalls.h
++++ b/sandbox/linux/system_headers/arm64_linux_syscalls.h
 @@ -1063,6 +1063,10 @@
  #define __NR_memfd_create 279
  #endif
@@ -90,10 +90,10 @@ index a242c18..bb80da6 100644
  #if !defined(__NR_bpf)
  #define __NR_bpf 280
  #endif
-diff --git sandbox/linux/system_headers/arm_linux_syscalls.h sandbox/linux/system_headers/arm_linux_syscalls.h
+diff --git a/sandbox/linux/system_headers/arm_linux_syscalls.h b/sandbox/linux/system_headers/arm_linux_syscalls.h
 index 85e2110..2621cd2 100644
---- sandbox/linux/system_headers/arm_linux_syscalls.h
-+++ sandbox/linux/system_headers/arm_linux_syscalls.h
+--- a/sandbox/linux/system_headers/arm_linux_syscalls.h
++++ b/sandbox/linux/system_headers/arm_linux_syscalls.h
 @@ -1385,6 +1385,10 @@
  #define __NR_memfd_create (__NR_SYSCALL_BASE+385)
  #endif
@@ -105,10 +105,10 @@ index 85e2110..2621cd2 100644
  #if !defined(__NR_bpf)
  #define __NR_bpf (__NR_SYSCALL_BASE+386)
  #endif
-diff --git sandbox/linux/system_headers/linux_syscalls.h sandbox/linux/system_headers/linux_syscalls.h
+diff --git a/sandbox/linux/system_headers/linux_syscalls.h b/sandbox/linux/system_headers/linux_syscalls.h
 index 2b78a0c..b6fedb5 100644
---- sandbox/linux/system_headers/linux_syscalls.h
-+++ sandbox/linux/system_headers/linux_syscalls.h
+--- a/sandbox/linux/system_headers/linux_syscalls.h
++++ b/sandbox/linux/system_headers/linux_syscalls.h
 @@ -10,6 +10,7 @@
  #define SANDBOX_LINUX_SYSTEM_HEADERS_LINUX_SYSCALLS_H_
  
@@ -117,10 +117,10 @@ index 2b78a0c..b6fedb5 100644
  
  #if defined(__x86_64__)
  #include "sandbox/linux/system_headers/x86_64_linux_syscalls.h"
-diff --git sandbox/linux/system_headers/mips64_linux_syscalls.h sandbox/linux/system_headers/mips64_linux_syscalls.h
+diff --git a/sandbox/linux/system_headers/mips64_linux_syscalls.h b/sandbox/linux/system_headers/mips64_linux_syscalls.h
 index ec75815..5515270 100644
---- sandbox/linux/system_headers/mips64_linux_syscalls.h
-+++ sandbox/linux/system_headers/mips64_linux_syscalls.h
+--- a/sandbox/linux/system_headers/mips64_linux_syscalls.h
++++ b/sandbox/linux/system_headers/mips64_linux_syscalls.h
 @@ -1271,4 +1271,8 @@
  #define __NR_memfd_create (__NR_Linux + 314)
  #endif
@@ -130,10 +130,10 @@ index ec75815..5515270 100644
 +#endif
 +
  #endif  // SANDBOX_LINUX_SYSTEM_HEADERS_MIPS64_LINUX_SYSCALLS_H_
-diff --git sandbox/linux/system_headers/mips_linux_syscalls.h sandbox/linux/system_headers/mips_linux_syscalls.h
+diff --git a/sandbox/linux/system_headers/mips_linux_syscalls.h b/sandbox/linux/system_headers/mips_linux_syscalls.h
 index ddbf97f..ad3d64b 100644
---- sandbox/linux/system_headers/mips_linux_syscalls.h
-+++ sandbox/linux/system_headers/mips_linux_syscalls.h
+--- a/sandbox/linux/system_headers/mips_linux_syscalls.h
++++ b/sandbox/linux/system_headers/mips_linux_syscalls.h
 @@ -1433,4 +1433,8 @@
  #define __NR_memfd_create (__NR_Linux + 354)
  #endif
@@ -143,10 +143,10 @@ index ddbf97f..ad3d64b 100644
 +#endif
 +
  #endif  // SANDBOX_LINUX_SYSTEM_HEADERS_MIPS_LINUX_SYSCALLS_H_
-diff --git sandbox/linux/system_headers/x86_64_linux_syscalls.h sandbox/linux/system_headers/x86_64_linux_syscalls.h
+diff --git a/sandbox/linux/system_headers/x86_64_linux_syscalls.h b/sandbox/linux/system_headers/x86_64_linux_syscalls.h
 index b0ae0a2..8b12029 100644
---- sandbox/linux/system_headers/x86_64_linux_syscalls.h
-+++ sandbox/linux/system_headers/x86_64_linux_syscalls.h
+--- a/sandbox/linux/system_headers/x86_64_linux_syscalls.h
++++ b/sandbox/linux/system_headers/x86_64_linux_syscalls.h
 @@ -1350,5 +1350,9 @@
  #define __NR_rseq 334
  #endif
@@ -157,10 +157,10 @@ index b0ae0a2..8b12029 100644
 +
  #endif  // SANDBOX_LINUX_SYSTEM_HEADERS_X86_64_LINUX_SYSCALLS_H_
  
-diff --git sandbox/policy/linux/bpf_renderer_policy_linux.cc sandbox/policy/linux/bpf_renderer_policy_linux.cc
+diff --git a/sandbox/policy/linux/bpf_renderer_policy_linux.cc b/sandbox/policy/linux/bpf_renderer_policy_linux.cc
 index 9fe9575..8ab9c9d 100644
---- sandbox/policy/linux/bpf_renderer_policy_linux.cc
-+++ sandbox/policy/linux/bpf_renderer_policy_linux.cc
+--- a/sandbox/policy/linux/bpf_renderer_policy_linux.cc
++++ b/sandbox/policy/linux/bpf_renderer_policy_linux.cc
 @@ -93,11 +93,11 @@ ResultExpr RendererProcessPolicy::EvaluateSyscall(int sysno) const {
      case __NR_sysinfo:
      case __NR_times:
