@@ -25,10 +25,10 @@ cat "$_root_dir/flags.portable.gn" >> "$_src_dir/out/Default/args.gn"
 
 # Set commands or paths to LLVM-provided tools outside the script via 'export ...'
 # or before these lines
-export AR=gcc-ar
-export NM=gcc-nm
-export CC=gcc
-export CXX=g++
+export AR=${AR:=llvm-ar}
+export NM=${NM:=llvm-nm}
+export CC=${CC:=clang}
+export CXX=${CXX:=clang++}
 # You may also set CFLAGS, CPPFLAGS, CXXFLAGS, and LDFLAGS
 # See build/toolchain/linux/unbundle/ in the Chromium source for more details.
 #
