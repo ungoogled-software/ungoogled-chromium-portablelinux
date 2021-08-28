@@ -1,7 +1,7 @@
 FROM ug-chromium-builder-stage1:latest
 
 RUN apt-get update
-RUN apt-get install -y imagemagick desktop-file-utils binutils
+RUN apt-get install -y imagemagick desktop-file-utils binutils fuse
 
 WORKDIR /data
 
