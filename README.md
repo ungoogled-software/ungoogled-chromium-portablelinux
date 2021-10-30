@@ -6,7 +6,9 @@ Portable Linux builds can run on **any Linux distribution** (that regular Chromi
 
 ## Downloads
 
-[Download binaries from the Contributor Binaries website](//ungoogled-software.github.io/ungoogled-chromium-binaries/).
+An automated build for 64-bit Linux is available in [Releases](//github.com/ungoogled-software/ungoogled-chromium-portablelinux/releases).
+
+Other binaries are available from [the Contributor Binaries website](//ungoogled-software.github.io/ungoogled-chromium-binaries/).
 
 **Source Code**: It is recommended to use a tag via `git checkout` (see building instructions below). You may also use `master`, but it is for development and may not be stable.
 
@@ -16,7 +18,7 @@ Portable Linux builds can run on **any Linux distribution** (that regular Chromi
     ```sh
     # tar -xvf ungoogled-chromium_xxxxxxx.tar.xz -C /opt
     ```
-2. Follow the instructions in `/opt/ungoogled-chromium_xxxxxxx/README`
+2. For the automated release, you can now run `/opt/bin/chromium`.  For contributor binaries, follow instructions in `/opt/ungoogled-chromium_xxxxxxx/README`.
 
 ## Building
 

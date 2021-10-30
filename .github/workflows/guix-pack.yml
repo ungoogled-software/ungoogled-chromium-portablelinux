@@ -1,0 +1,73 @@
+name: Create portable executable
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '21 5 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Guix cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cache/guix
+          key: guix-cache-${{ github.sha }}
+          restore-keys: |
+            guix-cache-
+      - name: Install Guix
+        uses: PromyLOPH/guix-install-action@v1
+      - name: Assert that binary substitute is available
+        # XXX: Currently 'guix weather' fails unless *all* substitute servers have it.
+        run: guix weather --substitute-urls="https://ci.guix.gnu.org" ungoogled-chromium
+      - name: Skip when substitute is unavailable
+        if: ${{ failure() }}
+        run: echo "No binary substitute available, skipping."
+      - name: Download substitutes
+        run: guix build --no-grafts --fallback ungoogled-chromium
+      - name: Install Recutils
+        run: sudo apt-get -q install recutils
+      - name: Export version information
+        run: |
+          echo today=$(date -I) >> $GITHUB_ENV
+          echo version=$(guix show ungoogled-chromium | recsel -P version) >> $GITHUB_ENV
+          echo guix_commit=$(guix describe -f recutils | recsel -e 'name = "guix"' -P commit) >> $GITHUB_ENV
+      - name: Create relocatable pack
+        run: >
+          guix pack --fallback -RR
+          -S /bin=bin
+          --save-provenance
+          --root=ungoogled-chromium-${{ env.version }}.tar.gz
+          ungoogled-chromium
+      - name: Create release notes
+        # Ah yes, shell scripting Markdown with YAML.  What could go wrong?
+        run: |
+          cat > ${{ runner.temp }}/release_notes.md <<'EOF'
+          The tarball below was generated at ${{ env.today }} by [GNU Guix](https://guix.gnu.org) and @github-actions.
+          To use it, run:
+          ```
+          cd /tmp # or anywhere
+          tar -xf ~/Downloads/ungoogled-chromium-${{ env.version }}.tar.gz
+          ./bin/chromium
+          ```
+          It can be reproduced on a Debian-like distribution by running:
+          ```
+          sudo apt install guix
+          guix time-machine --commit=${{ env.guix_commit }} \
+            -- pack -RR -S /bin=bin ungoogled-chromium
+          ```
+          EOF
+      - name: Upload release
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          artifacts: ungoogled-chromium-${{ env.version }}.tar.gz
+          artifactContentType: application/gzip
+          bodyFile: ${{ runner.temp }}/release_notes.md
+          omitBodyDuringUpdate: false
+          omitName: true
+          omitNameDuringUpdate: true
+          tag: ${{ env.version }}.1
+          token: ${{ secrets.GITHUB_TOKEN }}
