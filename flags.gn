@@ -12,3 +12,4 @@ symbol_level=0
 use_gnome_keyring=false
 use_kerberos=false
 use_sysroot=false
+use_vaapi=true
