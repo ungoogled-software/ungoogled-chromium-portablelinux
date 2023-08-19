@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 GIT_REPO="ungoogled-chromium"
 
@@ -14,10 +13,11 @@ RELEASE=$(echo ${DISTRO_RELEASE}| cut -d':' -f2)
 
 IMAGE="chromium-builder-${RELEASE}:llvm-${LLVM_VERSION}"
 
-cd $BASE_DIR 
+cd $BASE_DIR/docker
 
-echo "docker buildx build -t ${IMAGE} --build-arg DISTRO=${DISTRO} --build-arg RELEASE=${RELEASE} --build-arg LLVM_VERSION=${LLVM_VERSION} --build-arg REPO_POSTFIX=${REPO_POSTFIX} --build-arg NODE_VERSION=${NODE_VERSION} ."
-(cd $BASE_DIR/docker && docker buildx build -t ${IMAGE} --build-arg DISTRO=${DISTRO} --build-arg RELEASE=${RELEASE} --build-arg LLVM_VERSION=${LLVM_VERSION} --build-arg REPO_POSTFIX=${REPO_POSTFIX} --build-arg NODE_VERSION=${NODE_VERSION} . )
+set +x
+docker buildx build -t ${IMAGE} --build-arg DISTRO=${DISTRO} --build-arg RELEASE=${RELEASE} --build-arg LLVM_VERSION=${LLVM_VERSION} --build-arg REPO_POSTFIX=${REPO_POSTFIX} --build-arg NODE_VERSION=${NODE_VERSION} . )
+set -x
 
 [ -n "$(ls -A ungoogled-chromium)" ] || git submodule update --init --recursive
 
@@ -26,9 +26,7 @@ echo "==============================================================="
 echo "  docker build start at ${BUILD_START}"
 echo "==============================================================="
 
-cd ${BASE_DIR}
-
-docker run -it -v ${BASE_DIR}:/repo ${IMAGE} /bin/bash -c "/repo/build.sh"
+cd ${BASE_DIR} && docker run -it -v ${BASE_DIR}:/repo ${IMAGE} /bin/bash -c "/repo/build.sh"
 
 BUILD_END=$(date)
 echo "==============================================================="

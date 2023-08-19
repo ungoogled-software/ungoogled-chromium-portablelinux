@@ -34,6 +34,8 @@ mkdir -p "${src_dir}/out/Default" "${download_cache}"
 cd "${src_dir}"
 # revert addition of check for a certain llvm package version (seems to be introduced in chromium 107.xx)
 patch -Rp1 -i ${patches_dir}/REVERT-clang-version-check.patch
+# hack to disable rust version check (introduced with chromium 115.xx)
+patch -Np1 -i ${patches_dir}/rust-version-check.patch
 # revert addition of compiler flag that needs newer clang (taken from ungoogled-chromium-archlinux)
 patch -Rp1 -i ${patches_dir}/REVERT-disable-autoupgrading-debug-info.patch
 # use the --oauth2-client-id= and --oauth2-client-secret= switches for setting GOOGLE_DEFAULT_CLIENT_ID 
@@ -43,10 +45,9 @@ patch -Np1 -i ${patches_dir}/use-oauth2-client-switches-as-default.patch
 # https://crbug.com/1314342
 patch -Np1 -i ${patches_dir}/disable-GlobalMediaControlsCastStartStop.patch
 # VAAPI wayland support (taken from ungoogled-chromium-archlinux)
-patch -Np1 -i ${patches_dir}/ozone-add-va-api-support-to-wayland.patch
+#patch -Np1 -i ${patches_dir}/ozone-add-va-api-support-to-wayland.patch
 # fix missing includes in av1_vaapi_video_encoder_delegate.cc
 patch -Np1 -i ${patches_dir}/av1_vaapi_video_encoder_delegate.patch
-
 
 ## apply ungoogled-chromium patches
 "${main_repo}/utils/prune_binaries.py" "${src_dir}" "${main_repo}/pruning.list"
@@ -69,5 +70,6 @@ cat "${main_repo}/flags.gn" "${root_dir}/flags.gn" > "${src_dir}/out/Default/arg
 ## execute build
 ./tools/gn/bootstrap/bootstrap.py -o out/Default/gn --skip-generate-buildfiles
 ./out/Default/gn gen out/Default --fail-on-unused-args
-#
+
 ninja -C out/Default chrome chrome_sandbox chromedriver
+
