@@ -16,7 +16,7 @@ IMAGE="chromium-builder-${RELEASE}:llvm-${LLVM_VERSION}"
 cd $BASE_DIR/docker
 
 set +x
-docker buildx build -t ${IMAGE} --build-arg DISTRO=${DISTRO} --build-arg RELEASE=${RELEASE} --build-arg LLVM_VERSION=${LLVM_VERSION} --build-arg REPO_POSTFIX=${REPO_POSTFIX} --build-arg NODE_VERSION=${NODE_VERSION} . )
+docker buildx build -t ${IMAGE} --build-arg DISTRO=${DISTRO} --build-arg RELEASE=${RELEASE} --build-arg LLVM_VERSION=${LLVM_VERSION} --build-arg REPO_POSTFIX=${REPO_POSTFIX} --build-arg NODE_VERSION=${NODE_VERSION} .
 set -x
 
 [ -n "$(ls -A ungoogled-chromium)" ] || git submodule update --init --recursive
