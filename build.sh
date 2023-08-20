@@ -30,6 +30,11 @@ mkdir -p "${src_dir}/out/Default" "${download_cache}"
 
 # prepare sources 
 # ==================================================
+## apply ungoogled-chromium patches
+"${main_repo}/utils/prune_binaries.py" "${src_dir}" "${main_repo}/pruning.list"
+"${main_repo}/utils/patches.py" apply "${src_dir}" "${main_repo}/patches"
+"${main_repo}/utils/domain_substitution.py" apply -r "${main_repo}/domain_regex.list" -f "${main_repo}/domain_substitution.list" -c "${root_dir}/target/domsubcache.tar.gz" "${src_dir}"
+
 ## apply own patches needed for build
 cd "${src_dir}"
 # revert addition of check for a certain llvm package version (seems to be introduced in chromium 107.xx)
@@ -44,16 +49,23 @@ patch -Np1 -i ${patches_dir}/use-oauth2-client-switches-as-default.patch
 # Disable kGlobalMediaControlsCastStartStop by default
 # https://crbug.com/1314342
 patch -Np1 -i ${patches_dir}/disable-GlobalMediaControlsCastStartStop.patch
+<<<<<<< HEAD
 # VAAPI wayland support (taken from ungoogled-chromium-archlinux)
+=======
+# VAAPI wayland support (taken from ungoogled-chromium-archlinux, commented out since 116.xx due to comile errors)
+>>>>>>> a095665 (sync with ungoogled-chromium-build)
 #patch -Np1 -i ${patches_dir}/ozone-add-va-api-support-to-wayland.patch
 # fix missing includes in av1_vaapi_video_encoder_delegate.cc
 patch -Np1 -i ${patches_dir}/av1_vaapi_video_encoder_delegate.patch
 
+<<<<<<< HEAD
 ## apply ungoogled-chromium patches
 "${main_repo}/utils/prune_binaries.py" "${src_dir}" "${main_repo}/pruning.list"
 "${main_repo}/utils/patches.py" apply "${src_dir}" "${main_repo}/patches"
 "${main_repo}/utils/domain_substitution.py" apply -r "${main_repo}/domain_regex.list" -f "${main_repo}/domain_substitution.list" -c "${root_dir}/target/domsubcache.tar.gz" "${src_dir}"
 
+=======
+>>>>>>> a095665 (sync with ungoogled-chromium-build)
 ## Link to system tools required by the build
 mkdir -p third_party/node/linux/node-linux-x64/bin && ln -s /usr/bin/node third_party/node/linux/node-linux-x64/bin
 
