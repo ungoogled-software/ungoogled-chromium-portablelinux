@@ -5,8 +5,6 @@ Those how do not want to upgrade their ubuntu 20.04 might use the flatpak versio
 Portable Linux build and packaging for [ungoogled-chromium](https://github.com/ungoogled-software/ungoogled-chromium) to be published in the
 [ungoogled-chromium-binaries](https://github.com/ungoogled-software/ungoogled-chromium-binaries) web page found [here](https://ungoogled-software.github.io/ungoogled-chromium-binaries/).
 
-The code is mainly adapted from the [ungoogled-chromium-portablelinux](https://github.com/ungoogled-software/ungoogled-chromium-portablelinux) repo (that didn't work for me and seems currently rather unmaintained).
-
 ## building
 execute `docker-build.sh` script in the root dir. This will
 * build a docker image with all needed node, llvm and distro packages to build chromium
