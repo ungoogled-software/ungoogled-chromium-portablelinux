@@ -13,17 +13,13 @@ RELEASE=$(echo ${DISTRO_RELEASE}| cut -d':' -f2)
 
 IMAGE="chromium-builder-${RELEASE}:llvm-${LLVM_VERSION}"
 
-cd $BASE_DIR/docker
+echo "==============================================================="
+echo "  build docker image '${IMAGE}'"
+echo "==============================================================="
 
-set +x
-<<<<<<< HEAD
-docker buildx build -t ${IMAGE} --build-arg DISTRO=${DISTRO} --build-arg RELEASE=${RELEASE} --build-arg LLVM_VERSION=${LLVM_VERSION} --build-arg REPO_POSTFIX=${REPO_POSTFIX} --build-arg NODE_VERSION=${NODE_VERSION} .
-=======
-docker buildx build -t ${IMAGE} --build-arg DISTRO=${DISTRO} --build-arg RELEASE=${RELEASE} --build-arg LLVM_VERSION=${LLVM_VERSION} --build-arg REPO_POSTFIX=${REPO_POSTFIX} --build-arg NODE_VERSION=${NODE_VERSION} . )
->>>>>>> a095665 (sync with ungoogled-chromium-build)
-set -x
+(cd $BASE_DIR/docker && docker buildx build -t ${IMAGE} --build-arg DISTRO=${DISTRO} --build-arg RELEASE=${RELEASE} --build-arg LLVM_VERSION=${LLVM_VERSION} --build-arg REPO_POSTFIX=${REPO_POSTFIX} --build-arg NODE_VERSION=${NODE_VERSION} .)
 
-[ -n "$(ls -A ungoogled-chromium)" ] || git submodule update --init --recursive
+[ -n "$(ls -A ${BASE_DIR}/ungoogled-chromium)" ] || git submodule update --init --recursive
 
 BUILD_START=$(date)
 echo "==============================================================="
