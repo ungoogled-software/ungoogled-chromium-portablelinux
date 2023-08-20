@@ -10,19 +10,17 @@ app: ungoogled-chromium
 
 ingredients:
   package: libgconf2-4
-  dist: trusty
+  dist: bullseye
   sources: 
-    - deb http://us.archive.ubuntu.com/ubuntu/ trusty main universe
+    -deb http://deb.debian.org/debian bullseye main
 
 script:
-  - mkdir -p ./opt/google/chrome/ ; tar xf ../../../build/ungoogled-chromium_*_linux.tar.xz --strip-components=1 -C ./opt/google/chrome/
+  - mkdir -p ./opt/google/chrome/ ; tar xf ../../ungoogled-chromium_*_linux.tar.xz --strip-components=1 -C ./opt/google/chrome/
   - mkdir -p usr/share/icons/hicolor/48x48/apps/
   - cp ./opt/google/chrome/product_logo_48.png usr/share/icons/hicolor/48x48/apps/chromium.png
   - cp usr/share/icons/hicolor/48x48/apps/chromium.png .
-  - wget -c "https://github.com/ungoogled-software/ungoogled-chromium-debian/raw/debian_buster/debian/chromium.desktop" -O ungoogled-chromium.desktop
+  - cp ../../ungoogled-chromium.desktop .
   - sed -i -e 's|Exec=chromium|Exec=AppRun|g' ungoogled-chromium.desktop
-  - sed -i -e 's|Chromium|Chromium (ungoogled)|g' ungoogled-chromium.desktop
-  - sed -i -e 's|3.26|3.00|g' opt/google/chrome/chrome
   - cat > ./AppRun <<\EOF
   - #!/bin/sh
   - HERE="$(dirname "$(readlink -f "${0}")")"

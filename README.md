@@ -1,139 +1,35 @@
+<<<<<<< HEAD
+# ungoogled-chromium-build
+>__Note that this build produces results that are currently not working with ubuntu 20.04. The reason is, that the chromium code since 114.xx needs a newer gclib version than ubuntu 20.04 (and debian bullseye) and does not compile anymore with older gclib versions. Therefore I had to switch to debian:bookworm as builder image. The build results do work e.g. on ubuntu 22.04 and higher and debian bookworm.<br/>
+=======
 # ungoogled-chromium-portablelinux
+>__Note that this build produces results that are currently not working with ubuntu 20.04. The reason is, that the chromium code since 114.xx needs a newer glibc version than ubuntu 20.04 (and debian bullseye) and does not compile anymore with older gclib versions. Therefore I had to switch to debian:bookworm as builder image. The build results do work e.g. on ubuntu 22.04 and higher and debian bookworm.<br/>
+>>>>>>> a095665 (sync with ungoogled-chromium-build)
+Those how do not want to upgrade their ubuntu 20.04 might use the flatpak version of ungoogled-chromium. Flatpaks to not rely on the gclib on the underlying system. See [here](https://github.com/clickot/ungoogled-chromium-build/issues/4) for additional installation hints.__
 
-Portable Linux (i.e. a generic Linux version) packaging for [ungoogled-chromium](//github.com/Eloston/ungoogled-chromium).
+Portable Linux build and packaging for [ungoogled-chromium](https://github.com/ungoogled-software/ungoogled-chromium) to be published in the
+[ungoogled-chromium-binaries](https://github.com/ungoogled-software/ungoogled-chromium-binaries) web page found [here](https://ungoogled-software.github.io/ungoogled-chromium-binaries/).
 
-Portable Linux builds can run on **any Linux distribution** (that regular Chromium supports).
+The code is mainly adapted from the [ungoogled-chromium-portablelinux](https://github.com/ungoogled-software/ungoogled-chromium-portablelinux) repo (that didn't work for me and seems currently rather unmaintained).
 
-## Downloads
+## building
+execute `docker-build.sh` script in the root dir. This will
+* build a docker image with all needed node, llvm and distro packages to build chromium
+* start the docker image, mounts the current dir and runs `build.sh` in it, which executes the actual build process on ungoogled-chromium (mainly: download chromium source tar, unpack and patch it, setup build env and execute ninja build on the result).
 
-[Download binaries from the Contributor Binaries website](//ungoogled-software.github.io/ungoogled-chromium-binaries/).
+>Note that the build takes about 8 hours (on my computer) and consumes about 15G of disk space (you may delete the `target` dir __AFTER PACKAGING__, see [packaging](#packaging))
 
-**Source Code**: It is recommended to use a tag via `git checkout` (see building instructions below). You may also use `master`, but it is for development and may not be stable.
+The script accepts the following params:
+1. distro:release (defaults to 'debian:bookworm')
+2. major llvm toolchain version (defaults to '16')
+3. major node version (defaults to '18')
 
-## Installing the binaries
+example: `./docker-build.sh ubuntu:yammy 15 19`
 
-1. Unpack the downloaded `tar` archive to any location, such as `/opt`:
-    ```sh
-    # tar -xvf ungoogled-chromium_xxxxxxx.tar.xz -C /opt
-    ```
-2. Follow the instructions in `/opt/ungoogled-chromium_xxxxxxx/README`
+>Note that users of other distros than ubuntu or debian reported compatibility problems when i used ubuntu instead of debian as base image for builds. I therefor recommend to stick to debian base image.
 
-## Building
+I do not recommend to try to call `build.sh` directly. This will only work if you have a debian or ubuntu installation with all the packages installed and at the same place in the filesystem on your machine as in the docker image. It's the idea behind this docker-based build that you do NOT need to manipulate your own linux installation to build ungoogled-chromium.
 
-These instructions will build packages compatible with any Linux distribution that Chromium supports. They are portable and have minimal dependencies on system libraries (just as in regular Chromium).
-
-### Hardware requirements
-
-* For 64-bit systems, at least 8 GB of RAM is highly recommended (per the document in the Chromium source tree under `docs/linux_build_instructions.md`).
-    * To reduce RAM consumption, set the GN flag `jumbo_file_merge_limit` with a lower value (documented in the Chromium source code under `docs/jumbo.md`). `50` is a normal setting, while `8` will conserve more RAM.
-* At least 8 GB of filesystem space. 16 GB should be safe.
-
-### Software requirements
-
-TODO: Document all libraries and tools needed to build. For now, see the build dependencies for Debian systems.
-
-* Python 3 (tested on 3.5) for ungoogled-chromium's utilities
-* Python 2 (tested on 2.7) for building GN and running other build-time scripts
-* [Ninja](//ninja-build.org/) for running the build command
-* One of the following LLVM toolchain versions, in descending order of preference (which must include Clang and LLD):
-    1. A build of the LLVM revision used by Google to build Chromium. This is specified in the Chromium source tree under `tools/clang/scripts/update.py` in the constant `CLANG_REVISION`. (For more info about how Google manages its prebuilt LLVM toolchain, see the file in the Chromium source tree `docs/updating_clang.md`)
-    2. The latest *stable* LLVM version (not development/trunk!)
-    3. A nightly snapshot LLVM build, available from [the LLVM apt repo](//apt.llvm.org). For best results, the branch version should match the current stable LLVM version (e.g. if the current stable is 8.0.1, use branch version 8)
-
-    **However, make sure to note the following**:
-
-    * Any other LLVM version may outright fail, or [cause unexpected behavior](//github.com/Eloston/ungoogled-chromium/issues/586).
-    * on Debian-based systems, installing LLVM from the distro's repo and from `apt.llvm.org` may cause conflicts. To ensure correctness, make sure to only have one or the other installed. For example, [Clang could use the wrong linker](https://github.com/ungoogled-software/ungoogled-chromium-portablelinux/issues/21).
-* Node.js
-
-For Debian-based systems:
-
-1. Add the [the LLVM APT repo](//apt.llvm.org/) for the appropriate LLVM version (e.g. the latest stable).
-    * Note that the APT URLs for development (aka nightly snapshot) LLVM versions *do not contain* the LLVM version in them.
-2. Install LLVM (version 10 shown) and other build dependencies: `# apt install clang-10 lld-10 llvm-10-dev python python3 ninja-build nodejs`
-
-### Build a tar archive
-
-First clone the repository and choose the right tag or branch
-
-```sh
-git clone --recurse-submodules https://github.com/ungoogled-software/ungoogled-chromium-portablelinux.git
-cd ungoogled-chromium-portablelinux
-# Replace TAG_OR_BRANCH_HERE with a tag or branch name
-git checkout --recurse-submodules TAG_OR_BRANCH_HERE
-```
-
-Then run a normal build
-
-```sh
-# Use "export ..." for AR, NM, CC, CXX, or others to specify the compiler to use
-# In addition, there are custom variables:
-# - LLVM_BIN to specify the path to the "bin" directory for LLVM
-# - LLVM_VERSION to specify the LLVM version
-# These variables have defaults for LLVM on Debian. See build.sh for more details
-./build.sh
-./package.sh
-```
-
-Or run a build inside a docker container
-
-```sh
-./docker-build.sh
-```
-
-A compressed tar archive will appear under `build`
-
-**NOTE**: If the build fails, you must take additional steps before re-running the build:
-
-* If the build fails while downloading the Chromium source code (during `build.sh`), it can be fixed by removing `build/download_cache` and re-running the build instructions.
-* If the build fails at any other point after downloading, it can be fixed by removing `build/src` and re-running the build instructions. This will clear out all the code used by the build, and any files generated by the build.
-
-### Building an AppImage
-
-Software requirements:
-
-* desktop-file-utils
-* libglib2.0-dev
-* binutils
-
-First, follow the instructions in [Build a tar archive](#build-a-tar-archive).
-
-Then, run the following:
-
-```
-./package.appimage.sh
-```
-
-An `.AppImage` file will appear under `AppImages/out`
-
-## Developer info
-
-### Updating patches
-
-```sh
-./devutils/update_patches.sh merge
-source devutils/set_quilt_vars.sh
-
-# Setup Chromium source
-mkdir -p build/{src,download_cache}
-./ungoogled-chromium/utils/downloads.py retrieve -i ungoogled-chromium/downloads.ini -c build/download_cache
-./ungoogled-chromium/utils/downloads.py unpack -i ungoogled-chromium/downloads.ini -c build/download_cache build/src
-
-cd build/src
-# Use quilt to refresh patches. See ungoogled-chromium's docs/developing.md section "Updating patches" for more details
-quilt pop -a
-
-cd ../../
-# Remove all patches introduced by ungoogled-chromium
-./devutils/update_patches.sh unmerge
-# Ensure patches/series is formatted correctly, e.g. blank lines
-
-# Sanity checking for consistency in series file
-./devutils/check_patch_files.sh
-
-# Use git to add changes and commit
-```
-
-## License
-
-See [LICENSE](LICENSE)
+## packaging
+After building, enter the `package` directory and excute `package.sh`. This will create a `tar.xz` and an `AppImage` file in the root dir for your personal use. It takes about 2-3 minutes.</br>
+If you want to publish the build result on the [ungoogled-chromium-binaries](https://github.com/ungoogled-software/ungoogled-chromium-binaries) web page you may use the `prepare-publish.sh` script to create commits in your `ungoogled-chromium-binaries` fork for a pull request in the origin [ungoogled-chromium-binaries](https://github.com/ungoogled-software/ungoogled-chromium-binaries) repo. Therefor adjust the paths at the beginning of the script to match the paths to the according repos in your filesystem.

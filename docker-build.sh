@@ -1,16 +1,40 @@
-set -ex
+#!/bin/bash
 
-git submodule update --init --recursive
+BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+GIT_REPO="ungoogled-chromium"
 
-mkdir -p build
+DISTRO_RELEASE=${1:-'debian:bookworm'}
+LLVM_VERSION=${2:-'16'}
+NODE_VERSION=${3:-'18'}
 
-# Build first stage docker
-pushd docker-stage1
-docker build --rm -f "Dockerfile" -t ug-chromium-builder-stage1:latest ./
-popd
+DISTRO=$(echo ${DISTRO_RELEASE}| cut -d':' -f1)
+RELEASE=$(echo ${DISTRO_RELEASE}| cut -d':' -f2)
+[ "$LLVM_VERSION" -gt "16" ] || REPO_POSTFIX="-$LLVM_VERSION"
 
-# Build second stage docker
-docker build --rm -f "Dockerfile-stage2" -t ug-chromium-builder-stage2:latest ./
+IMAGE="chromium-builder-${RELEASE}:llvm-${LLVM_VERSION}"
 
-# start the browser build
-docker run -ti -v `pwd`/build:/repo/build ug-chromium-builder-stage2:latest bash -c "./build.sh && ./package.sh"
+cd $BASE_DIR/docker
+
+set +x
+<<<<<<< HEAD
+docker buildx build -t ${IMAGE} --build-arg DISTRO=${DISTRO} --build-arg RELEASE=${RELEASE} --build-arg LLVM_VERSION=${LLVM_VERSION} --build-arg REPO_POSTFIX=${REPO_POSTFIX} --build-arg NODE_VERSION=${NODE_VERSION} .
+=======
+docker buildx build -t ${IMAGE} --build-arg DISTRO=${DISTRO} --build-arg RELEASE=${RELEASE} --build-arg LLVM_VERSION=${LLVM_VERSION} --build-arg REPO_POSTFIX=${REPO_POSTFIX} --build-arg NODE_VERSION=${NODE_VERSION} . )
+>>>>>>> a095665 (sync with ungoogled-chromium-build)
+set -x
+
+[ -n "$(ls -A ungoogled-chromium)" ] || git submodule update --init --recursive
+
+BUILD_START=$(date)
+echo "==============================================================="
+echo "  docker build start at ${BUILD_START}"
+echo "==============================================================="
+
+cd ${BASE_DIR} && docker run -it -v ${BASE_DIR}:/repo ${IMAGE} /bin/bash -c "/repo/build.sh"
+
+BUILD_END=$(date)
+echo "==============================================================="
+echo "  docker build start at ${BUILD_START}"
+echo "  docker build end   at ${BUILD_END}"
+echo "==============================================================="
+

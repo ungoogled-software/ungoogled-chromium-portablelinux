@@ -1,0 +1,11 @@
+--- a/media/gpu/vaapi/av1_vaapi_video_encoder_delegate.cc
++++ b/media/gpu/vaapi/av1_vaapi_video_encoder_delegate.cc
+@@ -5,6 +5,8 @@
+ #include "media/gpu/vaapi/av1_vaapi_video_encoder_delegate.h"
+ 
+ #include <utility>
++#include <va/va.h>
++#include <va/va_dec_av1.h>
+ 
+ #include "base/bits.h"
+ #include "base/logging.h"
