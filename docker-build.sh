@@ -3,13 +3,8 @@
 BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 GIT_REPO="ungoogled-chromium"
 
-DISTRO_RELEASE=${1:-'debian:bookworm'}
-LLVM_VERSION=${2:-'16'}
-NODE_VERSION=${3:-'18'}
-
-DISTRO=$(echo ${DISTRO_RELEASE}| cut -d':' -f1)
-RELEASE=$(echo ${DISTRO_RELEASE}| cut -d':' -f2)
-[ "$LLVM_VERSION" -gt "16" ] || REPO_POSTFIX="-$LLVM_VERSION"
+RELEASE=${1:-'bookworm'}
+LLVM_VERSION=${2:-'17'}
 
 IMAGE="chromium-builder-${RELEASE}:llvm-${LLVM_VERSION}"
 
@@ -17,7 +12,7 @@ echo "==============================================================="
 echo "  build docker image '${IMAGE}'"
 echo "==============================================================="
 
-(cd $BASE_DIR/docker && docker buildx build -t ${IMAGE} --build-arg DISTRO=${DISTRO} --build-arg RELEASE=${RELEASE} --build-arg LLVM_VERSION=${LLVM_VERSION} --build-arg REPO_POSTFIX=${REPO_POSTFIX} --build-arg NODE_VERSION=${NODE_VERSION} .)
+(cd $BASE_DIR/docker && docker buildx build -t ${IMAGE} --build-arg RELEASE=${RELEASE} --build-arg LLVM_VERSION=${LLVM_VERSION} .)
 
 [ -n "$(ls -A ${BASE_DIR}/ungoogled-chromium)" ] || git submodule update --init --recursive
 
