@@ -2,11 +2,6 @@
 
 CURRENT_DIR=$(dirname $(readlink -f $0))
 
-PACKAGE_START=$(date)
-echo "==============================================================="
-echo "  package tar.xz start at $PACKAGE_START"
-echo "==============================================================="
-
 ROOT_DIR=$(cd ${CURRENT_DIR}/.. && pwd)
 
 chromium_version=$(cat ${ROOT_DIR}/ungoogled-chromium/chromium_version.txt)
@@ -49,19 +44,14 @@ done
 
 rm -rf ${CURRENT_DIR}/${FILE_PREFIX}_linux && xz "${CURRENT_DIR}/${FILE_PREFIX}_linux.tar" 
 
-APPIMAGE_START=$(date)
-
 set +eux
 
-./pkg2appimage ungoogled-chromium.yml
+if [ ! -f "./pkg2appimage" ] ; then
+    wget -c "https://github.com/AppImage/AppImages/raw/master/pkg2appimage" && chmod +x ./pkg2appimage
+fi
+./pkg2appimage ./ungoogled-chromium.yaml
 
 mv out/*.AppImage ${ROOT_DIR}/${FILE_PREFIX}.AppImage
 mv "${CURRENT_DIR}/${FILE_PREFIX}_linux.tar.xz" ${ROOT_DIR}
 rm -rf out ungoogled-chromium
 
-APPIMAGE_END=$(date)
-echo "==============================================================="
-echo "  package tar.xz   start at $PACKAGE_START"
-echo "  package AppImage start at $APPIMAGE_START"
-echo "  package AppImage end   at $APPIMAGE_END"
-echo "==============================================================="

@@ -2,11 +2,13 @@
 
 # directories
 # ==================================================
-root_dir=$(dirname $(readlink -f $0))
-download_cache="${root_dir}/target/download_cache"
-src_dir="${root_dir}/target/src"
+root_dir="$(dirname $(readlink -f $0))"
 patches_dir="${root_dir}/patches"
 main_repo="${root_dir}/ungoogled-chromium"
+
+build_dir="${root_dir}/build"
+download_cache="${build_dir}/download_cache"
+src_dir="${build_dir}/src"
 
 # env vars
 # ==================================================
