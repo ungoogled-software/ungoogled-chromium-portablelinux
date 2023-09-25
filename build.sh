@@ -22,7 +22,7 @@ export LLVM_BIN=${LLVM_BIN:=/usr/lib/llvm-${LLVM_VERSION}/bin}
 # clean
 # ==================================================
 echo "cleaning up directories"
-rm -rf "${src_dir}" "${root_dir}/target/domsubcache.tar.gz"
+rm -rf "${src_dir}" "${build_dir}/domsubcache.tar.gz"
 mkdir -p "${src_dir}/out/Default" "${download_cache}"
 
 ## fetch sources
@@ -35,7 +35,7 @@ mkdir -p "${src_dir}/out/Default" "${download_cache}"
 ## apply ungoogled-chromium patches
 "${main_repo}/utils/prune_binaries.py" "${src_dir}" "${main_repo}/pruning.list"
 "${main_repo}/utils/patches.py" apply "${src_dir}" "${main_repo}/patches"
-"${main_repo}/utils/domain_substitution.py" apply -r "${main_repo}/domain_regex.list" -f "${main_repo}/domain_substitution.list" -c "${root_dir}/target/domsubcache.tar.gz" "${src_dir}"
+"${main_repo}/utils/domain_substitution.py" apply -r "${main_repo}/domain_regex.list" -f "${main_repo}/domain_substitution.list" -c "${build_dir}/domsubcache.tar.gz" "${src_dir}"
 
 ## apply own patches needed for build
 cd "${src_dir}"
