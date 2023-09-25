@@ -26,4 +26,5 @@ script:
   - EOF
   - chmod a+x ./AppRun
   - rm -rf ./usr/ ; mkdir -p usr/share/icons/hicolor/48x48/apps/
-  - cp ./opt/ungoogled-chromium/product_logo_48.png usr/share/icons/hicolor/48x48/apps/
+  - cp ./opt/ungoogled-chromium/product_logo_48.png ./usr/share/icons/hicolor/48x48/apps/chromium.png
+  - cp ./usr/share/icons/hicolor/48x48/apps/chromium.png .

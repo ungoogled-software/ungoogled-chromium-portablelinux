@@ -3,6 +3,7 @@
 CURRENT_DIR=$(dirname $(readlink -f $0))
 
 ROOT_DIR=$(cd ${CURRENT_DIR}/.. && pwd)
+BUILD_DIR="${ROOT_DIR}/build"
 
 chromium_version=$(cat ${ROOT_DIR}/ungoogled-chromium/chromium_version.txt)
 ungoogled_revision=$(cat ${ROOT_DIR}/ungoogled-chromium/revision.txt)
@@ -35,9 +36,8 @@ xdg-mime
 xdg-settings"
 
 mkdir ${CURRENT_DIR}/${FILE_PREFIX}_linux
-cp ${CURRENT_DIR}/README ${CURRENT_DIR}/${FILE_PREFIX}_linux
 for i in $FILES ; do 
-    cp -r ${ROOT_DIR}/target/src/out/Default/$i ${CURRENT_DIR}/${FILE_PREFIX}_linux
+    cp -r ${BUILD_DIR}/src/out/Default/$i ${CURRENT_DIR}/${FILE_PREFIX}_linux
 done
 
 (cd ${CURRENT_DIR} && tar cf ${FILE_PREFIX}_linux.tar ${FILE_PREFIX}_linux)
