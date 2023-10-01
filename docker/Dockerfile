@@ -45,7 +45,7 @@ EOF
 RUN <<EOF
 _llvm_package_version_="$(apt list llvm-${LLVM_VERSION}-dev | grep -Po "\d+\.\d+\.\d+")" || _llvm_package_version_="${LLVM_VERSION}.0.0"
 if [ ! -e /usr/lib/clang/${_llvm_package_version_}/share ] ; then
-    (cd /usr/lib/clang/${_llvm_package_version_} && ln -s  ../../llvm-${LLVM_VERSION}/lib/clang/${llvm_package_version}/share)
+    (cd /usr/lib/clang/${_llvm_package_version_} && ln -s  ../../llvm-${LLVM_VERSION}/lib/clang/${_llvm_package_version}/share)
 fi
 if [ ! -e /usr/lib/clang/${LLVM_VERSION}/share ] ; then
     (cd /usr/lib/clang/${LLVM_VERSION} && ln -s  ../../llvm-${LLVM_VERSION}/lib/clang/${LLVM_VERSION}/share)
