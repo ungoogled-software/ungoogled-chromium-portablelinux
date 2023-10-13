@@ -1,9 +1,10 @@
 #!/bin/bash
 
 # adjust the paths for your file system
-PATH_TO_BUILD_REPO="$HOME/workspace/ungoogled-software/ungoogled-chromium-portablelinux"
+PATH_TO_BUILD_REPO="$HOME/workspace/clickot/ungoogled-chromium-portablelinux"
 PATH_TO_PUBLISH_REPO="$HOME/workspace/clickot/ungoogled-chromium-binaries"
 
+set -eux
 REPO_TAG="$(cd ${PATH_TO_BUILD_REPO} && git describe --tags --abbrev=0)"
 TAG="${REPO_TAG%.1}"
 
