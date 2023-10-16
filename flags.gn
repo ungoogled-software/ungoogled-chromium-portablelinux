@@ -12,9 +12,11 @@ fatal_linker_warnings=false
 rtc_use_pipewire=true
 is_clang=true
 is_debug=false
+enable_rust=false
 use_kerberos=false
 use_sysroot=false
 use_vaapi=true
+use_system_libffi=false
 
 #enable_hevc_parser_and_hw_decoder=true
 #enable_iterator_debugging=false
@@ -23,4 +25,3 @@ use_vaapi=true
 #link_pulseaudio=true
 #use_custom_libcxx=false
 #use_gnome_keyring=false
-#use_system_libffi=true
