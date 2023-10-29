@@ -51,8 +51,6 @@ patch -Np1 -i ${patches_dir}/use-oauth2-client-switches-as-default.patch
 # Disable kGlobalMediaControlsCastStartStop by default
 # https://crbug.com/1314342
 patch -Np1 -i ${patches_dir}/disable-GlobalMediaControlsCastStartStop.patch
-# VAAPI wayland support (taken from ungoogled-chromium-archlinux, commented out since 116.xx due to comile errors)
-#patch -Np1 -i ${patches_dir}/ozone-add-va-api-support-to-wayland.patch
 # fix missing includes in av1_vaapi_video_encoder_delegate.cc
 patch -Np1 -i ${patches_dir}/av1_vaapi_video_encoder_delegate.patch
 
