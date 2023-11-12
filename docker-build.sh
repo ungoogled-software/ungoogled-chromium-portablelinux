@@ -3,7 +3,7 @@
 BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 GIT_REPO="ungoogled-chromium"
 
-RELEASE=${1:-'bookworm'}
+RELEASE=${1:-'bullseye'}
 LLVM_VERSION=${2:-'17'}
 
 IMAGE="chromium-builder-${RELEASE}:llvm-${LLVM_VERSION}"

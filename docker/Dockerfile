@@ -1,9 +1,10 @@
-ARG RELEASE="bookworm"
+ARG RELEASE="bullseye"
 
 FROM debian:${RELEASE}
 
 ARG RELEASE
 ARG LLVM_VERSION="17"
+ARG NODE_VERSION="18"
 
 # set llvm version as env var to make it available for containers building chromium
 ENV LLVM_VERSION ${LLVM_VERSION}
@@ -12,19 +13,21 @@ ENV LLVM_VERSION ${LLVM_VERSION}
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections && export DEBIAN_FRONTEND=noninteractive 
 RUN apt -y update && apt -y upgrade
 
-#  install the needed base packages to add repos
+# install the needed base packages to add repos
 RUN apt -y install lsb-release wget software-properties-common gnupg
-# add llvm repo key
-RUN wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key | tee /etc/apt/trusted.gpg.d/apt.llvm.org.asc 
-# add repo (has to be done twice for some reason...)
-RUN add-apt-repository "deb http://apt.llvm.org/${RELEASE} llvm-toolchain-${RELEASE}-${LLVM_VERSION} main" && add-apt-repository "deb http://apt.llvm.org/${RELEASE} llvm-toolchain-${RELEASE}-${LLVM_VERSION} main"
-RUN apt update
+# add node repo (needed for bullseye)
+RUN wget -qO - https://deb.nodesource.com/gpgkey/nodesource.gpg.key | tee /etc/apt/trusted.gpg.d/deb.nodesource.com.asc \
+ && add-apt-repository "deb https://deb.nodesource.com/node_${NODE_VERSION}.x ${RELEASE} main"
+# add lvm repo
+RUN wget -qO - https://apt.llvm.org/llvm-snapshot.gpg.key | tee /etc/apt/trusted.gpg.d/apt.llvm.org.asc \
+ && add-apt-repository "deb http://apt.llvm.org/${RELEASE} llvm-toolchain-${RELEASE}-${LLVM_VERSION} main"
+RUN apt -y update
 
-# install llvm toolchain
-RUN apt -y install clang-${LLVM_VERSION} lldb-${LLVM_VERSION} lld-${LLVM_VERSION} clangd-${LLVM_VERSION}
+# install node and llvm toolchain
+#RUN apt -y install nodejs npm clang-${LLVM_VERSION} lldb-${LLVM_VERSION} lld-${LLVM_VERSION} clangd-${LLVM_VERSION}
+RUN apt -y install nodejs clang-${LLVM_VERSION} lldb-${LLVM_VERSION} lld-${LLVM_VERSION} clangd-${LLVM_VERSION}
 # install all remaining needed distro packages
-RUN apt -y install bison debhelper desktop-file-utils flex gperf gsettings-desktop-schemas-dev imagemagick libasound2-dev libavcodec-dev libavformat-dev libavutil-dev libcap-dev libcups2-dev libcurl4-openssl-dev libdrm-dev libegl1-mesa-dev libelf-dev libevent-dev libexif-dev libflac-dev libgbm-dev libgcrypt20-dev libgl1-mesa-dev libgles2-mesa-dev libglew-dev libglib2.0-dev libglu1-mesa-dev libgtk-3-dev libhunspell-dev libjpeg-dev libjs-jquery-flot libjsoncpp-dev libkrb5-dev liblcms2-dev libminizip-dev libmodpbase64-dev libnspr4-dev libnss3-dev libopenjp2-7-dev libopus-dev libpam0g-dev libpci-dev libpipewire-0.3-dev libpng-dev libpulse-dev libre2-dev libsnappy-dev libspeechd-dev libudev-dev libusb-1.0-0-dev libva-dev libvpx-dev libwebp-dev libx11-xcb-dev libxcb-dri3-dev libxshmfence-dev libxslt1-dev libxss-dev libxt-dev libxtst-dev mesa-common-dev ninja-build nodejs npm pkg-config python3-jinja2 python3-setuptools python3-xcbgen python-is-python3 qtbase5-dev uuid-dev valgrind wdiff x11-apps xcb-proto xfonts-base xvfb xz-utils yasm
-
+RUN apt -y install bison debhelper desktop-file-utils flex gperf gsettings-desktop-schemas-dev imagemagick libasound2-dev libavcodec-dev libavformat-dev libavutil-dev libcap-dev libcups2-dev libcurl4-openssl-dev libdrm-dev libegl1-mesa-dev libelf-dev libevent-dev libexif-dev libflac-dev libgbm-dev libgcrypt20-dev libgl1-mesa-dev libgles2-mesa-dev libglew-dev libglib2.0-dev libglu1-mesa-dev libgtk-3-dev libhunspell-dev libjpeg-dev libjs-jquery-flot libjsoncpp-dev libkrb5-dev liblcms2-dev libminizip-dev libmodpbase64-dev libnspr4-dev libnss3-dev libopenjp2-7-dev libopus-dev libpam0g-dev libpci-dev libpipewire-0.3-dev libpng-dev libpulse-dev libre2-dev libsnappy-dev libspeechd-dev libudev-dev libusb-1.0-0-dev libva-dev libvpx-dev libwebp-dev libx11-xcb-dev libxcb-dri3-dev libxshmfence-dev libxslt1-dev libxss-dev libxt-dev libxtst-dev mesa-common-dev ninja-build pkg-config python3-jinja2 python3-setuptools python3-xcbgen python-is-python3 qtbase5-dev uuid-dev valgrind wdiff x11-apps xcb-proto xfonts-base xvfb xz-utils yasm
 # update npm
 RUN npm update -g npm
 

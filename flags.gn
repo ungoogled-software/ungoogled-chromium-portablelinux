@@ -14,7 +14,7 @@ is_clang=true
 is_debug=false
 enable_rust=false
 use_kerberos=false
-use_sysroot=false
+use_sysroot=true
 use_vaapi=true
 use_system_libffi=false
 

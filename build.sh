@@ -67,6 +67,13 @@ export CFLAGS+=" -resource-dir=${llvm_resource_dir} -B${LLVM_BIN}"
 #
 cat "${main_repo}/flags.gn" "${root_dir}/flags.gn" > "${src_dir}/out/Default/args.gn"
 
+# install sysroot if according gn flag is present
+if grep -q -F "use_sysroot=true" "${src_dir}/out/Default/args.gn" ; then
+    # adjust host name to download sysroot files from (see e.g. https://github.com/ungoogled-software/ungoogled-chromium/issues/1846)
+    sed -i 's/commondatastorage.9oo91eapis.qjz9zk/commondatastorage.googleapis.com/g' ./build/linux/sysroot_scripts/sysroots.json
+    ./build/linux/sysroot_scripts/install-sysroot.py --arch=amd64
+fi
+
 ## execute build
 ./tools/gn/bootstrap/bootstrap.py -o out/Default/gn --skip-generate-buildfiles
 ./out/Default/gn gen out/Default --fail-on-unused-args
