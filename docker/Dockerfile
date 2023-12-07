@@ -5,6 +5,7 @@ FROM debian:${RELEASE}
 ARG RELEASE
 ARG LLVM_VERSION="17"
 ARG NODE_VERSION="18"
+ARG REPO_POSTFIX="-${LLVM_VERSION}"
 
 # set llvm version as env var to make it available for containers building chromium
 ENV LLVM_VERSION ${LLVM_VERSION}
@@ -20,7 +21,7 @@ RUN wget -qO - https://deb.nodesource.com/gpgkey/nodesource.gpg.key | tee /etc/a
  && add-apt-repository "deb https://deb.nodesource.com/node_${NODE_VERSION}.x ${RELEASE} main"
 # add lvm repo
 RUN wget -qO - https://apt.llvm.org/llvm-snapshot.gpg.key | tee /etc/apt/trusted.gpg.d/apt.llvm.org.asc \
- && add-apt-repository "deb http://apt.llvm.org/${RELEASE} llvm-toolchain-${RELEASE}-${LLVM_VERSION} main"
+ && add-apt-repository "deb http://apt.llvm.org/${RELEASE} llvm-toolchain-${RELEASE}${REPO_POSTFIX} main"
 RUN apt -y update
 
 # install node and llvm toolchain

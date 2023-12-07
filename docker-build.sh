@@ -4,7 +4,9 @@ BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 GIT_REPO="ungoogled-chromium"
 
 RELEASE=${1:-'bullseye'}
-LLVM_VERSION=${2:-'17'}
+LLVM_VERSION=${2:-'18'}
+REPO_POSTFIX="-$LLVM_VERSION"
+[ "$LLVM_VERSION" -lt "18" ] || REPO_POSTFIX=""
 
 IMAGE="chromium-builder-${RELEASE}:llvm-${LLVM_VERSION}"
 
@@ -12,7 +14,7 @@ echo "==============================================================="
 echo "  build docker image '${IMAGE}'"
 echo "==============================================================="
 
-(cd $BASE_DIR/docker && docker buildx build -t ${IMAGE} --build-arg RELEASE=${RELEASE} --build-arg LLVM_VERSION=${LLVM_VERSION} .)
+(cd $BASE_DIR/docker && docker buildx build -t ${IMAGE} --build-arg RELEASE=${RELEASE} --build-arg LLVM_VERSION=${LLVM_VERSION} --build-arg REPO_POSTFIX=${REPO_POSTFIX} .)
 
 [ -n "$(ls -A ${BASE_DIR}/ungoogled-chromium)" ] || git submodule update --init --recursive
 
