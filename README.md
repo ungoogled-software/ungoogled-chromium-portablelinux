@@ -20,4 +20,3 @@ I do not recommend to try to call `build.sh` directly. This will only work if yo
 
 ## packaging
 After building, enter the `package` directory and excute `package.sh`. This will create a `tar.xz` and an `AppImage` file in the root dir for your personal use. It takes about 2-3 minutes.</br>
-If you want to publish the build result on the [ungoogled-chromium-binaries](https://github.com/ungoogled-software/ungoogled-chromium-binaries) web page you may use the `prepare-publish.sh` script to create commits in your `ungoogled-chromium-binaries` fork for a pull request in the origin [ungoogled-chromium-binaries](https://github.com/ungoogled-software/ungoogled-chromium-binaries) repo. Therefor adjust the paths at the beginning of the script to match the paths to the according repos in your filesystem.
