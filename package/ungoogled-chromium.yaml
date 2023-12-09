@@ -10,9 +10,9 @@ app: ungoogled-chromium
 
 ingredients:
   package: libgconf2-4
-  dist: bookworm
+  dist: bullseye
   sources: 
-    -deb http://deb.debian.org/debian bookworm main
+    -deb http://deb.debian.org/debian bullseye main
 
 script:
   - mkdir -p ./opt/ungoogled-chromium/ ; tar xf ../../ungoogled-chromium_*_linux.tar.xz --strip-components=1 -C ./opt/ungoogled-chromium/
