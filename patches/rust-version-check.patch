@@ -1,6 +1,6 @@
 --- a/tools/rust/update_rust.py
 +++ a/tools/rust/update_rust.py
-@@ -109,7 +109,7 @@
+@@ -84,7 +84,7 @@
              return None
          return match.group(1)
  
@@ -8,4 +8,4 @@
 +    return GetRustClangRevision()
  
  
- def CheckUrl(url) -> bool:
+ def main():

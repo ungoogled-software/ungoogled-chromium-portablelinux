@@ -1,6 +1,6 @@
 --- a/tools/clang/scripts/update.py
 +++ b/tools/clang/scripts/update.py
-@@ -358,6 +358,13 @@
+@@ -365,6 +365,13 @@
        print(force_head_revision)
        return 0
  
