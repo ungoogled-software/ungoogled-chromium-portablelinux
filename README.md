@@ -8,15 +8,18 @@ execute `docker-build.sh` script in the root dir. This will
 * build a debian-based docker image with all needed llvm, nodejs and distro packages to build chromium
 * start the docker image, mounts the current dir and runs `build.sh` in it, which executes the actual build process on ungoogled-chromium (mainly: download chromium source tar, unpack and patch it, setup build env and execute ninja build on the result).
 
->Note that the build takes about 8 hours (on my computer) and consumes about 15G of disk space (you may delete the `target` dir __AFTER PACKAGING__, see [packaging](#packaging))
+>Note that the build takes about 9 hours (on my computer) and consumes about 15G of disk space (you may delete the `build` dir __AFTER PACKAGING__, see [packaging](#packaging))
 
 The script accepts the following params:
-1. debian release (defaults to 'bookworm')
-2. major llvm toolchain version (defaults to '17')
+1. debian release (defaults to 'bullseye')
+2. major llvm toolchain version (defaults to '18')
+3. node version (defaults to '18')
 
-example: `./docker-build.sh bookworm 15`
+example: `./docker-build.sh bookworm 15 17`
 
-I do not recommend to try to call `build.sh` directly. This will only work if you have a debian or ubuntu installation with all the packages installed and at the same place in the filesystem on your machine as in the docker image. It's the idea behind this docker-based build that you do NOT need to manipulate your own linux installation to build ungoogled-chromium.
+>Note that currently (starting from 120.xx) it seems chromium needs llvm 18 to complete the build successfully. Also, the `sysroot` feature with debian:bullseys is used to reach same compatibility as chromium itself. So you might face errors if you use other values than the defaults.
+
+I do not recommend to call `build.sh` directly. This will only work if you have a debian or ubuntu installation with all the packages installed and at the same place in the filesystem on your machine as in the docker image. It's the idea behind this docker-based build that you do NOT need to manipulate your own linux installation to build ungoogled-chromium.
 
 ## packaging
 After building, enter the `package` directory and excute `package.sh`. This will create a `tar.xz` and an `AppImage` file in the root dir for your personal use. It takes about 2-3 minutes.</br>
