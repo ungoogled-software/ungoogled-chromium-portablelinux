@@ -16,7 +16,7 @@ echo "==============================================================="
 
 (cd $BASE_DIR/docker && docker buildx build -t ${IMAGE} --build-arg RELEASE=${RELEASE} --build-arg LLVM_VERSION=${LLVM_VERSION} --build-arg REPO_POSTFIX=${REPO_POSTFIX} .)
 
-[ -n "$(ls -A ${BASE_DIR}/ungoogled-chromium)" ] || git submodule update --init --recursive
+[ -n "$(ls -A ${BASE_DIR}/${GIT_REPO})" ] || git submodule update --init --recursive
 
 BUILD_START=$(date)
 echo "==============================================================="
@@ -30,4 +30,3 @@ echo "==============================================================="
 echo "  docker build start at ${BUILD_START}"
 echo "  docker build end   at ${BUILD_END}"
 echo "==============================================================="
-
