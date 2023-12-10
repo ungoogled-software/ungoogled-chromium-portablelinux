@@ -1,7 +1,7 @@
 #!/bin/bash
 
 BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
-GIT_REPO="ungoogled-chromium"
+GIT_SUBMODULE="ungoogled-chromium"
 
 RELEASE=${1:-'bullseye'}
 LLVM_VERSION=${2:-'18'}
@@ -16,7 +16,7 @@ echo "==============================================================="
 
 (cd $BASE_DIR/docker && docker buildx build -t ${IMAGE} --build-arg RELEASE=${RELEASE} --build-arg LLVM_VERSION=${LLVM_VERSION} --build-arg REPO_POSTFIX=${REPO_POSTFIX} .)
 
-[ -n "$(ls -A ${BASE_DIR}/${GIT_REPO})" ] || git submodule update --init --recursive
+[ -n "$(ls -A ${BASE_DIR}/${GIT_SUBMODULE})" ] || git submodule update --init --recursive
 
 BUILD_START=$(date)
 echo "==============================================================="
