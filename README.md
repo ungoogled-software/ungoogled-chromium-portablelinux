@@ -17,7 +17,7 @@ The script accepts the following params:
 
 example: `./docker-build.sh bookworm 15 17`
 
->Note that currently (starting from 120.xx) it seems chromium needs llvm 18 to complete the build successfully. Also, the `sysroot` feature with debian:bullseys is used to reach same compatibility as chromium itself. So you might face errors if you use other values than the defaults.
+>Note that currently (starting from 120.xx) it seems chromium needs llvm 18 to complete the build successfully. Also, the `sysroot` feature with debian:bullseye is used to reach same compatibility as chromium itself. So you might face errors if you use other values than the defaults.
 
 I do not recommend to call `build.sh` directly. This will only work if you have a debian or ubuntu installation with all the packages installed and at the same place in the filesystem on your machine as in the docker image. It's the idea behind this docker-based build that you do NOT need to manipulate your own linux installation to build ungoogled-chromium.
 
