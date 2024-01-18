@@ -14,7 +14,7 @@ echo "==============================================================="
 echo "  build docker image '${IMAGE}'"
 echo "==============================================================="
 
-(cd $BASE_DIR/docker && docker buildx build -t ${IMAGE} --build-arg RELEASE=${RELEASE} --build-arg LLVM_VERSION=${LLVM_VERSION} --build-arg REPO_POSTFIX=${REPO_POSTFIX} .)
+(cd $BASE_DIR/docker && docker buildx build -t ${IMAGE} -f ./build.Dockerfile --build-arg RELEASE=${RELEASE} --build-arg LLVM_VERSION=${LLVM_VERSION} --build-arg REPO_POSTFIX=${REPO_POSTFIX} .)
 
 [ -n "$(ls -A ${BASE_DIR}/${GIT_SUBMODULE})" ] || git submodule update --init --recursive
 
