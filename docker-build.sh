@@ -5,7 +5,6 @@ GIT_SUBMODULE="ungoogled-chromium"
 
 RELEASE=${1:-'bullseye'}
 NODE_VERSION=${2:-'18'}
-LLVM_VERSION=${3:-'18'}
 
 IMAGE="chromium-builder:${RELEASE}"
 
@@ -22,7 +21,7 @@ echo "==============================================================="
 echo "  docker build start at ${BUILD_START}"
 echo "==============================================================="
 
-cd ${BASE_DIR} && docker run -it -v ${BASE_DIR}:/repo ${IMAGE} /bin/bash -c "LLVM_VERSION=${LLVM_VERSION} /repo/build.sh"
+cd ${BASE_DIR} && docker run -it -v ${BASE_DIR}:/repo ${IMAGE} /bin/bash -c "/repo/build.sh"
 
 BUILD_END=$(date)
 echo "==============================================================="

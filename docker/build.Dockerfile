@@ -13,12 +13,20 @@ RUN apt-get -y update && apt-get -y upgrade
 RUN apt-get -y install lsb-release wget software-properties-common gnupg
 
 # add node repo (needed for bullseye to install nodejs > 12)
-RUN wget -qO - https://deb.nodesource.com/gpgkey/nodesource.gpg.key | tee /etc/apt/trusted.gpg.d/deb.nodesource.com.asc \
+RUN wget -qO - https://deb.nodesource.com/gpgkey/nodesource.gpg.key | tee /etc/apt/trusted.gpg.d/deb.nodesource.com.asc\
  && add-apt-repository "deb https://deb.nodesource.com/node_${NODE_VERSION}.x ${RELEASE} main"
 RUN apt-get -y update && apt-get -y install nodejs && npm update -g npm
 
 # install all remaining needed distro packages
-RUN apt-get -y install bison debhelper desktop-file-utils flex gperf gsettings-desktop-schemas-dev imagemagick libasound2-dev libavcodec-dev libavformat-dev libavutil-dev libcap-dev libcups2-dev libcurl4-openssl-dev libdrm-dev libegl1-mesa-dev libelf-dev libevent-dev libexif-dev libflac-dev libgbm-dev libgcrypt20-dev libgl1-mesa-dev libgles2-mesa-dev libglew-dev libglib2.0-dev libglu1-mesa-dev libgtk-3-dev libhunspell-dev libjpeg-dev libjs-jquery-flot libjsoncpp-dev libkrb5-dev liblcms2-dev libminizip-dev libmodpbase64-dev libnspr4-dev libnss3-dev libopenjp2-7-dev libopus-dev libpam0g-dev libpci-dev libpipewire-0.3-dev libpng-dev libpulse-dev libre2-dev libsnappy-dev libspeechd-dev libudev-dev libusb-1.0-0-dev libva-dev libvpx-dev libwebp-dev libx11-xcb-dev libxcb-dri3-dev libxshmfence-dev libxslt1-dev libxss-dev libxt-dev libxtst-dev mesa-common-dev ninja-build pkg-config python3-jinja2 python3-setuptools python3-xcbgen python-is-python3 qtbase5-dev uuid-dev valgrind wdiff x11-apps xcb-proto xfonts-base xvfb xz-utils yasm
+RUN apt-get -y install bison debhelper desktop-file-utils flex gperf gsettings-desktop-schemas-dev imagemagick\
+  libasound2-dev libavcodec-dev libavformat-dev libavutil-dev libcap-dev libcups2-dev libcurl4-openssl-dev libdrm-dev\
+  libegl1-mesa-dev libelf-dev libevent-dev libexif-dev libflac-dev libgbm-dev libgcrypt20-dev libgl1-mesa-dev libgles2-mesa-dev\ 
+  libglew-dev libglib2.0-dev libglu1-mesa-dev libgtk-3-dev libhunspell-dev libjpeg-dev libjs-jquery-flot libjsoncpp-dev\
+  libkrb5-dev liblcms2-dev libminizip-dev libmodpbase64-dev libnspr4-dev libnss3-dev libopenjp2-7-dev libopus-dev libpam0g-dev\
+  libpci-dev libpipewire-0.3-dev libpng-dev libpulse-dev libre2-dev libsnappy-dev libspeechd-dev libudev-dev libusb-1.0-0-dev\
+  libva-dev libvpx-dev libwebp-dev libx11-xcb-dev libxcb-dri3-dev libxshmfence-dev libxslt1-dev libxss-dev libxt-dev libxtst-dev\
+  mesa-common-dev ninja-build pkg-config python3-jinja2 python3-setuptools python3-xcbgen python-is-python3 qtbase5-dev uuid-dev\
+  valgrind wdiff x11-apps xcb-proto xfonts-base xvfb xz-utils yasm
 
 # create and set workdir to mount in docker build
 RUN mkdir /repo
