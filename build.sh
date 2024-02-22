@@ -30,11 +30,12 @@ mkdir -p "${src_dir}/out/Default" "${download_cache}"
 
 cd "${src_dir}"
 
-## apply the patches from ungoogled-chromium-archlinux repo
-# use the --oauth2-client-id= and --oauth2-client-secret= switches for setting GOOGLE_DEFAULT_CLIENT_ID
-# and GOOGLE_DEFAULT_CLIENT_SECRET at runtime (taken from ungoogled-chromium-archlinux repo)
+## apply local patches
+# Use the --oauth2-client-id= and --oauth2-client-secret= switches for
+# setting GOOGLE_DEFAULT_CLIENT_ID and GOOGLE_DEFAULT_CLIENT_SECRET at
+# runtime -- this allows signing into Chromium without baked-in values
 patch -Np1 -i ${patches_dir}/use-oauth2-client-switches-as-default.patch
-# Fix build with ICU 74 (taken from ungoogled-chromium-archlinux repo)
+# Fix build with ICU 74 (TODO: check if this is needed here)
 patch -Np1 -i  ${patches_dir}/icu-74.patch
 
 # combine local and ungoogled-chromium gn flags
@@ -50,7 +51,7 @@ sed -i 's/commondatastorage.9oo91eapis.qjz9zk/commondatastorage.googleapis.com/g
 ./tools/rust/update_rust.py
 # to link to rust libraries we need to compile with prebuilt clang
 ./tools/clang/scripts/update.py
-# install sysroot if according gn flag is present
+# install sysroot if according gn flag is set to true
 if grep -q -F "use_sysroot=true" "${src_dir}/out/Default/args.gn"; then
     ./build/linux/sysroot_scripts/install-sysroot.py --arch=amd64
 fi
