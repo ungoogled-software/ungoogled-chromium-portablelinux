@@ -16,12 +16,3 @@ use_sysroot=true
 use_vaapi=true
 use_system_libffi=false
 
-#clang_base_path="/usr"
-#enable_rust=false
-#enable_hevc_parser_and_hw_decoder=true
-#enable_iterator_debugging=false
-#enable_platform_hevc=true
-#enable_widevine=true
-#link_pulseaudio=true
-#use_custom_libcxx=false
-#use_gnome_keyring=false

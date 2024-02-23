@@ -7,9 +7,8 @@ BUILD_DIR="${ROOT_DIR}/build"
 
 chromium_version=$(cat ${ROOT_DIR}/ungoogled-chromium/chromium_version.txt)
 ungoogled_revision=$(cat ${ROOT_DIR}/ungoogled-chromium/revision.txt)
-package_revision=$(cat ${ROOT_DIR}/revision.txt)
 
-FILE_PREFIX=ungoogled-chromium_${chromium_version}-${ungoogled_revision}.${package_revision}
+FILE_PREFIX=ungoogled-chromium_${chromium_version}-${ungoogled_revision}
 ARCHIVE_OUTPUT="${CURRENT_DIR}/${FILE_PREFIX}_linux.tar.xz"
 
 set -eux
