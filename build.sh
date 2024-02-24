@@ -3,7 +3,6 @@
 # directories
 # ==================================================
 root_dir="$(dirname $(readlink -f $0))"
-patches_dir="${root_dir}/patches"
 main_repo="${root_dir}/ungoogled-chromium"
 
 build_dir="${root_dir}/build"
@@ -34,9 +33,7 @@ cd "${src_dir}"
 # Use the --oauth2-client-id= and --oauth2-client-secret= switches for
 # setting GOOGLE_DEFAULT_CLIENT_ID and GOOGLE_DEFAULT_CLIENT_SECRET at
 # runtime -- this allows signing into Chromium without baked-in values
-patch -Np1 -i ${patches_dir}/use-oauth2-client-switches-as-default.patch
-# Fix build with ICU 74 (TODO: check if this is needed here)
-patch -Np1 -i  ${patches_dir}/icu-74.patch
+patch -Np1 -i ${root_dir}/use-oauth2-client-switches-as-default.patch
 
 # combine local and ungoogled-chromium gn flags
 cat "${main_repo}/flags.gn" "${root_dir}/flags.gn" >"${src_dir}/out/Default/args.gn"
