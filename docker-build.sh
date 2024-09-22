@@ -8,23 +8,18 @@ NODE_VERSION=${2:-'18'}
 
 IMAGE="chromium-builder:${RELEASE}"
 
-echo "==============================================================="
-echo "  build docker image '${IMAGE}'"
-echo "==============================================================="
-
+echo "building docker image '${IMAGE}'"
 (cd $BASE_DIR/docker && docker buildx build -t ${IMAGE} -f ./build.Dockerfile --build-arg RELEASE=${RELEASE} --build-arg NODE_VERSION=${NODE_VERSION} .)
 
+# checkout ungoogled-chromium submodule if not present
 [ -n "$(ls -A ${BASE_DIR}/${GIT_SUBMODULE})" ] || git submodule update --init --recursive
 
+# execute build.sh within docker container
 BUILD_START=$(date)
-echo "==============================================================="
-echo "  docker build start at ${BUILD_START}"
-echo "==============================================================="
+echo "docker build start at ${BUILD_START}"
 
 cd ${BASE_DIR} && docker run -it -v ${BASE_DIR}:/repo ${IMAGE} /bin/bash -c "/repo/build.sh"
 
 BUILD_END=$(date)
-echo "==============================================================="
-echo "  docker build start at ${BUILD_START}"
-echo "  docker build end   at ${BUILD_END}"
-echo "==============================================================="
+echo "docker build start at ${BUILD_START}, end at ${BUILD_END}"
+

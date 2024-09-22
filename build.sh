@@ -29,8 +29,6 @@ mkdir -p "${src_dir}/out/Default" "${download_cache}"
 
 cd "${src_dir}"
 
-## apply local patches
-patch -Np1 -i ${root_dir}/allow-ANGLEImplementation-kVulkan.patch
 # Use the --oauth2-client-id= and --oauth2-client-secret= switches for
 # setting GOOGLE_DEFAULT_CLIENT_ID and GOOGLE_DEFAULT_CLIENT_SECRET at
 # runtime -- this allows signing into Chromium without baked-in values
