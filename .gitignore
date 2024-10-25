@@ -1,5 +1,7 @@
 /package/ungoogled-chromium
-/build
+/build/
+/.config/
+/.gcs_entries
 *.tar
 *.tar.xz
 *.AppImage

@@ -27,7 +27,13 @@ RUN apt-get -y install bison debhelper desktop-file-utils flex gperf gsettings-d
   libva-dev libvpx-dev libwebp-dev libx11-xcb-dev libxcb-dri3-dev libxshmfence-dev libxslt1-dev libxss-dev libxt-dev libxtst-dev\
   mesa-common-dev ninja-build pkg-config python3-jinja2 python3-setuptools python3-xcbgen python-is-python3 qtbase5-dev uuid-dev\
   valgrind wdiff x11-apps xcb-proto xfonts-base xvfb xz-utils yasm
+# install additional packages needed when cloning the chromium repo
+RUN apt-get -y install git python3-httplib2 python3-pyparsing python-six rsync
 
 # create and set workdir to mount in docker build
-RUN mkdir /repo
+#RUN groupadd -g 1000 builder && useradd -d /repo -g 1000 -u 1000 builder
+ 
+RUN mkdir /repo #&& chown 1000:1000 /repo
+
+#USER builder
 WORKDIR /repo

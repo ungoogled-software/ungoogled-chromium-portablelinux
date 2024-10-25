@@ -1,5 +1,13 @@
 #!/bin/bash
 
+clone=false
+while getopts "c" opt; do
+    case "${opt}" in
+        c) clone=true
+        ;;
+    esac
+done
+
 # directories
 # ==================================================
 root_dir="$(dirname $(readlink -f $0))"
@@ -12,13 +20,21 @@ src_dir="${build_dir}/src"
 # clean
 # ==================================================
 echo "cleaning up directories"
-rm -rf "${src_dir}" "${build_dir}/domsubcache.tar.gz"
-mkdir -p "${src_dir}/out/Default" "${download_cache}"
+rm -rf "${src_dir}" "${build_dir}/domsubcache.tar.gz" 
+mkdir -p "${src_dir}" "${download_cache}"
 
 ## fetch sources
 # ==================================================
-"${main_repo}/utils/downloads.py" retrieve -i "${main_repo}/downloads.ini" -c "${download_cache}"
-"${main_repo}/utils/downloads.py" unpack -i "${main_repo}/downloads.ini" -c "${download_cache}" "${src_dir}"
+if $clone;  then
+    "${main_repo}/utils/clone.py" --sysroot amd64 -o "${src_dir}"
+    # the clone does not contain the file 'third_party/node/node_modules/node_modules.tar.gz' which is contained in the 
+    # 'pruning.list' file and therefore causes the 'prune_binaries.py' script to fail
+    sed -i '/third_party\/node\/node_modules\/node_modules.tar.gz/d' "${main_repo}/pruning.list"
+else
+    "${main_repo}/utils/downloads.py" retrieve -i "${main_repo}/downloads.ini" -c "${download_cache}"
+    "${main_repo}/utils/downloads.py" unpack -i "${main_repo}/downloads.ini" -c "${download_cache}" "${src_dir}"
+fi
+mkdir -p "${src_dir}/out/Default"
 
 # prepare sources
 # ==================================================
