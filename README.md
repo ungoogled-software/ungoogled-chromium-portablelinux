@@ -8,15 +8,10 @@ execute `docker-build.sh` script in the root dir. This will
 * build a debian-based docker image with all needed llvm, nodejs and distro packages to build chromium
 * start the docker image, mounts the current dir and runs `build.sh` in it, which executes the actual build process on ungoogled-chromium (mainly: download chromium source tar, unpack and patch it, setup build env and execute ninja build on the result).
 
->Note that the build takes about 9 hours (on my computer) and consumes about 15G of disk space (you may delete the `build` dir __AFTER PACKAGING__, see [packaging](#packaging))
+>Note that the build takes several hours (about 8 hous on my computer) and consumes about 15G of disk space (you may delete the `build` dir __AFTER PACKAGING__, see [packaging](#packaging))
 
-The script accepts the following params:
-1. debian release (defaults to 'bullseye')
-2. node version (defaults to '18')
-
-example: `./docker-build.sh bookworm 17`
-
->Note that currently (starting from 120.xx) the `sysroot` feature with debian:bullseye is used to reach same compatibility as chromium itself. So it might be you face errors when executing chromium if you use other values than the defaults.
+The script has a switch -c wether to fetch a chromium tarball (defualt) or to clone the chromium code (-c): `./docker-build.sh -c`.
+This is useful when for some reasons the tarball is not (yet) available.
 
 I do not recommend to call `build.sh` directly. This will only work if you have a debian or ubuntu installation with all the packages installed and at the same place in the filesystem on your machine as in the docker image. It's the idea behind this docker-based build that you do NOT need to manipulate your own linux installation to build ungoogled-chromium.
 
