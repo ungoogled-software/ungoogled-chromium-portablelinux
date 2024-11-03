@@ -1,9 +1,4 @@
-ARG RELEASE="bullseye"
-
-FROM debian:${RELEASE}
-
-ARG RELEASE
-ARG NODE_VERSION="18"
+FROM debian:bullseye
 
 # set deb to non-interactive mode and upgrade packages
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections && export DEBIAN_FRONTEND=noninteractive 
@@ -13,7 +8,7 @@ RUN apt-get -y update && apt-get -y upgrade
 RUN apt-get -y install lsb-release wget software-properties-common gnupg
 # add node repo (needed for bullseye to install nodejs > 12)
 RUN wget -qO - https://deb.nodesource.com/gpgkey/nodesource.gpg.key | tee /etc/apt/trusted.gpg.d/deb.nodesource.com.asc\
- && add-apt-repository "deb https://deb.nodesource.com/node_${NODE_VERSION}.x ${RELEASE} main"
+ && add-apt-repository "deb https://deb.nodesource.com/node_20.x bullseye main"
 # install node
 RUN apt-get -y update && apt-get -y install nodejs && npm update -g npm
 
