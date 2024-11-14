@@ -6,7 +6,10 @@ Portable Linux build and packaging for [ungoogled-chromium](https://github.com/u
 ## building
 execute `docker-build.sh` script in the root dir. This will
 * build a debian-based docker image with all needed llvm, nodejs and distro packages to build chromium
-* start the docker image, mounts the current dir and runs `build.sh` in it, which executes the actual build process on ungoogled-chromium (mainly: download chromium source tar, unpack and patch it, setup build env and execute ninja build on the result).
+* start the docker image, mounts the current dir and runs `build.sh` in it, which executes the actual build process on ungoogled-chromium (mainly: download chromium source tar, unpack 
+  and patch it, setup build env and execute ninja build on the result).
+* if you want to checkout chromium instead of downloading a tarball (e.g. because there's no tarball available yet), call `docker-build.sh -c`. 
+  Instead of tarball downloading this will call the `<ungoogled-chromium>/utils/clone.py` script for cloning the source tree of chromium and all needed submodules etc.
 
 >Note that the build takes several hours (about 8 hous on my computer) and consumes about 15G of disk space (you may delete the `build` dir __AFTER PACKAGING__, see [packaging](#packaging))
 
