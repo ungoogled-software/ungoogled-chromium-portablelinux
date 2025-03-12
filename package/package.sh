@@ -46,7 +46,9 @@ rm -rf ${CURRENT_DIR}/${FILE_PREFIX}_linux && xz "${CURRENT_DIR}/${FILE_PREFIX}_
 set +eux
 
 if [ ! -f "./pkg2appimage" ] ; then
-    wget -c "https://github.com/AppImage/AppImages/raw/master/pkg2appimage" && chmod +x ./pkg2appimage
+    #wget -c "https://github.com/AppImage/AppImages/raw/master/pkg2appimage" && chmod +x ./pkg2appimage
+    wget -c $(wget -q https://api.github.com/repos/AppImageCommunity/pkg2appimage/releases -O - | grep "pkg2appimage-.*-x86_64.AppImage" | grep browser_download_url | head -n 1 | cut -d '"' -f 4)
+    mv ./pkg2appimage-*.AppImage ./pkg2appimage && chmod +x ./pkg2appimage
 fi
 ./pkg2appimage ./ungoogled-chromium.yaml
 
