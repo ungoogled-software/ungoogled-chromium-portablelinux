@@ -1,14 +1,14 @@
 FROM debian:bullseye
 
+ARG NODE_VERSION="22"
+
 # set deb to non-interactive mode and upgrade packages
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections && export DEBIAN_FRONTEND=noninteractive 
 RUN apt-get -y update && apt-get -y upgrade
 
-# install the needed base packages to add repos
-RUN apt-get -y install lsb-release wget software-properties-common gnupg
 # add node repo (needed for bullseye to install nodejs > 12)
-RUN wget -qO - https://deb.nodesource.com/gpgkey/nodesource.gpg.key | tee /etc/apt/trusted.gpg.d/deb.nodesource.com.asc\
- && add-apt-repository "deb https://deb.nodesource.com/node_20.x bullseye main"
+RUN apt-get install -y apt-transport-https ca-certificates curl gnupg
+RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash -
 # install node
 RUN apt-get -y update && apt-get -y install nodejs && npm update -g npm
 
