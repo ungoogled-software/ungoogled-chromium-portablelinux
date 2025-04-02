@@ -23,16 +23,18 @@ chrome-wrapper
 icudtl.dat
 libEGL.so
 libGLESv2.so
+libqt5_shim.so
+libqt6_shim.so
 libvk_swiftshader.so
 libvulkan.so.1
 locales/
 product_logo_48.png
-resources/
 resources.pak
 v8_context_snapshot.bin
 vk_swiftshader_icd.json
 xdg-mime
 xdg-settings"
+
 
 mkdir ${CURRENT_DIR}/${FILE_PREFIX}_linux
 for i in $FILES ; do 

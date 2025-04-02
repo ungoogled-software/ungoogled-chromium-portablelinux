@@ -6,10 +6,9 @@ ARG NODE_VERSION="22"
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections && export DEBIAN_FRONTEND=noninteractive 
 RUN apt-get -y update && apt-get -y upgrade
 
-# add node repo (needed for bullseye to install nodejs > 12)
-RUN apt-get install -y apt-transport-https ca-certificates curl gnupg
-RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash -
-# install node
+# install latest nodejs lts version (needed since bullseye has nodejs 12.x)
+RUN apt-get install -y apt-transport-https ca-certificates curl gnupg &&\
+  curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash -
 RUN apt-get -y update && apt-get -y install nodejs && npm update -g npm
 
 # install all needed distro packages
