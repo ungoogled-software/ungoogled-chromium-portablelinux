@@ -35,5 +35,13 @@ Signed-off-by: Matt Jolly <kangie@gentoo.org>
 -    }
    }
  }
--- 
-2.48.1
+--- a/third_party/protobuf/proto_library.gni
++++ b/third_party/protobuf/proto_library.gni
+@@ -562,7 +562,6 @@
+                   _protoc_gen_ts_path,
+                   "//tools/protoc_wrapper/protoc-gen-ts_proto.py",
+                 ] + _protoc_gen_ts_runtime_deps
+-      deps += [ "//third_party/node:check_version" ]
+     }
+ 
+     if (_generate_with_plugin) {
