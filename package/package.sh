@@ -49,8 +49,10 @@ sed -i -e 's|Exec=chromium|Exec=AppRun|g' ${APP_DIR}/ungoogled-chromium.desktop
 
 cat > ${APP_DIR}/AppRun <<'EOF'
 #!/bin/sh
-HERE="$(dirname "$(readlink -f "${0}")")"
+THIS="$(readlink -f "${0}")"
+HERE="$(dirname "${THIS}")"
 export LD_LIBRARY_PATH="${HERE}"/usr/lib:$PATH
+export CHROMIUM_WRAPPER="${THIS}"
 "${HERE}"/opt/ungoogled-chromium/chrome "$@"
 EOF
 chmod a+x ${APP_DIR}/AppRun
