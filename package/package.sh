@@ -33,17 +33,17 @@ vk_swiftshader_icd.json
 xdg-mime
 xdg-settings"
 
+echo "copying release files and create archive ${FILE_PREFIX}_linux.tar"
 mkdir -p ${CURRENT_DIR}/${FILE_PREFIX}_linux
-set -x
 for i in $FILES ; do 
     cp -r ${BUILD_DIR}/src/out/Default/$i ${CURRENT_DIR}/${FILE_PREFIX}_linux
 done
-
 (cd ${CURRENT_DIR} && tar cf ${FILE_PREFIX}_linux.tar ${FILE_PREFIX}_linux)
 
+echo "compressing archive to ${FILE_PREFIX}_linux.tar.xz"
 rm -rf ${CURRENT_DIR}/${FILE_PREFIX}_linux ${CURRENT_DIR}/${FILE_PREFIX}_linux.tar.xz
-xz ${CURRENT_DIR}/${FILE_PREFIX}_linux.tar 
-set +x
+xz -v ${CURRENT_DIR}/${FILE_PREFIX}_linux.tar 
+
 
 ### create AppImage using appimagetool
 rm -rf ${APP_DIR} && mkdir -p ${APP_DIR}/opt/ungoogled-chromium/ ${APP_DIR}/usr/share/icons/hicolor/48x48/apps/
