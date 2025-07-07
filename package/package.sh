@@ -33,21 +33,17 @@ vk_swiftshader_icd.json
 xdg-mime
 xdg-settings"
 
-echo "copying release files and create archive ${FILE_PREFIX}_linux.tar"
+echo "copying release files and create compressed archive ${FILE_PREFIX}_linux.tar.xz"
 mkdir -p ${CURRENT_DIR}/${FILE_PREFIX}_linux
 for i in $FILES ; do 
     cp -r ${BUILD_DIR}/src/out/Default/$i ${CURRENT_DIR}/${FILE_PREFIX}_linux
 done
-(cd ${CURRENT_DIR} && tar cf ${FILE_PREFIX}_linux.tar ${FILE_PREFIX}_linux)
+SIZE="$(du -sk "${FILE_PREFIX}_linux" | cut -f1)"
+tar cf - ${FILE_PREFIX}_linux | pv -s"${SIZE}k" | xz > ${FILE_PREFIX}_linux.tar.xz
 
-echo "compressing archive to ${FILE_PREFIX}_linux.tar.xz"
-rm -rf ${CURRENT_DIR}/${FILE_PREFIX}_linux ${CURRENT_DIR}/${FILE_PREFIX}_linux.tar.xz
-xz -v ${CURRENT_DIR}/${FILE_PREFIX}_linux.tar 
-
-
-### create AppImage using appimagetool
+## create AppImage using appimagetool
 rm -rf ${APP_DIR} && mkdir -p ${APP_DIR}/opt/ungoogled-chromium/ ${APP_DIR}/usr/share/icons/hicolor/48x48/apps/
-tar xf ${CURRENT_DIR}/ungoogled-chromium_*_linux.tar.xz --strip-components=1 -C ${APP_DIR}/opt/ungoogled-chromium/
+mv ${CURRENT_DIR}/${FILE_PREFIX}_linux/* ${APP_DIR}/opt/ungoogled-chromium/
 cp ${CURRENT_DIR}/ungoogled-chromium.desktop ${APP_DIR}
 sed -i -e 's|Exec=chromium|Exec=AppRun|g' ${APP_DIR}/ungoogled-chromium.desktop
 
@@ -73,7 +69,7 @@ appimagetool -u 'gh-releases-zsync|ungoogled-software|ungoogled-chromium-portabl
 
 mv "Chromium_(ungoogled)-x86_64.AppImage" ${CURRENT_DIR}/${FILE_PREFIX}.AppImage
 mv "Chromium_(ungoogled)-x86_64.AppImage.zsync" ${CURRENT_DIR}/${FILE_PREFIX}.AppImage.zsync
-rm -rf ${APP_DIR}
+rm -rf ${CURRENT_DIR}/${FILE_PREFIX}_linux/ ${APP_DIR}
 
 
 ### mv results to root dir
