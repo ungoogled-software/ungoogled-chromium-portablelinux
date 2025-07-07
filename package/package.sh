@@ -52,7 +52,7 @@ cat > ${APP_DIR}/AppRun <<'EOF'
 THIS="$(readlink -f "${0}")"
 HERE="$(dirname "${THIS}")"
 export LD_LIBRARY_PATH="${HERE}"/usr/lib:$PATH
-export CHROMIUM_WRAPPER="${THIS}"
+export CHROME_WRAPPER="${THIS}"
 "${HERE}"/opt/ungoogled-chromium/chrome "$@"
 EOF
 chmod a+x ${APP_DIR}/AppRun
