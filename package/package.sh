@@ -7,8 +7,11 @@ APP_DIR=${CURRENT_DIR}/ungoogled-chromium.AppDir
 
 chromium_version=$(cat ${ROOT_DIR}/ungoogled-chromium/chromium_version.txt)
 ungoogled_revision=$(cat ${ROOT_DIR}/ungoogled-chromium/revision.txt)
-FILE_PREFIX=ungoogled-chromium_${chromium_version}-${ungoogled_revision}
 
+APP_NAME="ungoogled-chromium"
+VERSION="${chromium_version}-${ungoogled_revision}"
+ARCH="x86_64"
+FILE_PREFIX=$APP_NAME-$VERSION-$ARCH
 
 ### create tar.xz package
 FILES="chrome
@@ -67,12 +70,11 @@ if ! command -v appimagetool >/dev/null; then
     fi
     export PATH=".:$PATH"
 fi
-appimagetool -u 'gh-releases-zsync|ungoogled-software|ungoogled-chromium-portablelinux|latest|ungoogled-chromium_*.AppImage.zsync' ${APP_DIR}
+APPIMAGETOOL_APP_NAME=$APP_NAME ARCH=$ARCH VERSION=$VERSION appimagetool -u 'gh-releases-zsync|ungoogled-software|ungoogled-chromium-portablelinux|latest|ungoogled-chromium_*.AppImage.zsync' ${APP_DIR}
 
-mv "Chromium_(ungoogled)-x86_64.AppImage" ${CURRENT_DIR}/${FILE_PREFIX}.AppImage
-mv "Chromium_(ungoogled)-x86_64.AppImage.zsync" ${CURRENT_DIR}/${FILE_PREFIX}.AppImage.zsync
+#mv "ungoogled-chromium-*-x86_64.AppImage" ${CURRENT_DIR}/${FILE_PREFIX}.AppImage
+#mv "ungoogled-chromium-*-x86_64.AppImage.zsync" ${CURRENT_DIR}/${FILE_PREFIX}.AppImage.zsync
 rm -rf ${CURRENT_DIR}/${FILE_PREFIX}_linux/ ${APP_DIR}
-
 
 ### mv results to root dir
 mv ${CURRENT_DIR}/${FILE_PREFIX}_linux.tar.xz "${ROOT_DIR}"
