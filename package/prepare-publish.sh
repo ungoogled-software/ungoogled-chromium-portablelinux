@@ -20,9 +20,9 @@ cd ${PATH_TO_PUBLISH_REPO}
 #git push origin master --force
 
 # use conveninence scripts in ungoogled-chromium-binaries repo to produce commits for new binaries
-./utilities/submit_github_binary.py --skip-checks --skip-commit --tag ${TAG} --username clickot --output config/platforms/linux_portable/64bit/ ${PATH_TO_BUILD_REPO}/ungoogled-chromium_${TAG}*.tar.xz
+./utilities/submit_github_binary.py --skip-checks --skip-commit --tag ${TAG} --username clickot --output config/platforms/linux_portable/64bit/ ${PATH_TO_BUILD_REPO}/ungoogled-chromium-${TAG}*.tar.xz
 sed -i "s|${PUBLISH_REPO}|${BUILD_REPO}|" ${PATH_TO_PUBLISH_REPO}/config/platforms/linux_portable/64bit/${TAG}.ini
 
-./utilities/submit_github_binary.py --skip-checks --skip-commit --tag ${TAG} --username clickot --output config/platforms/appimage/64bit/ ${PATH_TO_BUILD_REPO}/ungoogled-chromium_${TAG}*.AppImage 
+./utilities/submit_github_binary.py --skip-checks --skip-commit --tag ${TAG} --username clickot --output config/platforms/appimage/64bit/ ${PATH_TO_BUILD_REPO}/ungoogled-chromium-${TAG}*.AppImage 
 sed -i "s|${PUBLISH_REPO}|${BUILD_REPO}|" ${PATH_TO_PUBLISH_REPO}/config/platforms/appimage/64bit/${TAG}.ini
 
