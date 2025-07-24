@@ -70,7 +70,7 @@ if ! command -v appimagetool >/dev/null; then
     fi
     export PATH=".:$PATH"
 fi
-APPIMAGETOOL_APP_NAME=$APP_NAME ARCH=$ARCH VERSION=$VERSION appimagetool -u 'gh-releases-zsync|ungoogled-software|ungoogled-chromium-portablelinux|latest|ungoogled-chromium_*.AppImage.zsync' ${APP_DIR}
+APPIMAGETOOL_APP_NAME=$APP_NAME ARCH=$ARCH VERSION=$VERSION appimagetool -u 'gh-releases-zsync|ungoogled-software|ungoogled-chromium-portablelinux|latest|ungoogled-chromium-*.AppImage.zsync' ${APP_DIR}
 
 #mv "ungoogled-chromium-*-x86_64.AppImage" ${CURRENT_DIR}/${FILE_PREFIX}.AppImage
 #mv "ungoogled-chromium-*-x86_64.AppImage.zsync" ${CURRENT_DIR}/${FILE_PREFIX}.AppImage.zsync
