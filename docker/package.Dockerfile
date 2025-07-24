@@ -9,7 +9,7 @@ ARG DEBIAN_VER="bullseye-slim"
 FROM debian:${DEBIAN_VER}
 
 ## Set deb to non-interactive mode and upgrade packages
-RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections && export DEBIAN_FRONTEND=noninteractive 
+RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections && export DEBIAN_FRONTEND=noninteractive
 RUN apt -y update && apt -y upgrade
 
 ## Install system dependencies
