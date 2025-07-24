@@ -50,7 +50,7 @@ patch -Np1 -i ${root_dir}/use-oauth2-client-switches-as-default.patch
 patch -Np1 -i ${root_dir}/drop-nodejs-version-check.patch
 
 # combine local and ungoogled-chromium gn flags
-cat "${main_repo}/flags.gn" "${root_dir}/flags.gn" >"${src_dir}/out/Default/args.gn"
+cat "${main_repo}/flags.gn" "${root_dir}/flags.linux.gn" > "${src_dir}/out/Default/args.gn"
 
 # adjust host name to download prebuilt tools below and sysroot files from 
 # (see e.g. https://github.com/ungoogled-software/ungoogled-chromium/issues/1846)
