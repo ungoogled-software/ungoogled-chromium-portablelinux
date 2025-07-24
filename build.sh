@@ -33,21 +33,12 @@ else
 fi
 mkdir -p "${src_dir}/out/Default"
 
-# prepare sources
-# ==================================================
-## apply ungoogled-chromium patches
+# Apply patches and substitutions
 "${main_repo}/utils/prune_binaries.py" "${src_dir}" "${main_repo}/pruning.list"
-"${main_repo}/utils/patches.py" apply "${src_dir}" "${main_repo}/patches"
+"${main_repo}/utils/patches.py" apply "${src_dir}" "${main_repo}/patches" "${root_dir}/patches"
 "${main_repo}/utils/domain_substitution.py" apply -r "${main_repo}/domain_regex.list" -f "${main_repo}/domain_substitution.list" -c "${build_dir}/domsubcache.tar.gz" "${src_dir}"
 
 cd "${src_dir}"
-
-# Use the --oauth2-client-id= and --oauth2-client-secret= switches for
-# setting GOOGLE_DEFAULT_CLIENT_ID and GOOGLE_DEFAULT_CLIENT_SECRET at
-# runtime -- this allows signing into Chromium without baked-in values
-patch -Np1 -i ${root_dir}/use-oauth2-client-switches-as-default.patch
-# disable check for a specific node version (here: 22.11.0, but latest lts we use is 22.16.0)
-patch -Np1 -i ${root_dir}/drop-nodejs-version-check.patch
 
 # combine local and ungoogled-chromium gn flags
 cat "${main_repo}/flags.gn" "${root_dir}/flags.linux.gn" > "${src_dir}/out/Default/args.gn"
