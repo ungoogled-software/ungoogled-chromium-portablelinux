@@ -1,6 +1,6 @@
 [Desktop Entry]
 Version=1.0
-Name=Chromium (ungoogled)
+Name=ungoogled-chromium
 GenericName=Web Browser
 Comment=Access the Internet
 Exec=chromium %U
@@ -19,4 +19,3 @@ Exec=chromium
 [Desktop Action new-private-window]
 Name=New Incognito Window
 Exec=chromium --incognito
-
