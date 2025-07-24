@@ -1,82 +1,71 @@
 #!/bin/bash
 
 clone=false
-while getopts "c" opt; do
-    case "${opt}" in
-        c) clone=true
-        ;;
-    esac
-done
-
-# directories
-# ==================================================
-root_dir="$(dirname $(readlink -f $0))"
-main_repo="${root_dir}/ungoogled-chromium"
-
-build_dir="${root_dir}/build"
-download_cache="${build_dir}/download_cache"
-src_dir="${build_dir}/src"
-
-# clean
-# ==================================================
-echo "cleaning up directories"
-rm -rf "${src_dir}" "${build_dir}/domsubcache.tar.gz" 
-mkdir -p "${src_dir}" "${download_cache}"
-
-## fetch sources
-# ==================================================
-if $clone;  then
-    "${main_repo}/utils/clone.py" --sysroot amd64 -o "${src_dir}"
-else
-    "${main_repo}/utils/downloads.py" retrieve -i "${main_repo}/downloads.ini" -c "${download_cache}"
-    "${main_repo}/utils/downloads.py" unpack -i "${main_repo}/downloads.ini" -c "${download_cache}" "${src_dir}"
+if [[ "$1" == "-c" ]]; then
+    clone=true
 fi
-mkdir -p "${src_dir}/out/Default"
+
+# Path variables
+_root_dir="$(dirname $(readlink -f $0))"
+_main_repo="$_root_dir/ungoogled-chromium"
+
+_build_dir="$_root_dir/build"
+_download_cache="$_build_dir/_download_cache"
+_src_dir="$_build_dir/src"
+
+rm -rf "$_src_dir/out" || true
+mkdir -p "$_src_dir" "$_download_cache"
+
+# Fetch sources
+if $clone; then
+    "$_main_repo/utils/clone.py" --sysroot amd64 -o "$_src_dir"
+else
+    "$_main_repo/utils/downloads.py" retrieve -i "$_main_repo/downloads.ini" -c "$_download_cache"
+    "$_main_repo/utils/downloads.py" unpack -i "$_main_repo/downloads.ini" -c "$_download_cache" "$_src_dir"
+fi
+
+mkdir -p "$_src_dir/out/Default"
 
 # Apply patches and substitutions
-"${main_repo}/utils/prune_binaries.py" "${src_dir}" "${main_repo}/pruning.list"
-"${main_repo}/utils/patches.py" apply "${src_dir}" "${main_repo}/patches" "${root_dir}/patches"
-"${main_repo}/utils/domain_substitution.py" apply -r "${main_repo}/domain_regex.list" -f "${main_repo}/domain_substitution.list" -c "${build_dir}/domsubcache.tar.gz" "${src_dir}"
+"$_main_repo/utils/prune_binaries.py" "$_src_dir" "$_main_repo/pruning.list"
+"$_main_repo/utils/patches.py" apply "$_src_dir" "$_main_repo/patches" "$_root_dir/patches"
+"$_main_repo/utils/domain_substitution.py" apply -r "$_main_repo/domain_regex.list" -f "$_main_repo/domain_substitution.list" "$_src_dir"
 
-cd "${src_dir}"
+# Set build flags
+cat "$_main_repo/flags.gn" "$_root_dir/flags.linux.gn" > "$_src_dir/out/Default/args.gn"
 
-# combine local and ungoogled-chromium gn flags
-cat "${main_repo}/flags.gn" "${root_dir}/flags.linux.gn" > "${src_dir}/out/Default/args.gn"
+# Fix downloading of prebuilt tools and sysroot files
+# (https://github.com/ungoogled-software/ungoogled-chromium/issues/1846)
+sed -i "s/commondatastorage.9oo91eapis.qjz9zk/commondatastorage.googleapis.com/g" "$_src_dir/build/linux/sysroot_scripts/sysroots.json"
+sed -i "s/commondatastorage.9oo91eapis.qjz9zk/commondatastorage.googleapis.com/g" "$_src_dir/tools/clang/scripts/update.py"
 
-# adjust host name to download prebuilt tools below and sysroot files from 
-# (see e.g. https://github.com/ungoogled-software/ungoogled-chromium/issues/1846)
-sed -i 's/commondatastorage.9oo91eapis.qjz9zk/commondatastorage.googleapis.com/g' ./build/linux/sysroot_scripts/sysroots.json
-sed -i 's/commondatastorage.9oo91eapis.qjz9zk/commondatastorage.googleapis.com/g' ./tools/clang/scripts/update.py
+# Use prebuilt tools for rust and clang instead of system libs
+"$_src_dir/tools/rust/update_rust.py" && "$_src_dir/tools/clang/scripts/update.py"
 
-## use prebuilt tools for rust and clang insetad of system libs
-# use prebuilt rust
-./tools/rust/update_rust.py
-# to link to rust libraries we need to compile with prebuilt clang
-./tools/clang/scripts/update.py
-# install sysroot if according gn flag is set to true
-if grep -q -F "use_sysroot=true" "${src_dir}/out/Default/args.gn"; then
-    ./build/linux/sysroot_scripts/install-sysroot.py --arch=amd64
+# Install sysroot if related GN flag is set to true
+if grep -q -F "use_sysroot=true" "$_src_dir/out/Default/args.gn"; then
+    "$_src_dir/build/linux/sysroot_scripts/install-sysroot.py" --arch=amd64
 fi
 
-## Link to system tools required by the build
-mkdir -p third_party/node/linux/node-linux-x64/bin && ln -s /usr/bin/node third_party/node/linux/node-linux-x64/bin
+# Link system tools required by the build
+mkdir -p "$_src_dir/third_party/node/linux/node-linux-x64/bin"
+ln -s /usr/bin/node "$_src_dir/third_party/node/linux/node-linux-x64/bin"
 
-### build
-# ==================================================
-_clang_path="${src_dir}/third_party/llvm-build/Release+Asserts/bin"
-## env vars
+_clang_path="$_src_dir/third_party/llvm-build/Release+Asserts/bin"
+
 export CC=$_clang_path/clang
 export CXX=$_clang_path/clang++
 export AR=$_clang_path/llvm-ar
 export NM=$_clang_path/llvm-nm
-export LLVM_BIN=${_clang_path}
-## flags
-llvm_resource_dir=$("$CC" --print-resource-dir)
-export CXXFLAGS+=" -resource-dir=${llvm_resource_dir} -B${LLVM_BIN}"
-export CPPFLAGS+=" -resource-dir=${llvm_resource_dir} -B${LLVM_BIN}"
-export CFLAGS+=" -resource-dir=${llvm_resource_dir} -B${LLVM_BIN}"
+export LLVM_BIN=$_clang_path
 
-# execute build
+llvm_resource_dir=$("$CC" --print-resource-dir)
+export CXXFLAGS+=" -resource-dir=$llvm_resource_dir -B$LLVM_BIN"
+export CPPFLAGS+=" -resource-dir=$llvm_resource_dir -B$LLVM_BIN"
+export CFLAGS+=" -resource-dir=$llvm_resource_dir -B$LLVM_BIN"
+
+cd "$_src_dir"
+
 ./tools/gn/bootstrap/bootstrap.py -o out/Default/gn --skip-generate-buildfiles
 ./out/Default/gn gen out/Default --fail-on-unused-args
 
