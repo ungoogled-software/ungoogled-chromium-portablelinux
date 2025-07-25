@@ -82,5 +82,5 @@ APPIMAGETOOL_APP_NAME=$APP_NAME ARCH=$ARCH VERSION=$VERSION appimagetool -u \
 
 rm -rf ${CURRENT_DIR}/${FILE_PREFIX}_linux/ ${APP_DIR}
 
-mv ${CURRENT_DIR}/${FILE_PREFIX}_linux.tar.xz "${ROOT_DIR}"
-mv ${CURRENT_DIR}/${FILE_PREFIX}.AppImage* "${ROOT_DIR}"
+mv ${CURRENT_DIR}/${FILE_PREFIX}_linux.tar.xz "${BUILD_DIR}"
+mv ${CURRENT_DIR}/${FILE_PREFIX}.AppImage* "${BUILD_DIR}"
