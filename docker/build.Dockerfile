@@ -25,10 +25,11 @@ RUN apt-get -y install bison debhelper desktop-file-utils flex gperf gsettings-d
 # install additional packages needed when cloning the chromium repo (and sudo and vim for convenience)
 RUN apt-get -y install git python3-httplib2 python3-pyparsing python3-six rsync sudo vim
 
-COPY home /home/ubuntu
-RUN chown -R ubuntu:ubuntu /home/ubuntu
+# create builder user
+RUN groupadd -g 1000 builder && useradd -d /home/builder -g 1000 -u 1000 -m builder
+
 # create workdir to mount in docker build
 RUN mkdir /repo
 
-USER ubuntu
+USER builder
 WORKDIR /repo
