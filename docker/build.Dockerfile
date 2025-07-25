@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM debian:trixie-slim
 
 ARG NODE_VERSION="22"
 
@@ -6,7 +6,7 @@ ARG NODE_VERSION="22"
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections && export DEBIAN_FRONTEND=noninteractive
 RUN apt-get -y update && apt-get -y upgrade
 
-# install latest nodejs lts version (needed since ubuntu noble has nodejs 18.x)
+# install latest nodejs lts version
 RUN apt-get install -y apt-transport-https ca-certificates curl gnupg &&\
   curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash -
 RUN apt-get -y update && apt-get -y install nodejs && npm update -g npm

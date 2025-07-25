@@ -1,12 +1,4 @@
-# Usage(on repo root folder):
-#   docker build . -t ungoogled-chromium:packager -f ./docker/package.Dockerfile
-# Optionally, add arguments like: --build-arg DEBIAN_VER=latest
-
-# Arguments configuration
-ARG DEBIAN_VER="bullseye-slim"
-
-# Environment setup
-FROM debian:${DEBIAN_VER}
+FROM debian:trixie-slim
 
 ## Set deb to non-interactive mode and upgrade packages
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections && export DEBIAN_FRONTEND=noninteractive
