@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM debian:bullseye
 
 ARG NODE_VERSION="22"
 
@@ -22,12 +22,14 @@ RUN apt-get -y install bison debhelper desktop-file-utils flex gperf gsettings-d
   mesa-common-dev ninja-build pkg-config python3-jinja2 python3-setuptools python3-xcbgen python-is-python3 qtbase5-dev\
   uuid-dev valgrind wdiff x11-apps xcb-proto xfonts-base xvfb xz-utils yasm
 # install additional packages needed when cloning the chromium repo (and sudo and vim for convenience)
-RUN apt-get -y install git python3-httplib2 python3-pyparsing python3-six rsync sudo vim
+RUN apt-get -y install git python3-httplib2 python3-pyparsing python-six rsync sudo vim
 
-COPY home /home/ubuntu
-RUN chown -R ubuntu:ubuntu /home/ubuntu
+# create builder user
+RUN groupadd -g 1000 builder && useradd -d /home/builder -g 1000 -u 1000 builder
+COPY home /home/builder
+RUN chown -R builder:builder /home/builder
 # create workdir to mount in docker build
 RUN mkdir /repo 
 
-USER ubuntu 
+USER builder 
 WORKDIR /repo

@@ -3,7 +3,7 @@
 BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 GIT_SUBMODULE="ungoogled-chromium"
 
-IMAGE="chromium-builder:bullseye"
+IMAGE="chromium-builder:noble"
 
 echo "building docker image '${IMAGE}'"
 (cd $BASE_DIR/docker && docker buildx build -t ${IMAGE} -f ./build.Dockerfile .)
