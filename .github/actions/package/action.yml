@@ -1,0 +1,52 @@
+name: Package AppImage
+description: Package ungoogled-chromium as AppImage and tar.xz, upload artifacts
+
+runs:
+  using: composite
+  steps:
+    - uses: docker/setup-buildx-action@v3
+
+    - name: Download build cache
+      uses: actions/download-artifact@v4
+      with:
+        name: build-cache
+        path: .github/cache/
+
+    - name: Import build cache
+      shell: bash
+      run: bash ./.github/scripts/import-cache.sh
+
+    - name: Package as AppImage with Docker
+      shell: bash
+      run: bash ./package/docker-package.sh
+
+    - name: List build artifacts
+      shell: bash
+      run: ls -la build
+
+    - name: Get version info
+      id: version
+      shell: bash
+      run: |
+        chromium_version=$(cat ungoogled-chromium/chromium_version.txt)
+        ungoogled_revision=$(cat ungoogled-chromium/revision.txt)
+        version="${chromium_version}-${ungoogled_revision}"
+        echo "version=${version}" >> $GITHUB_OUTPUT
+        echo "chromium_version=${chromium_version}" >> $GITHUB_OUTPUT
+        echo "ungoogled_revision=${ungoogled_revision}" >> $GITHUB_OUTPUT
+
+    - name: Upload AppImage artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ungoogled-chromium-${{ steps.version.outputs.version }}-x86_64-AppImage
+        path: build/ungoogled-chromium-${{ steps.version.outputs.version }}-x86_64.AppImage*
+        if-no-files-found: error
+        compression-level: 0
+
+    - name: Upload tar.xz artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ungoogled-chromium-${{ steps.version.outputs.version }}-x86_64-linux
+        path: build/ungoogled-chromium-${{ steps.version.outputs.version }}-x86_64_linux.tar.xz
+        if-no-files-found: error
+        compression-level: 0
