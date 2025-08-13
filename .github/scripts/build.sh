@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euo pipefail
+set -euxo pipefail
 
 . "/repo/scripts/shared.sh"
 
@@ -16,7 +16,8 @@ if [ "${_prepare_only}" = "1" ]; then
     fix_tool_downloading
     setup_toolchain
     gn_gen
-    echo "Preparation complete"
+
+    echo "Preheat done"
     exit 0
 fi
 
