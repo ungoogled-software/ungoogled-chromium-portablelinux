@@ -39,7 +39,7 @@ runs:
       uses: actions/upload-artifact@v4
       with:
         name: ungoogled-chromium-${{ steps.version.outputs.version }}-x86_64-AppImage
-        path: build/ungoogled-chromium-${{ steps.version.outputs.version }}-x86_64.AppImage*
+        path: build/release/ungoogled-chromium-${{ steps.version.outputs.version }}-x86_64.AppImage*
         if-no-files-found: error
         compression-level: 0
 
@@ -47,6 +47,6 @@ runs:
       uses: actions/upload-artifact@v4
       with:
         name: ungoogled-chromium-${{ steps.version.outputs.version }}-x86_64-linux
-        path: build/ungoogled-chromium-${{ steps.version.outputs.version }}-x86_64_linux.tar.xz
+        path: build/release/ungoogled-chromium-${{ steps.version.outputs.version }}-x86_64_linux.tar.xz
         if-no-files-found: error
         compression-level: 0

@@ -2,17 +2,21 @@
 set -euo pipefail
 
 _current_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
-_root_dir="$(cd "${_current_dir}/.." && pwd)"
-_build_dir="${_root_dir}/build"
-_app_dir="${_current_dir}/ungoogled-chromium.AppDir"
+_root_dir="$(cd "$_current_dir/.." && pwd)"
+_build_dir="$_root_dir/build"
+_release_dir="$_build_dir/release"
+_app_dir="$_release_dir/ungoogled-chromium.AppDir"
 
-_chromium_version=$(cat "${_root_dir}/ungoogled-chromium/chromium_version.txt")
-_ungoogled_revision=$(cat "${_root_dir}/ungoogled-chromium/revision.txt")
+_chromium_version=$(cat "$_root_dir/ungoogled-chromium/chromium_version.txt")
+_ungoogled_revision=$(cat "$_root_dir/ungoogled-chromium/revision.txt")
 
 _app_name="ungoogled-chromium"
-_version="${_chromium_version}-${_ungoogled_revision}"
+_version="$_chromium_version-$_ungoogled_revision"
 _arch="x86_64"
-_file_prefix=${_app_name}-${_version}-${_arch}
+
+_release_name="$_app_name-$_version-$_arch"
+_tarball_name="${_release_name}_linux"
+_tarball_dir="$_release_dir/$_tarball_name"
 
 _files="chrome
 chrome_100_percent.pak
@@ -36,25 +40,31 @@ vk_swiftshader_icd.json
 xdg-mime
 xdg-settings"
 
-echo "copying release files and creating ${_file_prefix}_linux.tar.xz"
+echo "copying release files and creating $_tarball_name.tar.xz"
 
-mkdir -p "${_current_dir}/${_file_prefix}_linux"
+mkdir -p "$_tarball_dir"
 
-for i in $_files ; do
-    cp -r "${_build_dir}/src/out/Default/$i" "${_current_dir}/${_file_prefix}_linux"
+for file in $_files; do
+    cp -r "$_build_dir/src/out/Default/$file" "$_tarball_dir" &
 done
+wait
 
-_size="$(du -sk "${_file_prefix}_linux" | cut -f1)"
-tar cf - "${_file_prefix}_linux" | pv -s"${_size}k" | xz > "${_file_prefix}_linux.tar.xz"
+_size="$(du -sk "$_tarball_dir" | cut -f1)"
+
+pushd "$_release_dir"
+
+tar vcf - "$_tarball_name" \
+    | pv -s"${_size}k" \
+    | xz -e9 > "$_release_dir/$_tarball_name.tar.xz" &
 
 # create AppImage
-rm -rf "${_app_dir}"
-mkdir -p "${_app_dir}/opt/ungoogled-chromium/" "${_app_dir}/usr/share/icons/hicolor/48x48/apps/"
-mv "${_current_dir}/${_file_prefix}_linux"/* "${_app_dir}/opt/ungoogled-chromium/"
-cp "${_current_dir}/../package/ungoogled-chromium.desktop" "${_app_dir}"
-sed -i -e 's|Exec=chromium|Exec=AppRun|g' "${_app_dir}/ungoogled-chromium.desktop"
+rm -rf "$_app_dir"
+mkdir -p "$_app_dir/opt/ungoogled-chromium/" "$_app_dir/usr/share/icons/hicolor/48x48/apps/"
+cp -r "$_tarball_dir"/* "$_app_dir/opt/ungoogled-chromium/"
+cp "$_root_dir/package/ungoogled-chromium.desktop" "$_app_dir"
+sed -i -e 's|Exec=chromium|Exec=AppRun|g' "$_app_dir/ungoogled-chromium.desktop"
 
-cat > "${_app_dir}/AppRun" <<'EOF'
+cat > "$_app_dir/AppRun" <<'EOF'
 #!/bin/sh
 THIS="$(readlink -f "${0}")"
 HERE="$(dirname "${THIS}")"
@@ -62,16 +72,19 @@ export LD_LIBRARY_PATH="${HERE}"/usr/lib:$PATH
 export CHROME_WRAPPER="${THIS}"
 "${HERE}"/opt/ungoogled-chromium/chrome "$@"
 EOF
-chmod a+x "${_app_dir}/AppRun"
+chmod a+x "$_app_dir/AppRun"
 
-cp "${_app_dir}/opt/ungoogled-chromium/product_logo_48.png" "${_app_dir}/usr/share/icons/hicolor/48x48/apps/chromium.png"
-cp "${_app_dir}/usr/share/icons/hicolor/48x48/apps/chromium.png" "${_app_dir}"
+cp "${_app_dir}/opt/ungoogled-chromium/product_logo_48.png" "$_app_dir/usr/share/icons/hicolor/48x48/apps/chromium.png"
+cp "${_app_dir}/usr/share/icons/hicolor/48x48/apps/chromium.png" "$_app_dir"
 
-APPIMAGETOOL_APP_NAME=${_app_name} ARCH=${_arch} VERSION=${_version} appimagetool -u \
-    'gh-releases-zsync|ungoogled-software|ungoogled-chromium-portablelinux|latest|ungoogled-chromium-*.AppImage.zsync' \
-    "${_app_dir}"
+export APPIMAGETOOL_APP_NAME="$_app_name"
+export VERSION="$_version"
 
-rm -rf "${_current_dir}/${_file_prefix}_linux/" "${_app_dir}"
+appimagetool \
+    -u 'gh-releases-zsync|ungoogled-software|ungoogled-chromium-portablelinux|latest|ungoogled-chromium-*.AppImage.zsync' \
+    "$_app_dir" \
+    "$_release_name.AppImage" &
+popd
+wait
 
-mv "${_current_dir}/${_file_prefix}_linux.tar.xz" "${_build_dir}"
-mv "${_current_dir}/${_file_prefix}.AppImage"* "${_build_dir}"
+rm -rf "$_tarball_dir" "$_app_dir"
