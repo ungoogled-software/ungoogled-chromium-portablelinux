@@ -67,15 +67,6 @@ chmod a+x "${_app_dir}/AppRun"
 cp "${_app_dir}/opt/ungoogled-chromium/product_logo_48.png" "${_app_dir}/usr/share/icons/hicolor/48x48/apps/chromium.png"
 cp "${_app_dir}/usr/share/icons/hicolor/48x48/apps/chromium.png" "${_app_dir}"
 
-# download appimagetool if not in PATH
-if ! command -v appimagetool >/dev/null; then
-    if [ ! -f "${_current_dir}/appimagetool" ] ; then
-        _url=$(curl -s https://api.github.com/repos/AppImage/appimagetool/releases/latest | jq '.assets[].browser_download_url' | grep x86_64 | sed 's/"//g')
-        wget -q --show-progress -O "${_current_dir}/appimagetool" "$_url" && chmod +x "${_current_dir}/appimagetool"
-    fi
-    export PATH="${_current_dir}:$PATH"
-fi
-
 APPIMAGETOOL_APP_NAME=${_app_name} ARCH=${_arch} VERSION=${_version} appimagetool -u \
     'gh-releases-zsync|ungoogled-software|ungoogled-chromium-portablelinux|latest|ungoogled-chromium-*.AppImage.zsync' \
     "${_app_dir}"
