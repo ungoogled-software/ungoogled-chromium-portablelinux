@@ -2,10 +2,6 @@ name: Build Chromium
 description: Build ungoogled-chromium with Docker and upload build cache
 
 inputs:
-  task-timeout:
-    description: "Timeout in seconds for the ninja build."
-    required: false
-    default: "18000"
   prepare-only:
     description: "If 'true', run only preparation steps."
     required: false
@@ -51,9 +47,8 @@ runs:
       id: build
       shell: bash
       env:
-        _task_timeout: ${{ inputs.task-timeout }}
-        _prepare_only: ${{ inputs.prepare-only == 'true' && '1' || '' }}
-        _use_existing_image: ${{ inputs.use-existing-image == 'true' && '1' || '' }}
+        _prepare_only: ${{ inputs.prepare-only }}
+        _use_existing_image: ${{ inputs.use-existing-image }}
       run: bash ./scripts/docker-build.sh
 
     - name: Export build cache

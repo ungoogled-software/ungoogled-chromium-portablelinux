@@ -12,8 +12,6 @@ runs:
         ungoogled_revision=$(cat ungoogled-chromium/revision.txt)
         version="${chromium_version}-${ungoogled_revision}"
         echo "version=${version}" >> $GITHUB_OUTPUT
-        echo "chromium_version=${chromium_version}" >> $GITHUB_OUTPUT
-        echo "ungoogled_revision=${ungoogled_revision}" >> $GITHUB_OUTPUT
         echo "release_tag=v${version}" >> $GITHUB_OUTPUT
 
     - name: Download AppImage artifacts
@@ -30,16 +28,13 @@ runs:
 
     - name: List release files
       shell: bash
-      run: |
-        echo "Release files:"
-        ls -la release/
+      run: ls -la release/
 
     - name: Create Release
       uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844 # v1, pinned commit hash
       with:
-        tag_name: ${{ steps.version.outputs.release_tag }}
-        draft: false
-        prerelease: false
+        tag_name: ${{ steps.version.outputs.version }}
+        fail_on_unmatched_files: true
         files: |
           release/ungoogled-chromium-${{ steps.version.outputs.version }}-x86_64.AppImage
           release/ungoogled-chromium-${{ steps.version.outputs.version }}-x86_64.AppImage.zsync
