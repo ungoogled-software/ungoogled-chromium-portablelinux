@@ -11,6 +11,7 @@ sudo rm -rf /usr/local/lib/android \
             /usr/share/swift &
 
 _base_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && cd ../.. && pwd)"
+_cache_tar="$_base_dir/.github/cache/build-cache-$ARCH.tar.zst"
 
 zstd -d -c "${_cache_tar}" | tar -xf - -C "${_base_dir}"
 

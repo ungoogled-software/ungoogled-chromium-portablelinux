@@ -17,14 +17,16 @@ runs:
     - name: Download AppImage artifacts
       uses: actions/download-artifact@v4
       with:
-        name: ungoogled-chromium-${{ steps.version.outputs.version }}-x86_64-AppImage
+        pattern: ungoogled-chromium-${{ steps.version.outputs.version }}-*-AppImage
         path: ./release/
+        merge-multiple: true
 
     - name: Download tar.xz artifacts
       uses: actions/download-artifact@v4
       with:
-        name: ungoogled-chromium-${{ steps.version.outputs.version }}-x86_64-linux
+        pattern: ungoogled-chromium-${{ steps.version.outputs.version }}-*-linux
         path: ./release/
+        merge-multiple: true
 
     - name: List release files
       shell: bash
@@ -36,6 +38,6 @@ runs:
         tag_name: ${{ steps.version.outputs.version }}
         fail_on_unmatched_files: true
         files: |
-          release/ungoogled-chromium-${{ steps.version.outputs.version }}-x86_64.AppImage
-          release/ungoogled-chromium-${{ steps.version.outputs.version }}-x86_64.AppImage.zsync
-          release/ungoogled-chromium-${{ steps.version.outputs.version }}-x86_64_linux.tar.xz
+          release/ungoogled-chromium-${{ steps.version.outputs.version }}-*.AppImage
+          release/ungoogled-chromium-${{ steps.version.outputs.version }}-*.AppImage.zsync
+          release/ungoogled-chromium-${{ steps.version.outputs.version }}-*_linux.tar.xz

@@ -10,6 +10,10 @@ inputs:
     description: "If 'true', skip Docker image building and use existing image."
     required: false
     default: "false"
+  final:
+    description: "If 'true', this job is the last and should fail if it runs out of time"
+    required: false
+    default: "false"
 
 outputs:
   status:
@@ -23,7 +27,7 @@ runs:
       if: ${{ inputs.use-existing-image == 'true' }}
       uses: actions/download-artifact@v4
       with:
-        name: docker-image
+        name: docker-image-${{ env.ARCH }}
         path: /tmp
 
     - name: Load Docker image
@@ -35,7 +39,7 @@ runs:
       if: ${{ inputs.prepare-only != 'true' }}
       uses: actions/download-artifact@v4
       with:
-        name: build-cache
+        name: build-cache-${{ env.ARCH }}
         path: .github/cache/
 
     - name: Import build cache
@@ -49,6 +53,7 @@ runs:
       env:
         _prepare_only: ${{ inputs.prepare-only }}
         _use_existing_image: ${{ inputs.use-existing-image }}
+        _gha_final: ${{ inputs.final }}
       run: bash ./scripts/docker-build.sh
 
     - name: Export build cache
@@ -58,7 +63,7 @@ runs:
     - name: Upload build cache
       uses: actions/upload-artifact@v4
       with:
-        name: build-cache
-        path: .github/cache/build-cache.*
+        name: build-cache-${{ env.ARCH }}
+        path: .github/cache/build-cache-${{ env.ARCH }}.tar.zst
         if-no-files-found: error
         overwrite: true

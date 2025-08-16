@@ -9,7 +9,7 @@ runs:
     - name: Download build cache
       uses: actions/download-artifact@v4
       with:
-        name: build-cache
+        name: build-cache-${{ env.ARCH }}
         path: .github/cache/
 
     - name: Import build cache
@@ -38,15 +38,15 @@ runs:
     - name: Upload AppImage artifact
       uses: actions/upload-artifact@v4
       with:
-        name: ungoogled-chromium-${{ steps.version.outputs.version }}-x86_64-AppImage
-        path: build/release/ungoogled-chromium-${{ steps.version.outputs.version }}-x86_64.AppImage*
+        name: ungoogled-chromium-${{ steps.version.outputs.version }}-${{ env.ARCH }}-AppImage
+        path: build/release/ungoogled-chromium-${{ steps.version.outputs.version }}-${{ env.ARCH }}.AppImage*
         if-no-files-found: error
         compression-level: 0
 
     - name: Upload tar.xz artifact
       uses: actions/upload-artifact@v4
       with:
-        name: ungoogled-chromium-${{ steps.version.outputs.version }}-x86_64-linux
-        path: build/release/ungoogled-chromium-${{ steps.version.outputs.version }}-x86_64_linux.tar.xz
+        name: ungoogled-chromium-${{ steps.version.outputs.version }}-${{ env.ARCH }}-linux
+        path: build/release/ungoogled-chromium-${{ steps.version.outputs.version }}-${{ env.ARCH }}_linux.tar.xz
         if-no-files-found: error
         compression-level: 0

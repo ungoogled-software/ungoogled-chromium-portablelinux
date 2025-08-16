@@ -22,7 +22,7 @@ else
     rc=$?
     set -e
 
-    if [ "$rc" -eq 124 ]; then
+    if [ "${_gha_final}" != "true" ] && [ "$rc" -eq 124 ]; then
         echo "Task timed out after ${_task_timeout}s; continuing in next run."
         echo "status=running" >> "$GITHUB_OUTPUT"
         exit 0

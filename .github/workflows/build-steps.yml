@@ -1,0 +1,191 @@
+name: Building Linux AppImage for ungoogled-chromium
+
+defaults:
+  run:
+    shell: bash
+
+on:
+  workflow_call:
+    inputs:
+      arch:
+        required: true
+        type: string
+      runs-on:
+        required: true
+        type: string
+
+env:
+  ARCH: ${{ inputs.arch }}
+
+jobs:
+  prep:
+    name: Prepare resources
+    runs-on: ${{ inputs.runs-on }}
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+        with: { submodules: true }
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and cache Docker image
+        id: build-image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./docker
+          file: ./docker/build.Dockerfile
+          tags: chromium-builder:trixie-slim
+          outputs: type=docker,dest=/tmp/chromium-builder.tar
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Upload Docker image
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image-${{ inputs.arch }}
+          path: /tmp/chromium-builder.tar
+          retention-days: 1
+
+      - name: Prepare build tree
+        uses: ./.github/actions/build
+        with:
+          prepare-only: true
+          use-existing-image: true
+
+  build_part_01:
+    runs-on: ${{ inputs.runs-on }}
+    needs: prep
+    outputs:
+      status: ${{ steps.build.outputs.status }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { submodules: true }
+      - uses: ./.github/actions/build
+        id: build
+        with: { use-existing-image: true }
+
+  build_part_02:
+    runs-on: ${{ inputs.runs-on }}
+    if: needs.build_part_01.outputs.status == 'running'
+    needs: build_part_01
+    outputs:
+      status: ${{ steps.build.outputs.status }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { submodules: true }
+      - uses: ./.github/actions/build
+        id: build
+        with: { use-existing-image: true }
+
+  build_part_03:
+    runs-on: ${{ inputs.runs-on }}
+    if: needs.build_part_02.outputs.status == 'running'
+    needs: build_part_02
+    outputs:
+      status: ${{ steps.build.outputs.status }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { submodules: true }
+      - uses: ./.github/actions/build
+        id: build
+        with: { use-existing-image: true }
+
+  build_part_04:
+    runs-on: ${{ inputs.runs-on }}
+    if: needs.build_part_03.outputs.status == 'running'
+    needs: build_part_03
+    outputs:
+      status: ${{ steps.build.outputs.status }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { submodules: true }
+      - uses: ./.github/actions/build
+        id: build
+        with: { use-existing-image: true }
+
+  build_part_05:
+    runs-on: ${{ inputs.runs-on }}
+    if: needs.build_part_04.outputs.status == 'running'
+    needs: build_part_04
+    outputs:
+      status: ${{ steps.build.outputs.status }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { submodules: true }
+      - uses: ./.github/actions/build
+        id: build
+        with: { use-existing-image: true }
+
+  build_part_06:
+    runs-on: ${{ inputs.runs-on }}
+    if: needs.build_part_05.outputs.status == 'running'
+    needs: build_part_05
+    outputs:
+      status: ${{ steps.build.outputs.status }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { submodules: true }
+      - uses: ./.github/actions/build
+        id: build
+        with: { use-existing-image: true }
+
+  build_part_07:
+    runs-on: ${{ inputs.runs-on }}
+    if: needs.build_part_06.outputs.status == 'running'
+    needs: build_part_06
+    outputs:
+      status: ${{ steps.build.outputs.status }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { submodules: true }
+      - uses: ./.github/actions/build
+        id: build
+        with: { use-existing-image: true }
+
+  build_part_08:
+    runs-on: ${{ inputs.runs-on }}
+    if: needs.build_part_07.outputs.status == 'running'
+    needs: build_part_07
+    outputs:
+      status: ${{ steps.build.outputs.status }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { submodules: true }
+      - uses: ./.github/actions/build
+        id: build
+        with: { use-existing-image: true }
+
+  build_part_09:
+    runs-on: ${{ inputs.runs-on }}
+    if: needs.build_part_08.outputs.status == 'running'
+    needs: build_part_08
+    outputs:
+      status: ${{ steps.build.outputs.status }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { submodules: true }
+      - uses: ./.github/actions/build
+        id: build
+        with: { use-existing-image: true }
+
+  build_part_10:
+    runs-on: ${{ inputs.runs-on }}
+    if: needs.build_part_09.outputs.status == 'running'
+    needs: build_part_09
+    steps:
+      - uses: actions/checkout@v4
+        with: { submodules: true }
+      - uses: ./.github/actions/build
+        with: { use-existing-image: true, final: true }
+
+  package:
+    runs-on: ${{ inputs.runs-on }}
+    if: ${{ !cancelled() && !failure()
+            && contains(fromJSON('["success", "skipped"]'),
+                        needs.build_part_10.result) }}
+    needs: build_part_10
+    steps:
+      - uses: actions/checkout@v4
+        with: { submodules: true }
+      - uses: ./.github/actions/package

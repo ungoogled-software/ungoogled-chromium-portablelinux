@@ -11,6 +11,11 @@ RUN apt-get install -y apt-transport-https ca-certificates curl gnupg &&\
   curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash -
 RUN apt-get -y update && apt-get -y install nodejs && npm update -g npm
 
+# needed to be able to compile LLVM
+RUN if [ "$(uname -m)" != x86_64 ]; then \
+      apt-get -y install cmake clang lld; \
+    fi
+
 # install all needed distro packages
 RUN apt-get -y install bison debhelper desktop-file-utils flex gperf gsettings-desktop-schemas-dev imagemagick \
   libasound2-dev libavcodec-dev libavformat-dev libavutil-dev libcap-dev libcups2-dev libcurl4-openssl-dev libdrm-dev \

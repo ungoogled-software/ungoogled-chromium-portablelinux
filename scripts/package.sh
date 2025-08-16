@@ -12,7 +12,16 @@ _ungoogled_revision=$(cat "$_root_dir/ungoogled-chromium/revision.txt")
 
 _app_name="ungoogled-chromium"
 _version="$_chromium_version-$_ungoogled_revision"
-_arch="x86_64"
+
+_arch=$(cat "$_build_dir/src/out/Default/args.gn" \
+                | grep ^target_cpu \
+                | tail -1 \
+                | sed 's/.*=//' \
+                | cut -d'"' -f2)
+
+if [ "$_arch" = "x64" ]; then
+    _arch="x86_64"
+fi
 
 _release_name="$_app_name-$_version-$_arch"
 _tarball_name="${_release_name}_linux"
