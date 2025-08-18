@@ -24,6 +24,7 @@ if [ "$_arch" = "x64" ]; then
 fi
 
 _release_name="$_app_name-$_version-$_arch"
+_update_info="gh-releases-zsync|ungoogled-software|ungoogled-chromium-portablelinux|latest|$_app_name-*-$_arch.AppImage.zsync"
 _tarball_name="${_release_name}_linux"
 _tarball_dir="$_release_dir/$_tarball_name"
 
@@ -90,7 +91,7 @@ export APPIMAGETOOL_APP_NAME="$_app_name"
 export VERSION="$_version"
 
 appimagetool \
-    -u 'gh-releases-zsync|ungoogled-software|ungoogled-chromium-portablelinux|latest|ungoogled-chromium-*.AppImage.zsync' \
+    -u "$_update_info" \
     "$_app_dir" \
     "$_release_name.AppImage" &
 popd
