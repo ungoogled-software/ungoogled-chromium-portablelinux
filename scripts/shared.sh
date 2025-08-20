@@ -157,5 +157,5 @@ gn_gen() {
 
 maybe_build() {
     cd "${_src_dir}"
-    ninja -C out/Default chrome chrome_sandbox chromedriver
+    ninja -C out/Default chrome chromedriver
 }
