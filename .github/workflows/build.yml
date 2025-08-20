@@ -1,6 +1,8 @@
 name: Build Linux AppImage for ungoogled-chromium
 on:
-  workflow_dispatch:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+.[0-9]+-[0-9]+'
 
 permissions:
   contents: write

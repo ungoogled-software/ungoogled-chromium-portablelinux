@@ -4,16 +4,6 @@ description: Create GitHub release and upload packaged artifacts
 runs:
   using: composite
   steps:
-    - name: Get version info
-      id: version
-      shell: bash
-      run: |
-        chromium_version=$(cat ungoogled-chromium/chromium_version.txt)
-        ungoogled_revision=$(cat ungoogled-chromium/revision.txt)
-        version="${chromium_version}-${ungoogled_revision}"
-        echo "version=${version}" >> $GITHUB_OUTPUT
-        echo "release_tag=v${version}" >> $GITHUB_OUTPUT
-
     - name: Download AppImage artifacts
       uses: actions/download-artifact@v4
       with:
@@ -35,9 +25,8 @@ runs:
     - name: Create Release
       uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844 # v1, pinned commit hash
       with:
-        tag_name: ${{ steps.version.outputs.version }}
         fail_on_unmatched_files: true
         files: |
-          release/ungoogled-chromium-${{ steps.version.outputs.version }}-*.AppImage
-          release/ungoogled-chromium-${{ steps.version.outputs.version }}-*.AppImage.zsync
-          release/ungoogled-chromium-${{ steps.version.outputs.version }}-*_linux.tar.xz
+          release/ungoogled-chromium-*.AppImage
+          release/ungoogled-chromium-*.AppImage.zsync
+          release/ungoogled-chromium-*_linux.tar.xz
