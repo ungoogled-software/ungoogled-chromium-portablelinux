@@ -1,36 +1,20 @@
 #!/bin/bash
+set -euo pipefail
 
-CURRENT_DIR=$(dirname $(readlink -f $0))
-ROOT_DIR=$(cd ${CURRENT_DIR}/.. && pwd)
-GIT_SUBMODULE="ungoogled-chromium"
+_current_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+_root_dir="$(cd "${_current_dir}/.." && pwd)"
+_git_submodule="ungoogled-chromium"
 
-DEBIAN_VER=${1:-'bullseye-slim'}
+_image="ungoogled-chromium-trixie-slim:packager"
 
-IMAGE="ungoogled-chromium-${DEBIAN_VER}:packager"
+docker buildx build --load -t "${_image}" -f "${_root_dir}/docker/package.Dockerfile" .
 
-echo "==============================================================="
-echo "  build docker image '${IMAGE}'"
-echo "==============================================================="
+[ -n "$(ls -A "${_root_dir}/${_git_submodule}" 2>/dev/null || true)" ] || git -C "${_root_dir}" submodule update --init --recursive
 
-(cd $ROOT_DIR/docker && docker buildx build -t ${IMAGE} -f ./package.Dockerfile --build-arg DEBIAN_VER=${DEBIAN_VER} .)
+_user_uidgid="$(id -u):$(id -g)"
 
-[ -n "$(ls -A ${ROOT_DIR}/${GIT_SUBMODULE})" ] || git submodule update --init --recursive
-
-# Since AppImages inside Docker require fuze, we will instead extract and run it
-sed -i '54 s/\.\/pkg2appimage \.\/ungoogled-chromium.yaml/\.\/pkg2appimage --appimage-extract-and-run \.\/ungoogled-chromium.yaml/' ${CURRENT_DIR}/package.sh
-
-PACKAGE_START=$(date)
-echo "==============================================================="
-echo "  docker package start at ${BUILD_START}"
-echo "==============================================================="
-
-cd ${ROOT_DIR} && docker run -it -v ${ROOT_DIR}:/repo ${IMAGE} /bin/bash -c "cd package && ./package.sh"
-
-PACKAGE_END=$(date)
-echo "==============================================================="
-echo "  docker package start at ${PACKAGE_START}"
-echo "  docker package end   at ${PACKAGE_END}"
-echo "==============================================================="
-
-# Revert package script
-sed -i '54 s/\.\/pkg2appimage --appimage-extract-and-run \.\/ungoogled-chromium.yaml/\.\/pkg2appimage \.\/ungoogled-chromium.yaml/' ${CURRENT_DIR}/package.sh
+cd "${_root_dir}" && docker run --rm -i \
+    -u "${_user_uidgid}" \
+    -e APPIMAGE_EXTRACT_AND_RUN=1 \
+    -v "${_root_dir}:/repo" \
+    "${_image}" bash "/repo/scripts/package.sh"

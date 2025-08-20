@@ -45,5 +45,3 @@ Signed-off-by: Matt Jolly <kangie@gentoo.org>
      }
  
      if (_generate_with_plugin) {
--- 
-2.49.0

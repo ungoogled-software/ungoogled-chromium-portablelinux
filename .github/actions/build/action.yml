@@ -1,0 +1,69 @@
+name: Build Chromium
+description: Build ungoogled-chromium with Docker and upload build cache
+
+inputs:
+  prepare-only:
+    description: "If 'true', run only preparation steps."
+    required: false
+    default: "false"
+  use-existing-image:
+    description: "If 'true', skip Docker image building and use existing image."
+    required: false
+    default: "false"
+  final:
+    description: "If 'true', this job is the last and should fail if it runs out of time"
+    required: false
+    default: "false"
+
+outputs:
+  status:
+    description: "Build status: 'running' if build isn't complete, 'completed' if it is."
+    value: ${{ steps.build.outputs.status }}
+
+runs:
+  using: composite
+  steps:
+    - name: Download Docker image
+      if: ${{ inputs.use-existing-image == 'true' }}
+      uses: actions/download-artifact@v4
+      with:
+        name: docker-image-${{ env.ARCH }}
+        path: /tmp
+
+    - name: Load Docker image
+      if: ${{ inputs.use-existing-image == 'true' }}
+      shell: bash
+      run: docker load -i /tmp/chromium-builder.tar
+
+    - name: Download build cache
+      if: ${{ inputs.prepare-only != 'true' }}
+      uses: actions/download-artifact@v4
+      with:
+        name: build-cache-${{ env.ARCH }}
+        path: .github/cache/
+
+    - name: Import build cache
+      if: ${{ inputs.prepare-only != 'true' }}
+      shell: bash
+      run: bash ./.github/scripts/import-cache.sh
+
+    - name: Build
+      id: build
+      shell: bash
+      env:
+        _prepare_only: ${{ inputs.prepare-only }}
+        _use_existing_image: ${{ inputs.use-existing-image }}
+        _gha_final: ${{ inputs.final }}
+      run: bash ./scripts/docker-build.sh
+
+    - name: Export build cache
+      shell: bash
+      run: bash ./.github/scripts/export-cache.sh
+
+    - name: Upload build cache
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-cache-${{ env.ARCH }}
+        path: .github/cache/build-cache-${{ env.ARCH }}.tar.zst
+        if-no-files-found: error
+        overwrite: true

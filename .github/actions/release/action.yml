@@ -1,0 +1,32 @@
+name: Create Release
+description: Create GitHub release and upload packaged artifacts
+
+runs:
+  using: composite
+  steps:
+    - name: Download AppImage artifacts
+      uses: actions/download-artifact@v4
+      with:
+        pattern: ungoogled-chromium-${{ steps.version.outputs.version }}-*-AppImage
+        path: ./release/
+        merge-multiple: true
+
+    - name: Download tar.xz artifacts
+      uses: actions/download-artifact@v4
+      with:
+        pattern: ungoogled-chromium-${{ steps.version.outputs.version }}-*-linux
+        path: ./release/
+        merge-multiple: true
+
+    - name: List release files
+      shell: bash
+      run: ls -la release/
+
+    - name: Create Release
+      uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844 # v1, pinned commit hash
+      with:
+        fail_on_unmatched_files: true
+        files: |
+          release/ungoogled-chromium-*.AppImage
+          release/ungoogled-chromium-*.AppImage.zsync
+          release/ungoogled-chromium-*_linux.tar.xz

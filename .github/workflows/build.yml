@@ -1,0 +1,33 @@
+name: Build Linux AppImage for ungoogled-chromium
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+.[0-9]+-[0-9]+'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build ungoogled-chromium binaries and AppImage
+    strategy:
+      matrix:
+        arch: [arm64, x86_64]
+      max-parallel: 2
+      fail-fast: true
+    uses: ./.github/workflows/build-steps.yml
+    with:
+      arch: ${{ matrix.arch }}
+      runs-on: ubuntu-latest
+
+  release:
+    name: Create release
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - uses: ./.github/actions/release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
