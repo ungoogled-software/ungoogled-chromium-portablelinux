@@ -7,14 +7,14 @@ runs:
     - name: Download AppImage artifacts
       uses: actions/download-artifact@v4
       with:
-        pattern: ungoogled-chromium-${{ steps.version.outputs.version }}-*-AppImage
+        pattern: ungoogled-chromium-*-AppImage
         path: ./release/
         merge-multiple: true
 
     - name: Download tar.xz artifacts
       uses: actions/download-artifact@v4
       with:
-        pattern: ungoogled-chromium-${{ steps.version.outputs.version }}-*-linux
+        pattern: ungoogled-chromium-*-linux
         path: ./release/
         merge-multiple: true
 
