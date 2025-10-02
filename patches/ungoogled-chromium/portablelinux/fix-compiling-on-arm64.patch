@@ -22,9 +22,9 @@
  from build import (AddCMakeToPath, AddZlibToPath, CheckoutGitRepo, CopyFile,
 -                   DownloadDebianSysroot, GetLibXml2Dirs, GitCherryPick,
 +                   DownloadDebianSysroot, GetLibXml2Dirs, GetHostSysrootPlatform,
+                    GitRevert, LLVM_DIR, IsGitAncestorToHead,
                     LLVM_BUILD_TOOLS_DIR, RunCommand)
  from update import (CHROMIUM_DIR, DownloadAndUnpack, EnsureDirExists,
-                     GetDefaultHostOs, RmTree, UpdatePackage)
 @@ -161,8 +161,8 @@ def AddOpenSSLToEnv():
          ssl_url = (f'{CIPD_DOWNLOAD_URL}/{OPENSSL_CIPD_WIN_AMD_PATH}'
                     f'/+/version:2@{OPENSSL_CIPD_WIN_AMD_VERSION}')
