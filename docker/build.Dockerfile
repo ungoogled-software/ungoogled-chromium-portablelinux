@@ -34,9 +34,9 @@ RUN apt-get -y install git python3-httplib2 python3-pyparsing python3-six rsync 
 RUN groupadd -g 1000 builder && useradd -d /home/builder -g 1000 -u 1000 -m builder
 
 # create config for gsclient depot tools that is needed when building locally
-COPY --chmod=777 --chown builder:builder metrics.cfg /home/builder/.config/depot_tools/
+COPY --chmod=777 --chown=builder:builder metrics.cfg /home/builder/.config/depot_tools/
 # create config for gsclient depot tools that is needed when running in CI
-COPY --chmod=777 --chown builder:builder metrics.cfg /.config/depot_tools/
+COPY --chmod=777 --chown=builder:builder metrics.cfg /.config/depot_tools/
 
 USER builder
 WORKDIR /repo
