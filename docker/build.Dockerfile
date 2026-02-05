@@ -34,7 +34,7 @@ RUN apt-get -y install git python3-httplib2 python3-pyparsing python3-six rsync 
 RUN groupadd -g 1000 builder && useradd -d /home/builder -g 1000 -u 1000 -m builder
 
 # create config dir for gsclient that is needed when running in CI
-RUN mkdir /.config/depot_tools && chown -R builder:builder /.config/depot_tools
+RUN mkdir -p /.config/depot_tools && chown -R 1000:1000 /.config/depot_tools
 
 USER builder
 WORKDIR /repo
