@@ -6,7 +6,7 @@ set -euxo pipefail
 setup_paths
 
 if [ "$_prepare_only" = true ]; then
-    fetch_sources true
+    fetch_sources false
     apply_patches
     apply_domsub
     write_gn_args
