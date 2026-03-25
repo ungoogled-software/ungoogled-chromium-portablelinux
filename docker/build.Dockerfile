@@ -1,6 +1,6 @@
 FROM debian:trixie-slim
 
-ARG NODE_VERSION="22"
+ARG NODE_VERSION="24"
 
 # set deb to non-interactive mode and upgrade packages
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections && export DEBIAN_FRONTEND=noninteractive
