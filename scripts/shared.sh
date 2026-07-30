@@ -136,6 +136,8 @@ setup_toolchain() {
     ln -sf "$(which node)" "${_src_dir}/third_party/node/linux/node-linux-x64/bin/node"
     mkdir -p "${_src_dir}/third_party/gperf/cipd/bin/"
     ln -sf "$(which gperf)" "${_src_dir}/third_party/gperf/cipd/bin/gperf"
+    mkdir -p "${_src_dir}/third_party/dawn/tools/golang/linux-amd64/bin"
+    ln -sf "$(which go)" "${_src_dir}/third_party/dawn/tools/golang/linux-amd64/bin/go"
 
     local clang_bin="${_src_dir}/third_party/llvm-build/Release+Asserts/bin"
     export CC="${clang_bin}/clang"

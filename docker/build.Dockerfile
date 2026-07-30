@@ -17,7 +17,7 @@ RUN if [ "$(uname -m)" != x86_64 ]; then \
     fi
 
 # install all needed distro packages
-RUN apt-get -y install bison debhelper desktop-file-utils flex gperf gsettings-desktop-schemas-dev imagemagick \
+RUN apt-get -y install bison debhelper desktop-file-utils flex golang gperf gsettings-desktop-schemas-dev imagemagick \
   libasound2-dev libavcodec-dev libavformat-dev libavutil-dev libcap-dev libcups2-dev libcurl4-openssl-dev libdrm-dev \
   libegl1-mesa-dev libelf-dev libevent-dev libexif-dev libflac-dev libgbm-dev libgcrypt20-dev libgl1-mesa-dev libgles2-mesa-dev \
   libglew-dev libglib2.0-dev libglu1-mesa-dev libgtk-3-dev libhunspell-dev libjpeg-dev libjs-jquery-flot libjsoncpp-dev \
