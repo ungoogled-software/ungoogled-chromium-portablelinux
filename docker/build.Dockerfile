@@ -45,3 +45,7 @@ ENV GOMODCACHE=/home/builder/.go/mod
 ENV GOCACHE=/home/builder/.go/build
 ENV GOPATH=/home/builder/.go/go
 
+RUN mkdir -p ${GOMODCACHE} ${GOCACHE} ${GOPATH} && chown -R builder:builder /home/builder
+
+
+
