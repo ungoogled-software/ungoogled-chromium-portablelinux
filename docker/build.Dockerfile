@@ -40,3 +40,8 @@ COPY --chmod=777 --chown=builder:builder metrics.cfg /.config/depot_tools/
 
 USER builder
 WORKDIR /repo
+
+ENV GOMODCACHE=/home/builder/.go/mod
+ENV GOCACHE=/home/builder/.go/build
+ENV GOPATH=/home/builder/.go/go
+
