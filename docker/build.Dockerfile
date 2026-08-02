@@ -14,6 +14,8 @@ ENV GO111MODULE=on
 # create builder user
 RUN groupadd -g $BUILDER_UID $BUILDER_USER && useradd -d $BUILDER_HOME -g $BUILDER_UID -u $BUILDER_UID -m $BUILDER_USER
 
+RUN mkdir -p $GOPATH $GOCACHE $GOMODCACHE && chown -R $BUILDER_USER:$BUILDER_USER $BUILDER_HOME $GOPATH $GOCACHE $GOMODCACHE
+
 # set deb to non-interactive mode and upgrade packages
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections && export DEBIAN_FRONTEND=noninteractive
 RUN apt-get -y update && apt-get -y upgrade
