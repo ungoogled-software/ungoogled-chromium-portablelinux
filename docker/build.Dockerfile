@@ -2,19 +2,13 @@ FROM debian:trixie-slim
 
 ARG NODE_VERSION="24"
 
-ENV BUILDER_USER=builder
-ENV BUILDER_UID=1000
-ENV BUILDER_HOME=/home/$BUILDER_USER
-
-ENV GOPATH=$BUILDER_HOME/go
-ENV GOCACHE=$BUILDER_HOME/.cache/go-build
-ENV GOMODCACHE=$GOPATH/pkg/mod
-ENV GO111MODULE=on 
+ENV GOPATH=/tmp/go
+ENV GOCACHE=/tmp/go-build-cache
 
 # create builder user
-RUN groupadd -g $BUILDER_UID $BUILDER_USER && useradd -d $BUILDER_HOME -g $BUILDER_UID -u $BUILDER_UID -m $BUILDER_USER
+RUN groupadd -g 1000 builder && useradd -d /home/builder -g 1000 -u 1000 -m builder
 
-RUN mkdir -p $GOPATH $GOCACHE $GOMODCACHE && chown -R $BUILDER_USER:$BUILDER_USER $BUILDER_HOME $GOPATH $GOCACHE $GOMODCACHE
+RUN mkdir -p $GOPATH $GOCACHE $GOMODCACHE && chown -R builder:builder /home/builder $GOPATH $GOCACHE $GOMODCACHE
 
 # set deb to non-interactive mode and upgrade packages
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections && export DEBIAN_FRONTEND=noninteractive
@@ -37,11 +31,11 @@ RUN apt-get -y install bison clang cmake debhelper desktop-file-utils flex git g
   python3-setuptools python3-six python3-xcbgen python-is-python3 qtbase5-dev rsync sudo uuid-dev valgrind vim wdiff x11-apps\
   xcb-proto xfonts-base xvfb xz-utils yasm
 
-USER $BUILDER_USER
+USER builder
 # create config for gsclient depot tools that is needed when building locally
-COPY --chmod=777 --chown=$BUILDER_USER:$BUILDER_USER metrics.cfg $BUILDER_HOME/.config/depot_tools/
+COPY --chmod=777 --chown=builder:builder metrics.cfg /home/builder/.config/depot_tools/
 # create config for gsclient depot tools that is needed when running in CI
-COPY --chmod=777 --chown=$BUILDER_USER:$BUILDER_USER metrics.cfg $BUILDER_HOME/.config/depot_tools/
+COPY --chmod=777 --chown=builder:builder metrics.cfg /home/builder/.config/depot_tools/
 
 WORKDIR /repo
 
