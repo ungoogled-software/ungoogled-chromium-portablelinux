@@ -4,6 +4,7 @@ ARG NODE_VERSION="24"
 
 ENV GOPATH=/tmp/go
 ENV GOCACHE=/tmp/go-build-cache
+RUN mkdir -p $GOPATH $GOCACHE && chmod -R 777 $GOPATH $GOCACHE
 
 # create builder user
 RUN groupadd -g 1000 builder && useradd -d /home/builder -g 1000 -u 1000 -m builder
