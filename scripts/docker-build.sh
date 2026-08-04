@@ -25,7 +25,7 @@ _extra_env=()
 [ -n "${ARCH:-}" ] && _extra_env+=(-e ARCH)
 
 # match host user to avoid permission issues on bind mount
-#_user_uidgid="$(id -u):$(id -g)"
+_user_uidgid="$(id -u):$(id -g)"
 
 _build_start=$(date)
 echo "docker build start at ${_build_start}"
@@ -36,12 +36,8 @@ if [ -n "${GITHUB_OUTPUT:-}" ]; then
     _gha_mount="-v $GITHUB_OUTPUT:$GITHUB_OUTPUT"
 fi
 
-#cd "${_base_dir}" && docker run --rm -i \
-#    -u "${_user_uidgid}" \
-#    -v "${_base_dir}:/repo" \
-#    $_gha_mount \
-#    "${_extra_env[@]}" "${_image}" bash "${_entrypoint}" "$@"
 cd "${_base_dir}" && docker run --rm -i \
+    -u "${_user_uidgid}" \
     -v "${_base_dir}:/repo" \
     $_gha_mount \
     "${_extra_env[@]}" "${_image}" bash "${_entrypoint}" "$@"
