@@ -2,14 +2,9 @@ FROM debian:trixie-slim
 
 ARG NODE_VERSION="24"
 
+# set GO related paths under /tmp to avoid ownerhip/permission issues in Github CI build
 ENV GOPATH=/tmp/go
 ENV GOCACHE=/tmp/go-build-cache
-RUN mkdir -p $GOPATH $GOCACHE && chmod -R 777 $GOPATH $GOCACHE
-
-# create builder user
-RUN groupadd -g 1000 builder && useradd -d /home/builder -g 1000 -u 1000 -m builder
-
-RUN mkdir -p $GOPATH $GOCACHE $GOMODCACHE && chown -R builder:builder /home/builder $GOPATH $GOCACHE $GOMODCACHE
 
 # set deb to non-interactive mode and upgrade packages
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections && export DEBIAN_FRONTEND=noninteractive
@@ -32,10 +27,11 @@ RUN apt-get -y install bison clang cmake debhelper desktop-file-utils flex git g
   python3-setuptools python3-six python3-xcbgen python-is-python3 qtbase5-dev rsync sudo uuid-dev valgrind vim wdiff x11-apps\
   xcb-proto xfonts-base xvfb xz-utils yasm
 
+# create builder user
+RUN groupadd -g 1000 builder && useradd -d /home/builder -g 1000 -u 1000 -m builder
+# switch to builder user
 USER builder
-# create config for gsclient depot tools that is needed when building locally
-COPY --chmod=777 --chown=builder:builder metrics.cfg /home/builder/.config/depot_tools/
-# create config for gsclient depot tools that is needed when running in CI
+# copy config file for gsclient depot tools
 COPY --chmod=777 --chown=builder:builder metrics.cfg /home/builder/.config/depot_tools/
 
 WORKDIR /repo
