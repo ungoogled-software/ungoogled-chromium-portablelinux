@@ -1,6 +1,7 @@
 ungoogled-chromium/portablelinux/drop-nodejs-version-check.patch
 ungoogled-chromium/portablelinux/use-oauth2-client-switches-as-default.patch
 ungoogled-chromium/portablelinux/fix-compiling-on-arm64.patch
-ungoogled-chromium/portablelinux/enable-cpp-api-from-rust.patch
+ungoogled-chromium/portablelinux/revert-crubit-changes.patch
 ungoogled-chromium/portablelinux/revert-public-input-changes.patch
-ungoogled-chromium/portablelinux/remove-use-of-new-xclang-switches.patch
+ungoogled-chromium/portablelinux/revert-python-path-adjustement.patch
+ungoogled-chromium/portablelinux/revert-tsgo-usage.patch

@@ -16,24 +16,23 @@
    cxx = "g++"
 --- a/tools/rust/build_rust.py
 +++ b/tools/rust/build_rust.py
-@@ -55,7 +55,7 @@ sys.path.append(
-                  'scripts'))
- 
- from build import (AddCMakeToPath, AddZlibToPath, CheckoutGitRepo, CopyFile,
-                   DownloadDebianSysroot, FetchUrl, GetLibXml2Dirs,
--                  GitCherryPick, GitRevert, LLVM_DIR, IsGitAncestorToHead,
-+                  GetHostSysrootPlatform, GitRevert, LLVM_DIR, IsGitAncestorToHead,
-                   LLVM_BUILD_TOOLS_DIR, RunCommand,
-                   DEFAULT_MACOSX_DEPLOYMENT_TARGET, GetLatestCommit)
- from update import (CHROMIUM_DIR, DownloadAndUnpack, EnsureDirExists,
-@@ -161,8 +161,8 @@ def AddOpenSSLToEnv():
-         ssl_url = (f'{CIPD_DOWNLOAD_URL}/{OPENSSL_CIPD_WIN_AMD_PATH}'
-                    f'/+/version:2@{OPENSSL_CIPD_WIN_AMD_VERSION}')
+@@ -65,7 +65,7 @@
+     DownloadDebianSysroot,
+     FetchUrl,
+     GetLibXml2Dirs,
+-    GitCherryPick,
++    GetHostSysrootPlatform,
+     GitRevert,
+     LLVM_DIR,
+     IsGitAncestorToHead,
+@@ -254,7 +254,7 @@
+         )
      else:
--        ssl_url = (f'{CIPD_DOWNLOAD_URL}/{OPENSSL_CIPD_LINUX_AMD_PATH}'
--                   f'/+/version:2@{OPENSSL_CIPD_LINUX_AMD_VERSION}')
-+            ssl_url = (f'{CIPD_DOWNLOAD_URL}/{OPENSSL_CIPD_LINUX_AMD_PATH.replace("amd64", GetHostSysrootPlatform())}'
-+                    f'/+/version:2@{OPENSSL_CIPD_LINUX_AMD_VERSION}')
+         ssl_url = (
+-            f'{CIPD_DOWNLOAD_URL}/{OPENSSL_CIPD_LINUX_AMD_PATH}'
++            f'{CIPD_DOWNLOAD_URL}/{OPENSSL_CIPD_LINUX_AMD_PATH.replace("amd64", GetHostSysrootPlatform()}'
+             f'/+/version:2@{OPENSSL_CIPD_LINUX_AMD_VERSION}'
+         )
  
      if os.path.exists(ssl_dir):
          RmTree(ssl_dir)
@@ -94,22 +93,25 @@
 +
 --- a/tools/rust/build_bindgen.py
 +++ b/tools/rust/build_bindgen.py
-@@ -23,7 +23,7 @@ sys.path.append(
-                  'scripts'))
- 
- from build import (CheckoutGitRepo, DownloadAndUnpack, LLVM_BUILD_TOOLS_DIR,
--                   DownloadDebianSysroot, RunCommand)
-+                   DownloadDebianSysroot, GetHostSysrootPlatform, RunCommand)
- from update import (RmTree)
+@@ -35,6 +35,7 @@
+     DownloadAndUnpack,
+     LLVM_BUILD_TOOLS_DIR,
+     DownloadDebianSysroot,
++    GetHostSysrootPlatform,
+     RunCommand,
+ )
+ from update import RmTree
+
  
  # The git hash to use.
-@@ -66,7 +66,7 @@ def InstallRustBetaSysroot(rust_git_hash
- def FetchNcurseswLibrary():
+@@ -78,7 +78,7 @@
      assert sys.platform.startswith('linux')
      ncursesw_dir = os.path.join(LLVM_BUILD_TOOLS_DIR, 'ncursesw')
--    ncursesw_url = (f'{CIPD_DOWNLOAD_URL}/{NCURSESW_CIPD_LINUX_AMD_PATH}'
-+    ncursesw_url = (f'{CIPD_DOWNLOAD_URL}/{NCURSESW_CIPD_LINUX_AMD_PATH.replace("amd64", GetHostSysrootPlatform())}'
-                     f'/+/version:2@{NCURSESW_CIPD_LINUX_AMD_VERSION}')
+     ncursesw_url = (
+-        f'{CIPD_DOWNLOAD_URL}/{NCURSESW_CIPD_LINUX_AMD_PATH}'
++        f'{CIPD_DOWNLOAD_URL}/{NCURSESW_CIPD_LINUX_AMD_PATH.replace("amd64", GetHostSysrootPlatform()}'
+         f'/+/version:2@{NCURSESW_CIPD_LINUX_AMD_VERSION}'
+     )
  
      if os.path.exists(ncursesw_dir):
 @@ -146,7 +146,7 @@ def RunCargo(cargo_args):

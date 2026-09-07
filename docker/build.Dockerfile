@@ -13,7 +13,7 @@ RUN apt-get -y update && apt-get -y upgrade
 # install latest nodejs lts version
 RUN apt-get -y update && apt-get install -y apt-transport-https ca-certificates curl gnupg &&\
   curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash -
-RUN apt-get -y update && apt-get -y install nodejs && npm update -g npm
+RUN apt-get -y update && apt-get -y install nodejs && npm update -g npm && npm -g install typescript
 
 # install all needed (or wanted) distro packages
 RUN apt-get -y install bison clang clang-format cmake debhelper desktop-file-utils flex git golang gperf gsettings-desktop-schemas-dev\
