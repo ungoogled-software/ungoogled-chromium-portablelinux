@@ -1,12 +1,17 @@
 #!/bin/bash
 set -euxo pipefail
 
+clone=false
+if [[ "${1:-}" == "-c" ]]; then
+    clone=true
+fi
+
 . "/repo/scripts/shared.sh"
 
 setup_paths
 
 if [ "$_prepare_only" = true ]; then
-    fetch_sources false
+    fetch_sources "$clone"
     apply_patches
     apply_domsub
     write_gn_args

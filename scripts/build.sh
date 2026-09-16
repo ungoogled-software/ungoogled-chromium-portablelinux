@@ -1,9 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
-clone="false"
+clone=false
 if [[ "${1:-}" == "-c" ]]; then
-    clone="true"
+    clone=true
 fi
 
 . "$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)/shared.sh"
