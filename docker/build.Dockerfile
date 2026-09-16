@@ -32,7 +32,7 @@ RUN groupadd -g 1000 builder && useradd -d /home/builder -g 1000 -u 1000 -m buil
 # switch to builder user
 USER builder
 # copy config file for gsclient depot tools
-COPY --chmod=777 --chown=builder:builder metrics.cfg /home/builder/.config/depot_tools/
+COPY --chmod=777 --chown=builder:builder metrics.cfg /home/builder/.config/depot_tools/ /.config/depot_tools/
 
 WORKDIR /repo
 
