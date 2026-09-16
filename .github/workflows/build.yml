@@ -12,7 +12,7 @@ jobs:
     name: Build ungoogled-chromium binaries and AppImage
     strategy:
       matrix:
-        arch: [arm64, x86_64]
+        arch: [x86_64]
       max-parallel: 2
       fail-fast: true
     uses: ./.github/workflows/build-steps.yml
