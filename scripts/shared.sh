@@ -51,7 +51,7 @@ fetch_sources() {
     fi
 
     if ${use_clone}; then
-        _host_arch_clone="$_host_arch"
+        _host_arch_clone="$_build_arch"
         if [ "$_host_arch_clone" = x64 ]; then
             _host_arch_clone="amd64"
         fi
