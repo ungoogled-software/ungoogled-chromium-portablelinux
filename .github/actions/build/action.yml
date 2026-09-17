@@ -54,7 +54,7 @@ runs:
         _prepare_only: ${{ inputs.prepare-only }}
         _use_existing_image: ${{ inputs.use-existing-image }}
         _gha_final: ${{ inputs.final }}
-      run: bash ./scripts/docker-build.sh -c
+      run: bash ./scripts/docker-build.sh
 
     - name: Export build cache
       shell: bash
