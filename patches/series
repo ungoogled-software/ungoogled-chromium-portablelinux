@@ -5,3 +5,5 @@ ungoogled-chromium/portablelinux/revert-crubit-changes.patch
 ungoogled-chromium/portablelinux/revert-public-input-changes.patch
 ungoogled-chromium/portablelinux/revert-python-path-adjustement.patch
 ungoogled-chromium/portablelinux/revert-tsgo-usage.patch
+ungoogled-chromium/portablelinux/remove-private-verification-tokens.patch
+ungoogled-chromium/portablelinux/use-system-esbuild.patch

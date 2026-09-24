@@ -1,0 +1,19 @@
+diff --git a/downloads.ini b/downloads.ini
+index e61ab4d7d2..9ffa2b9f65 100644
+--- a/downloads.ini
++++ b/downloads.ini
+@@ -1,8 +1,11 @@
+ # Official Chromium source code archive
+ # NOTE: Substitutions beginning with underscore are provided by utils
+ [chromium]
+-url = https://commondatastorage.googleapis.com/chromium-browser-official/chromium-%(_chromium_version)s-lite.tar.xz
+-download_filename = chromium-%(_chromium_version)s-lite.tar.xz
+-hash_url = chromium|chromium-%(_chromium_version)s-lite.tar.xz.hashes|https://commondatastorage.googleapis.com/chromium-browser-official/chromium-%(_chromium_version)s-lite.tar.xz.hashes
++#url = https://commondatastorage.googleapis.com/chromium-browser-official/chromium-%(_chromium_version)s-lite.tar.xz
++#download_filename = chromium-%(_chromium_version)s-lite.tar.xz
++#hash_url = chromium|chromium-%(_chromium_version)s-lite.tar.xz.hashes|https://commondatastorage.googleapis.com/chromium-browser-official/chromium-%(_chromium_version)s-lite.tar.xz.hashes
++url = https://github.com/chromium-linux-tarballs/chromium-tarballs/releases/download/%(_chromium_version)s/chromium-%(_chromium_version)s-linux.tar.xz
++download_filename = chromium-%(_chromium_version)s-linux.tar.xz
++hash_url = chromium|chromium-%(_chromium_version)s-linux.tar.xz.hashes|https://github.com/chromium-linux-tarballs/chromium-tarballs/releases/download/%(_chromium_version)s/chromium-%(_chromium_version)s-linux.tar.xz.hashes
+ output_path = ./
+ strip_leading_dirs = chromium-%(_chromium_version)s
