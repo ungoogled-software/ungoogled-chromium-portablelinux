@@ -43,8 +43,9 @@ setup_paths() {
 
 fetch_sources() {
     local use_clone="${1:-false}"
-    local stamp="${_src_dir}/.downloaded.stamp"
+	local use_gentoo_source_tar="${2:-false}"
 
+    local stamp="${_src_dir}/.downloaded.stamp"
     if [ -f "${stamp}" ]; then
         echo "Sources already present, skipping download/unpack"
         return 0
@@ -58,6 +59,11 @@ fetch_sources() {
 
         "${_main_repo}/utils/clone.py" --sysroot "$_host_arch_clone" -o "${_src_dir}"
     else
+		if ${use_gentoo_source_tar}; then
+			# replace url and filename to switch to gentoo's chromium source tar
+			sed -i 's|https://commondatastorage.googleapis.com/chromium-browser-official|https://github.com/chromium-linux-tarballs/chromium-tarballs/releases/download/%(_chromium_version)s|g' "${_main_repo}/downloads.ini"
+			sed -i 's|chromium-%(_chromium_version)s-lite.tar.xz|chromium-%(_chromium_version)s-linux.tar.xz|g' "${_main_repo}/downloads.ini"
+		fi
         "${_main_repo}/utils/downloads.py" retrieve -i "${_main_repo}/downloads.ini" -c "${_dl_cache}"
         "${_main_repo}/utils/downloads.py" unpack -i "${_main_repo}/downloads.ini" -c "${_dl_cache}" "${_src_dir}"
     fi
