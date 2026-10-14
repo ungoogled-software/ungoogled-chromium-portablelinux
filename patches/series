@@ -1,9 +1,9 @@
-ungoogled-chromium/portablelinux/drop-nodejs-version-check.patch
 ungoogled-chromium/portablelinux/use-oauth2-client-switches-as-default.patch
 ungoogled-chromium/portablelinux/fix-compiling-on-arm64.patch
-ungoogled-chromium/portablelinux/revert-crubit-changes.patch
-ungoogled-chromium/portablelinux/revert-public-input-changes.patch
-ungoogled-chromium/portablelinux/revert-python-path-adjustement.patch
-ungoogled-chromium/portablelinux/revert-tsgo-usage.patch
-ungoogled-chromium/portablelinux/remove-private-verification-tokens.patch
-ungoogled-chromium/portablelinux/use-system-esbuild.patch
+ungoogled-chromium/portablelinux/chromium-138-drop-nodejs-version-check.patch
+ungoogled-chromium/portablelinux/chromium-153-revert-hermetic-python.patch
+ungoogled-chromium/portablelinux/chromium-154-revert-typescript-changes.patch
+ungoogled-chromium/portablelinux/chromium-155-remove-private-verification-tokens.patch
+ungoogled-chromium/portablelinux/chromium-155-revert-crubit-changes.patch
+ungoogled-chromium/portablelinux/chromium-155-revert-public-input-changes.patch
+ungoogled-chromium/portablelinux/chromium-155-use-system-esbuild.patch
