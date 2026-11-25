@@ -2,9 +2,12 @@ FROM debian:trixie-slim
 
 ARG NODE_VERSION="24"
 
-# set GO related paths under /tmp to avoid ownerhip/permission issues in Github CI build
+# set GO related paths under /tmp to a/void ownerhip/permission issues in Github CI build
 ENV GOPATH=/tmp/go
 ENV GOCACHE=/tmp/go-build-cache
+
+ENV RUSTUP_HOME=/opt/rust
+ENV CARGO_HOME=/opt/rust
 
 # set deb to non-interactive mode and upgrade packages
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections && export DEBIAN_FRONTEND=noninteractive
@@ -27,10 +30,15 @@ RUN apt-get -y install bison clang clang-format cmake debhelper desktop-file-uti
   python3-setuptools python3-six python3-xcbgen python-is-python3 qtbase5-dev rsync sudo uuid-dev valgrind vim wdiff x11-apps\
   xcb-proto xfonts-base xvfb xz-utils yasm
 
-# create builder user
-RUN groupadd -g 1000 builder && useradd -d /home/builder -g 1000 -u 1000 -m builder
+# create builder user (including rustup environment)
+RUN groupadd -g 1000 builder && useradd -d /home/builder -g 1000 -u 1000 -m builder &&\
+    mkdir -p ${RUSTUP_HOME} && chown builder:builder ${RUSTUP_HOME} &&\
+    echo 'PATH=${RUSTUP_HOME}/bin:$PATH' >> /etc/profile.d/rust.sh
 # switch to builder user
 USER builder
+# install rustup with builder user
+RUN RUSTUP_HOME=${RUSTUP_HOME} CARGO_HOME=${CARGO_HOME} bash -c 'curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path -y'
+RUN ${RUSTUP_HOME}/bin/rustup default stable && ${RUSTUP_HOME}/bin/rustup component add rust-src rustc-dev llvm-tools rustfmt
 
 # copy config file for gsclient depot tools (also to root dir in case of github action build)
 COPY --chmod=777 --chown=builder:builder metrics.cfg /home/builder/.config/depot_tools/

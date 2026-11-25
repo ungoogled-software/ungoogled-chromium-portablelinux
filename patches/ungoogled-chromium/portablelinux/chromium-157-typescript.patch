@@ -1,0 +1,87 @@
+--- a/third_party/typescript/tsgo.gni
++++ b/third_party/typescript/tsgo.gni
+@@ -23,7 +23,7 @@ assert(defined(_platform_dir), "Did not
+ 
+ tsgo_inputs = [
+   "//third_party/typescript/typescript.py",
+-  "//third_party/typescript/$_platform_dir/src/lib/$_binary_name",
++  "/usr/bin/tsc",
+ ]
+ 
+ _tsgo_lib_files = [
+@@ -138,5 +138,5 @@ _tsgo_lib_files = [
+ ]
+ 
+ foreach(file, _tsgo_lib_files) {
+-  tsgo_inputs += [ "//third_party/typescript/$_platform_dir/src/lib/$file" ]
++  tsgo_inputs += [ "//third_party/node/node_modules/typescript/lib/$file" ]
+ }
+--- a/tools/typescript/ts_definitions.py
++++ b/tools/typescript/ts_definitions.py
+@@ -13,8 +13,9 @@ _CWD = os.getcwd()
+ _HERE_DIR = os.path.dirname(__file__)
+ _SRC_DIR = os.path.normpath(os.path.join(_HERE_DIR, '..', '..'))
+ 
+-sys.path.append(os.path.join(_SRC_DIR, 'third_party', 'typescript'))
+-import typescript
++sys.path.append(os.path.join(_SRC_DIR, 'third_party', 'node'))
++import node
++import node_modules
+ 
+ 
+ _TSCONFIG_BASE = 'tsconfig_definitions_base.json'
+@@ -81,8 +82,12 @@ def main(argv):
+       if os.path.exists(to_delete):
+         os.remove(to_delete)
+ 
+-  stdout = typescript.RunTypeScript(
+-    ['--project', os.path.join(args.gen_dir, _TSCONFIG_GEN)]
++  stdout = node.RunNode(
++    [
++      node_modules.PathToTypescript(),
++      '--project',
++      os.path.join(args.gen_dir, _TSCONFIG_GEN),
++    ]
+   )
+ 
+   # Verify that that no unexpected .d.ts files were generated.
+--- a/tools/typescript/ts_library.py
++++ b/tools/typescript/ts_library.py
+@@ -15,8 +15,9 @@ _CWD = os.getcwd()
+ _HERE_DIR = os.path.dirname(__file__)
+ _SRC_DIR = os.path.normpath(os.path.join(_HERE_DIR, '..', '..'))
+ 
+-sys.path.append(os.path.join(_SRC_DIR, 'third_party', 'typescript'))
+-import typescript
++sys.path.append(os.path.join(_SRC_DIR, 'third_party', 'node'))
++import node
++import node_modules
+ 
+ from path_utils import isInAshFolder, getTargetPath
+ from validate_tsconfig import (
+@@ -305,8 +306,12 @@ def main(argv):
+             os.remove(to_check)
+ 
+   try:
+-    typescript.RunTypeScript(
+-      ['--project', os.path.join(args.gen_dir, tsconfig_file)]
++    node.RunNode(
++      [
++        node_modules.PathToTypescript(),
++        '--project',
++        os.path.join(args.gen_dir, tsconfig_file),
++      ]
+     )
+   finally:
+     if args.composite:
+@@ -327,8 +332,9 @@ def main(argv):
+ 
+   # Invoke the TS compiler again, with the --listFilesOnly flag, to detect any
+   # files that are used by the build, but not properly declared as dependencies.
+-  out = typescript.RunTypeScript(
++  out = node.RunNode(
+     [
++      node_modules.PathToTypescript(),
+       '--project',
+       os.path.join(args.gen_dir, tsconfig_file),
+       '--listFilesOnly',

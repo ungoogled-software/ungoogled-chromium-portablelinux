@@ -93,17 +93,14 @@
 +
 --- a/tools/rust/build_bindgen.py
 +++ b/tools/rust/build_bindgen.py
-@@ -35,6 +35,7 @@
+@@ -41,6 +41,7 @@
+     CheckoutGitRepo,
      DownloadAndUnpack,
      LLVM_BUILD_TOOLS_DIR,
-     DownloadDebianSysroot,
 +    GetHostSysrootPlatform,
-     RunCommand,
  )
  from update import RmTree
 
- 
- # The git hash to use.
 @@ -78,7 +78,7 @@
      assert sys.platform.startswith('linux')
      ncursesw_dir = os.path.join(LLVM_BUILD_TOOLS_DIR, 'ncursesw')
