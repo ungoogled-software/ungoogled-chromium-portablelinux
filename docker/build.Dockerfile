@@ -13,7 +13,7 @@ RUN apt-get -y update && apt-get -y upgrade
 # install latest nodejs lts version
 RUN apt-get -y update && apt-get install -y apt-transport-https ca-certificates curl gnupg &&\
   curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash -
-RUN apt-get -y update && apt-get -y install nodejs && npm update -g npm && npm -g install typescript esbuild
+RUN apt-get -y update && apt-get -y install nodejs && npm update -g npm && npm -g install typescript
 
 # install all needed (or wanted) distro packages
 RUN apt-get -y install bison clang clang-format cmake debhelper desktop-file-utils flex git golang gperf gsettings-desktop-schemas-dev\
@@ -24,8 +24,11 @@ RUN apt-get -y install bison clang clang-format cmake debhelper desktop-file-uti
   libopus-dev libpam0g-dev libpci-dev libpipewire-0.3-dev libpng-dev libpulse-dev libre2-dev libsnappy-dev libspeechd-dev\
   libudev-dev libusb-1.0-0-dev libva-dev libvpx-dev libwebp-dev libx11-xcb-dev libxcb-dri3-dev libxshmfence-dev libxslt1-dev\
   libxss-dev libxt-dev libxtst-dev mesa-common-dev ninja-build pkg-config python3-httplib2 python3-jinja2 python3-pyparsing\
-  python3-setuptools python3-six python3-xcbgen python-is-python3 qtbase5-dev rsync sudo uuid-dev valgrind vim wdiff x11-apps\
+  python3-setuptools python3-six python3-xcbgen python-is-python3 qtbase5-dev rsync cargo esbuild sudo uuid-dev valgrind vim wdiff x11-apps\
   xcb-proto xfonts-base xvfb xz-utils yasm
+# Debian esbuild is /usr/bin/esbuild (ninja). Chromium also imports the npm
+# esbuild module; install it under /opt so npm 11 cannot replace the binary.
+RUN mkdir -p /opt/npm-esbuild /usr/lib/node_modules && npm install --prefix /opt/npm-esbuild esbuild && ln -sfn /opt/npm-esbuild/node_modules/esbuild /usr/lib/node_modules/esbuild
 
 # create builder user
 RUN groupadd -g 1000 builder && useradd -d /home/builder -g 1000 -u 1000 -m builder

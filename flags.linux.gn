@@ -13,4 +13,5 @@ use_kerberos=false
 use_sysroot=true
 use_vaapi=true
 use_system_libffi=false
-v8_use_metagen_instance_types=false
+v8_use_metagen=false
+rust_crubit_root="//third_party/rust-toolchain/crubit/"

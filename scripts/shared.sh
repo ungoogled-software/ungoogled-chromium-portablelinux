@@ -111,6 +111,71 @@ fix_tool_downloading() {
         "${_src_dir}/tools/rust/build_rust.py"
 }
 
+# Chromium 158 GN expects cc_bindings_from_rs. The prebuilt rust-toolchain
+# from update_rust.py does not ship it, so build Crubit the same way Arch does.
+setup_crubit() {
+    local rust_root="${_src_dir}/third_party/rust-toolchain"
+    local crubit_rev
+    crubit_rev="$(sed -n "s/^CRUBIT_REVISION = '\\([^']*\\)'.*/\\1/p" \
+        "${_src_dir}/tools/rust/update_rust.py")"
+    if [ -z "${crubit_rev}" ]; then
+        echo "Could not read CRUBIT_REVISION from tools/rust/update_rust.py" >&2
+        return 1
+    fi
+
+    echo "setting up Crubit at ${crubit_rev}"
+
+    local crubit_src="${_build_dir}/crubit"
+    if [ ! -d "${crubit_src}/.git" ]; then
+        git init "${crubit_src}"
+        git -C "${crubit_src}" remote add origin \
+            https://chromium.googlesource.com/external/github.com/google/crubit.git
+    fi
+    if [ "$(git -C "${crubit_src}" rev-parse HEAD 2>/dev/null || true)" != "${crubit_rev}" ]; then
+        git -C "${crubit_src}" fetch --depth=1 origin "${crubit_rev}" \
+            || git -C "${crubit_src}" fetch origin "${crubit_rev}" \
+            || git -C "${crubit_src}" fetch origin
+        git -C "${crubit_src}" checkout --force "${crubit_rev}" \
+            || git -C "${crubit_src}" checkout --force FETCH_HEAD
+    fi
+
+    mkdir -p "${rust_root}/crubit/lib/third_party"
+    ln -sfn "${crubit_src}" "${rust_root}/crubit/lib/third_party/crubit"
+
+    if [ -x "${rust_root}/crubit/bin/cc_bindings_from_rs" ]; then
+        echo "cc_bindings_from_rs already present"
+        return 0
+    fi
+
+    (
+        cd "${crubit_src}"
+        export CARGO_HOME="${CARGO_HOME:-/tmp/cargo}"
+        export CARGO_TARGET_DIR="${crubit_src}/target"
+        export RUSTC_BOOTSTRAP=1
+        export PATH="${rust_root}/bin:${PATH}"
+
+        # crubit's rust-toolchain.toml asks rustup for nightly+rustc-dev.
+        # Use Chromium's rustc instead (same compiler the 158 build will use).
+        if [ -f rust-toolchain.toml ]; then
+            mv rust-toolchain.toml rust-toolchain.toml.ignored
+        fi
+        export RUSTC="${rust_root}/bin/rustc"
+
+        echo "using $(command -v rustc) $(rustc --version)"
+        echo "using $(command -v cargo) $(cargo --version)"
+
+        local host_tuple
+        host_tuple="$(rustc --print host-tuple)"
+        local rustc_libs="${rust_root}/lib/rustlib/${host_tuple}/lib"
+        export RUSTFLAGS="${RUSTFLAGS:-} -Clink-args=-Wl,-z,origin -Clink-args=-Wl,-rpath,${rustc_libs} -Clink-args=-Wl,-rpath,${rust_root}/lib"
+
+        cargo fetch --locked
+        cargo build --frozen --release -p cc_bindings_from_rs --bin cc_bindings_from_rs
+        install -Dm755 "${CARGO_TARGET_DIR}/release/cc_bindings_from_rs" \
+            "${rust_root}/crubit/bin/cc_bindings_from_rs"
+    )
+}
+
 setup_toolchain() {
     # Chromium currently has no non-x86 llvm/rust builds on
     # Linux, so we have to build it ourselves.
@@ -130,6 +195,8 @@ setup_toolchain() {
         "${_src_dir}/tools/rust/build_bindgen.py"
     fi
 
+    setup_crubit
+
     if grep -q -F "use_sysroot=true" "${_out_dir}/args.gn"; then
         "${_src_dir}/build/linux/sysroot_scripts/install-sysroot.py" --arch="$_host_arch" &
         if [ "$_build_arch" != "$_host_arch" ]; then
@@ -146,8 +213,19 @@ setup_toolchain() {
     ln -sf "$(which go)" "${_src_dir}/third_party/dawn/tools/golang/linux-amd64/bin/go"
 	mkdir -p "${_src_dir}/buildtools/linux64-format"
 	ln -sf "$(which clang-format)" "${_src_dir}/buildtools/linux64-format/clang-format"
-    rm -rf "${_src_dir}/third_party/devtools-frontend/src/node_modules/esbuild/"
-    ln -s /usr/lib/node_modules/esbuild/ "${_src_dir}/third_party/devtools-frontend/src/node_modules/esbuild"
+    rm -rf "${_src_dir}/third_party/devtools-frontend/src/node_modules/esbuild"
+    _esbuild_mod=""
+    for _cand in /opt/npm-esbuild/node_modules/esbuild /usr/lib/node_modules/esbuild "$(npm -g root 2>/dev/null)/esbuild"; do
+        if [ -e "${_cand}" ]; then
+            _esbuild_mod="${_cand}"
+            break
+        fi
+    done
+    if [ -e "${_esbuild_mod}" ]; then
+        mkdir -p "${_src_dir}/third_party/devtools-frontend/src/node_modules"
+        ln -sfn "${_esbuild_mod}" \
+            "${_src_dir}/third_party/devtools-frontend/src/node_modules/esbuild"
+    fi
     mkdir -p "${_src_dir}/third_party/typescript/linux-amd64/src/lib"
 	ln -sf "$(which tsc)" "${_src_dir}/third_party/typescript/linux-amd64/src/lib/tsc"
 
