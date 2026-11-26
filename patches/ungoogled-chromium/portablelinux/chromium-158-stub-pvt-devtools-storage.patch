@@ -1,0 +1,68 @@
+--- a/chrome/browser/devtools/protocol/storage_handler.h
++++ b/chrome/browser/devtools/protocol/storage_handler.h
+@@ -24,6 +24,24 @@ class StorageHandler : public protocol::
+   void RunBounceTrackingMitigations(
+       std::unique_ptr<RunBounceTrackingMitigationsCallback> callback) override;
+ 
++  // Protocol still generates these PVT methods; the service is not built.
++  void GetPrivateVerificationTokens(
++      std::unique_ptr<GetPrivateVerificationTokensCallback> callback) override;
++  protocol::DispatchResponse GetPrivateVerificationTokensIssuerConfigs(
++      std::unique_ptr<protocol::Array<
++          protocol::Storage::PrivateVerificationTokensIssuerConfig>>*
++          out_configs) override;
++  void ClearPrivateVerificationTokens(
++      const protocol::String& in_issuerOrigin,
++      std::unique_ptr<ClearPrivateVerificationTokensCallback> callback)
++      override;
++  void DeletePrivateVerificationToken(
++      const protocol::String& in_tokenId,
++      std::unique_ptr<DeletePrivateVerificationTokenCallback> callback)
++      override;
++  protocol::DispatchResponse SetPrivateVerificationTokensTracking(
++      bool enable) override;
++
+   static void GotDeletedSites(
+       std::unique_ptr<RunBounceTrackingMitigationsCallback> callback,
+       const std::vector<std::string>& sites);
+--- a/chrome/browser/devtools/protocol/storage_handler.cc
++++ b/chrome/browser/devtools/protocol/storage_handler.cc
+@@ -50,3 +50,38 @@ void StorageHandler::GotDeletedSites(
+       std::make_unique<protocol::Array<protocol::String>>(sites);
+   callback->sendSuccess(std::move(deleted_sites));
+ }
++
++void StorageHandler::GetPrivateVerificationTokens(
++    std::unique_ptr<GetPrivateVerificationTokensCallback> callback) {
++  callback->sendFailure(protocol::Response::ServerError(
++      "Private Verification Tokens are not supported"));
++}
++
++protocol::DispatchResponse
++StorageHandler::GetPrivateVerificationTokensIssuerConfigs(
++    std::unique_ptr<protocol::Array<
++        protocol::Storage::PrivateVerificationTokensIssuerConfig>>*
++        out_configs) {
++  return protocol::Response::ServerError(
++      "Private Verification Tokens are not supported");
++}
++
++void StorageHandler::ClearPrivateVerificationTokens(
++    const protocol::String& in_issuerOrigin,
++    std::unique_ptr<ClearPrivateVerificationTokensCallback> callback) {
++  callback->sendFailure(protocol::Response::ServerError(
++      "Private Verification Tokens are not supported"));
++}
++
++void StorageHandler::DeletePrivateVerificationToken(
++    const protocol::String& in_tokenId,
++    std::unique_ptr<DeletePrivateVerificationTokenCallback> callback) {
++  callback->sendFailure(protocol::Response::ServerError(
++      "Private Verification Tokens are not supported"));
++}
++
++protocol::DispatchResponse StorageHandler::SetPrivateVerificationTokensTracking(
++    bool enable) {
++  return protocol::Response::ServerError(
++      "Private Verification Tokens are not supported");
++}

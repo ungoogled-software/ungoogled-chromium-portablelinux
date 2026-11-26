@@ -8,14 +8,13 @@
      "//chrome/browser/profiles:misc",
      "//chrome/browser/profiles:profile_io_data",
      "//chrome/browser/profiles:profiles_extra_parts",
-@@ -2248,7 +2247,6 @@ source_set("browser") {
-     "//chrome/browser/preloading/search_preload",
-     "//chrome/browser/privacy",
+@@ -2485,6 +2484,5 @@ source_set("browser") {
      "//chrome/browser/privacy_sandbox:impl",
+     "//chrome/browser/private_ai",
 -    "//chrome/browser/private_verification_tokens",
      "//chrome/browser/profiles:misc",
+     "//chrome/browser/profiles:profile_manager_impl",
      "//chrome/browser/profiles:profile_util_impl",
-     "//chrome/browser/profiles:profiles_extra_parts_impl",
 --- a/chrome/browser/browsing_data/BUILD.gn
 +++ b/chrome/browser/browsing_data/BUILD.gn
 @@ -125,7 +125,6 @@ source_set("impl") {
@@ -192,10 +191,10 @@
  }  // namespace component_updater
 --- a/chrome/browser/devtools/BUILD.gn
 +++ b/chrome/browser/devtools/BUILD.gn
-@@ -433,7 +433,6 @@ static_library("devtools") {
-       "//chrome/app:command_ids",
+@@ -446,7 +445,6 @@ static_library("devtools") {
        "//chrome/browser/badging",
        "//chrome/browser/custom_handlers",
+       "//chrome/browser/origin_gating",
 -      "//chrome/browser/private_verification_tokens",
        "//chrome/browser/ui:browser_window_header",
        "//chrome/browser/ui/media_router",
@@ -574,23 +573,20 @@
    ProfilePasswordStoreFactory::GetInstance();
 --- a/chrome/test/BUILD.gn
 +++ b/chrome/test/BUILD.gn
-@@ -1869,8 +1869,6 @@ if (!is_android) {
-       "//chrome/browser/privacy_sandbox:headers",
-       "//chrome/browser/privacy_sandbox:test_support",
-       "//chrome/browser/private_ai",
--      "//chrome/browser/private_verification_tokens",
+@@ -1333,6 +1333,5 @@ if (!is_android) {
+       "//chrome/browser/preloading/search_preload:browser_tests",
+       "//chrome/browser/privacy_sandbox:browser_tests",
 -      "//chrome/browser/private_verification_tokens:browser_tests",
-       "//chrome/browser/profile_resetter",
        "//chrome/browser/profile_resetter:browser_tests",
-       "//chrome/browser/profiles",
-@@ -5043,7 +5041,6 @@ test("unit_tests") {
-     "//chrome/browser/preloading/prerender:unit_tests",
+       "//chrome/browser/profiles:browser_tests",
+       "//chrome/browser/push_messaging:browser_tests",
+@@ -2676,6 +2675,5 @@ test("unit_tests") {
      "//chrome/browser/privacy_sandbox:unit_tests",
      "//chrome/browser/private_ai:unit_tests",
 -    "//chrome/browser/private_verification_tokens:unit_tests",
-     "//chrome/browser/profiles",
-     "//chrome/browser/profiles:misc",
-     "//chrome/browser/profiles:profile_downloader",
+     "//chrome/browser/profiles:unit_tests",
+     "//chrome/browser/push_messaging:unit_tests",
+     "//chrome/browser/pwc:unit_tests",
 --- a/components/BUILD.gn
 +++ b/components/BUILD.gn
 @@ -313,7 +313,6 @@ test("components_unittests") {

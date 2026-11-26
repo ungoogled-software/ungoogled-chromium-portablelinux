@@ -5,6 +5,7 @@ ungoogled-chromium/portablelinux/chromium-153-revert-hermetic-python.patch
 ungoogled-chromium/portablelinux/chromium-154-use-system-tsc.patch
 ungoogled-chromium/portablelinux/chromium-155-use-system-esbuild.patch
 ungoogled-chromium/portablelinux/chromium-156-remove-private-verification-tokens.patch
-ungoogled-chromium/portablelinux/chromium-156-revert-crubit-changes.patch
+ungoogled-chromium/portablelinux/chromium-158-stub-pvt-devtools-storage.patch
+ungoogled-chromium/portablelinux/chromium-158-drop-pvt-browsing-data-factory.patch
 ungoogled-chromium/portablelinux/chromium-156-revert-use-typescript-go.patch
 

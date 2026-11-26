@@ -16,21 +16,20 @@
    cxx = "g++"
 --- a/tools/rust/build_rust.py
 +++ b/tools/rust/build_rust.py
-@@ -65,7 +65,7 @@
+@@ -64,6 +64,7 @@ from build import (
      DownloadDebianSysroot,
-     FetchUrl,
+     FetchGitFile,
      GetLibXml2Dirs,
--    GitCherryPick,
 +    GetHostSysrootPlatform,
+     GitCherryPick,
      GitRevert,
      LLVM_DIR,
-     IsGitAncestorToHead,
-@@ -254,7 +254,7 @@
+@@ -256,7 +257,7 @@ def AddOpenSSLToEnv():
          )
      else:
          ssl_url = (
 -            f'{CIPD_DOWNLOAD_URL}/{OPENSSL_CIPD_LINUX_AMD_PATH}'
-+            f'{CIPD_DOWNLOAD_URL}/{OPENSSL_CIPD_LINUX_AMD_PATH.replace("amd64", GetHostSysrootPlatform()}'
++            f'{CIPD_DOWNLOAD_URL}/{OPENSSL_CIPD_LINUX_AMD_PATH.replace("amd64", GetHostSysrootPlatform())}'
              f'/+/version:2@{OPENSSL_CIPD_LINUX_AMD_VERSION}'
          )
  
@@ -93,40 +92,24 @@
 +
 --- a/tools/rust/build_bindgen.py
 +++ b/tools/rust/build_bindgen.py
-@@ -35,6 +35,7 @@
+@@ -42,6 +42,7 @@ from build import (
+     CheckoutGitRepo,
      DownloadAndUnpack,
      LLVM_BUILD_TOOLS_DIR,
-     DownloadDebianSysroot,
 +    GetHostSysrootPlatform,
-     RunCommand,
  )
  from update import RmTree
-
  
- # The git hash to use.
-@@ -78,7 +78,7 @@
-     assert sys.platform.startswith('linux')
-     ncursesw_dir = os.path.join(LLVM_BUILD_TOOLS_DIR, 'ncursesw')
+@@ -78,4 +79,4 @@ def FetchNcurseswLibrary():
      ncursesw_url = (
 -        f'{CIPD_DOWNLOAD_URL}/{NCURSESW_CIPD_LINUX_AMD_PATH}'
-+        f'{CIPD_DOWNLOAD_URL}/{NCURSESW_CIPD_LINUX_AMD_PATH.replace("amd64", GetHostSysrootPlatform()}'
++        f'{CIPD_DOWNLOAD_URL}/{NCURSESW_CIPD_LINUX_AMD_PATH.replace("amd64", GetHostSysrootPlatform())}'
          f'/+/version:2@{NCURSESW_CIPD_LINUX_AMD_VERSION}'
      )
- 
-     if os.path.exists(ncursesw_dir):
-@@ -146,7 +146,7 @@ def RunCargo(cargo_args):
- 
-     if sys.platform.startswith('linux'):
-         # We use these flags to avoid linking with the system libstdc++.
--        sysroot = DownloadDebianSysroot('amd64')
-+        sysroot = DownloadDebianSysroot(GetHostSysrootPlatform())
-         sysroot_flag = f'--sysroot={sysroot}'
-         env['CFLAGS'] += f' {sysroot_flag}'
-         env['CXXFLAGS'] += f' {sysroot_flag}'
 --- a/tools/clang/scripts/build.py
 +++ b/tools/clang/scripts/build.py
-@@ -483,6 +483,21 @@ def DownloadPinnedClang():
-                            PINNED_CLANG_VERSION)
+@@ -737,4 +737,19 @@ def DownloadPinnedClang():
+   )
  
  
 +def GetHostSysrootPlatform():
@@ -145,5 +128,3 @@
 +
 +
  def VerifyVersionOfBuiltClangMatchesVERSION():
-   """Checks that `clang --version` outputs RELEASE_VERSION. If this
-   fails, update.RELEASE_VERSION is out-of-date and needs to be updated (possibly
