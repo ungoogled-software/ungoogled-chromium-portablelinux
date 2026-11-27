@@ -93,6 +93,11 @@ apply_domsub() {
 	fi
 }
 
+install_rustup() {
+	RUSTUP_HOME=${RUSTUP_HOME} CARGO_HOME=${CARGO_HOME} bash -c 'curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path -y'
+	${RUSTUP_HOME}/bin/rustup default stable && ${RUSTUP_HOME}/bin/rustup component add rust-src rustc-dev llvm-tools rustfmt
+}
+
 write_gn_args() {
 	mkdir -p "${_out_dir}"
 
@@ -179,7 +184,6 @@ setup_toolchain() {
     # build crubit
 	(
 		cd ${_src_dir}/third_party/rust-toolchain/crubit/lib/third_party/crubit
-		#_rustc_libs="${RUSTUP_HOME}/toolchains/$(rustc --print host-tuple)/lib"
 		_rustc_libs="${RUSTUP_HOME}/toolchains/stable-$(rustc --print host-tuple)/lib/rustlib/$(rustc --print host-tuple)/lib"
 		export CARGO_TARGET_DIR=target
 		export RUSTC_BOOTSTRAP=1

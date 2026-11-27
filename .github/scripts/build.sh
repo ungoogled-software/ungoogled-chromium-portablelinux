@@ -18,6 +18,7 @@ if [ "$_prepare_only" = true ]; then
     fetch_sources "$clone" "$use_gentoo_source_tar" "$crubit_rev"
     apply_patches
     apply_domsub
+	install_rustup
     write_gn_args
     fix_tool_downloading
     setup_toolchain

@@ -32,13 +32,12 @@ RUN apt-get -y install bison clang clang-format cmake debhelper desktop-file-uti
 
 # create builder user (including rustup environment)
 RUN groupadd -g 1000 builder && useradd -d /home/builder -g 1000 -u 1000 -m builder &&\
-    mkdir -p ${RUSTUP_HOME} && chown builder:builder ${RUSTUP_HOME} &&\
-    echo 'PATH=${RUSTUP_HOME}/bin:$PATH' >> /etc/profile.d/rust.sh
+    mkdir -p ${RUSTUP_HOME} && chown builder:builder ${RUSTUP_HOME} && chmod -R 777 ${RUSTUP_HOME}
 # switch to builder user
 USER builder
-# install rustup with builder user
-RUN RUSTUP_HOME=${RUSTUP_HOME} CARGO_HOME=${CARGO_HOME} bash -c 'curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path -y'
-RUN ${RUSTUP_HOME}/bin/rustup default stable && ${RUSTUP_HOME}/bin/rustup component add rust-src rustc-dev llvm-tools rustfmt
+# install rustup with builder user (moved to shared.sh build script to avoid permission issues in github actions)
+#RUN RUSTUP_HOME=${RUSTUP_HOME} CARGO_HOME=${CARGO_HOME} bash -c 'curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path -y'
+#RUN ${RUSTUP_HOME}/bin/rustup default stable && ${RUSTUP_HOME}/bin/rustup component add rust-src rustc-dev llvm-tools rustfmt
 
 # copy config file for gsclient depot tools (also to root dir in case of github action build)
 COPY --chmod=777 --chown=builder:builder metrics.cfg /home/builder/.config/depot_tools/
