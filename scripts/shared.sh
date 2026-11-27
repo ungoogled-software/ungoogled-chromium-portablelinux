@@ -96,7 +96,7 @@ apply_domsub() {
 }
 
 install_rustup() {
-	if if [ "$_host_arch" = x64 ]; then
+	if [ "$_host_arch" = x64 ]; then
 		RUSTUP_HOME=${RUSTUP_HOME} CARGO_HOME=${CARGO_HOME} bash -c 'curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path -y'
 	else
 		RUSTUP_HOME=${RUSTUP_HOME} CARGO_HOME=${CARGO_HOME} bash -c 'curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path --default-host aarch64-unknown-linux-gnu -y'
