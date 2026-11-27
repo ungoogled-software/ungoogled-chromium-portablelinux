@@ -3,8 +3,6 @@ set -euo pipefail
 
 # shared build functions used by local and CI scripts
 
-export PATH="${RUSTUP_HOME}/bin:$PATH"
-
 # resolve repo root directory regardless of caller location
 repo_root() {
 	local _base_dir
@@ -40,7 +38,11 @@ setup_paths() {
 	_out_dir="${_src_dir}/out/Default"
 	setup_arch
 
-	mkdir -p "${_dl_cache}"
+	export RUSTUP_HOME="${_src_dir}/rustup"
+	export CARGO_HOME="${_src_dir}/rustup"
+	export PATH="${CARGO_HOME}/bin:$PATH"
+
+	mkdir -p "${_dl_cache}" "${RUSTUP_HOME}"
 }
 
 fetch_sources() {
@@ -95,7 +97,7 @@ apply_domsub() {
 
 install_rustup() {
 	RUSTUP_HOME=${RUSTUP_HOME} CARGO_HOME=${CARGO_HOME} bash -c 'curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path -y'
-	${RUSTUP_HOME}/bin/rustup default stable && ${RUSTUP_HOME}/bin/rustup component add rust-src rustc-dev llvm-tools rustfmt
+	${CARGO_HOME}/bin/rustup default stable && ${CARGO_HOME}/bin/rustup component add rust-src rustc-dev llvm-tools rustfmt
 }
 
 write_gn_args() {
@@ -103,7 +105,7 @@ write_gn_args() {
 
 	cat "${_main_repo}/flags.gn" "${_root}/flags.linux.gn" | tee "${_out_dir}/args.gn"
 	
-	echo "rust_sysroot_absolute=\"${RUSTUP_HOME}/toolchains/stable-$(rustc --print host-tuple)/\"" | tee -a "${_out_dir}/args.gn"
+	echo "rust_sysroot_absolute=\"${_src_dir}/rustup/toolchains/stable-$(rustc --print host-tuple)/\"" | tee -a "${_out_dir}/args.gn"
 	echo "rustc_version=\"$(rustc --version | awk '{ print $2 ;}')\"" | tee -a "${_out_dir}/args.gn"
 	
 	echo "target_cpu = \"$_build_arch\"" | tee -a "${_out_dir}/args.gn"
