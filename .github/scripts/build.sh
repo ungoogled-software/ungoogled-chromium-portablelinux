@@ -15,7 +15,7 @@ crubit_rev="${1:-d757594f6f7ac27c0cf9c8ea63d9136f8e1f77ae}"
 setup_paths
 
 if [ "$_prepare_only" = true ]; then
-    fetch_sources "$clone" "$use_gentoo_source_tar" "crubit_rev"
+    fetch_sources "$clone" "$use_gentoo_source_tar" "$crubit_rev"
     apply_patches
     apply_domsub
     write_gn_args
