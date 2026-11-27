@@ -25,10 +25,13 @@ if [ "$_prepare_only" = true ]; then
     gn_gen
 else
     _task_timeout=18000
-    cd "$_src_dir"
+    export RUSTC_BOOTSTRAP=1
+    export RUSTFLAGS+=' -Clink-args=-Wl,-z,origin -Clink-args=-Wl,-rpath,$ORIGIN/../lib'
+    
+	cd "$_src_dir"
 
     set +e
-    timeout -k 5m -s INT "${_task_timeout}"s ninja -C out/Default chrome chromedriver
+	timeout -k 5m -s INT "${_task_timeout}"s ninja -C out/Default chrome chromedriver
     rc=$?
     set -e
 
