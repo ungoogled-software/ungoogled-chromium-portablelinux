@@ -96,10 +96,10 @@ apply_domsub() {
 }
 
 install_rustup() {
-	if [ "$_host_arch" = x64 ]; then
-		RUSTUP_HOME=${RUSTUP_HOME} CARGO_HOME=${CARGO_HOME} bash -c 'curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path -y'
-	else
+	if [ "$_host_arch" = "arm64" ]; then
 		RUSTUP_HOME=${RUSTUP_HOME} CARGO_HOME=${CARGO_HOME} bash -c 'curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path --default-host aarch64-unknown-linux-gnu -y'
+	else
+		RUSTUP_HOME=${RUSTUP_HOME} CARGO_HOME=${CARGO_HOME} bash -c 'curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path -y'
 	fi
 	${CARGO_HOME}/bin/rustup default stable && ${CARGO_HOME}/bin/rustup component add rust-src rustc-dev llvm-tools rustfmt
 }
