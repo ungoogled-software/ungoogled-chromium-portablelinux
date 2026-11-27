@@ -2,12 +2,11 @@ FROM debian:trixie-slim
 
 ARG NODE_VERSION="24"
 
-# set GO related paths under /tmp to a/void ownerhip/permission issues in Github CI build
+# set GO and RUSTUP related paths under /tmp to avoid ownerhip/permission issues in Github CI build
 ENV GOPATH=/tmp/go
 ENV GOCACHE=/tmp/go-build-cache
-
-ENV RUSTUP_HOME=/opt/rust
-ENV CARGO_HOME=/opt/rust
+ENV RUSTUP_HOME=/tmp/rust
+ENV CARGO_HOME=/tmp/rust
 
 # set deb to non-interactive mode and upgrade packages
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections && export DEBIAN_FRONTEND=noninteractive
@@ -35,7 +34,7 @@ RUN groupadd -g 1000 builder && useradd -d /home/builder -g 1000 -u 1000 -m buil
     mkdir -p ${RUSTUP_HOME} && chown builder:builder ${RUSTUP_HOME} && chmod -R 777 ${RUSTUP_HOME}
 # switch to builder user
 USER builder
-# install rustup with builder user (moved to shared.sh build script to avoid permission issues in github actions)
+# install rustup with builder user
 #RUN RUSTUP_HOME=${RUSTUP_HOME} CARGO_HOME=${CARGO_HOME} bash -c 'curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --no-modify-path -y'
 #RUN ${RUSTUP_HOME}/bin/rustup default stable && ${RUSTUP_HOME}/bin/rustup component add rust-src rustc-dev llvm-tools rustfmt
 
