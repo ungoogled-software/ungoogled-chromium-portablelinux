@@ -15,7 +15,7 @@ jobs:
         include:
           - runner: ubuntu-latest
             platform: linux/amd64
-            arch: x64
+            arch: x86_64
           - runner: ubuntu-24.04-arm
             platform: linux/arm64
             arch: arm64
