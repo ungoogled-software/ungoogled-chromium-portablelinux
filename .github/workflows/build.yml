@@ -15,13 +15,16 @@ jobs:
         include:
           - runner: ubuntu-latest
             platform: linux/amd64
+            arch: x64
           - runner: ubuntu-24.04-arm
             platform: linux/arm64
+            arch: arm64
       max-parallel: 2
       fail-fast: true
     uses: ./.github/workflows/build-steps.yml
     with:
       runs-on: ${{ matrix.runner }}
+      arch: ${{ matrix.arch }}
 
   release:
     name: Create release
